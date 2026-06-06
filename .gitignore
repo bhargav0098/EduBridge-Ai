@@ -52,3 +52,11 @@ venv/
 htmlcov/
 .mypy_cache/
 
+# Databases & SQLite files
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads & temporary runtime files
+/temp/
+/uploads/
