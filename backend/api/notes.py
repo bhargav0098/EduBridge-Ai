@@ -25,7 +25,8 @@ async def upload_note(
     
     file_path = None
     if file:
-        file_path = os.path.join(UPLOAD_DIR, f"{user_id}_{file.filename}")
+        safe_filename = os.path.basename(file.filename)
+        file_path = os.path.join(UPLOAD_DIR, f"{user_id}_{safe_filename}")
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
             

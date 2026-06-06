@@ -35,7 +35,8 @@ async def speech_to_text(
     # 1. Save uploaded file temporarily for Whisper
     temp_dir = "temp"
     os.makedirs(temp_dir, exist_ok=True)
-    temp_file_path = os.path.join(temp_dir, f"{current_user.id}_{file.filename}")
+    safe_filename = os.path.basename(file.filename)
+    temp_file_path = os.path.join(temp_dir, f"{current_user.id}_{safe_filename}")
 
     try:
         with open(temp_file_path, "wb") as f:
@@ -59,7 +60,7 @@ async def speech_to_text(
         else:
             # Mock transcription fallback
             # Simulate Santali stub if Santali is requested
-            if language == "Santali" or "santali" in file.filename.lower():
+            if language == "Santali" or "santali" in safe_filename.lower():
                 transcript = "Santali mock transcription: Nehel hukum reak' dosar niyam leme."
                 detected_language = "sat"
             else:

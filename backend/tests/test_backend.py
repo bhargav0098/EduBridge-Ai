@@ -183,3 +183,61 @@ async def test_adaptive_quiz_flow(async_client: AsyncClient):
     assert analy_data["student_id"] == student_id
     assert "topics" in analy_data
     assert analy_data["total_attempts"] > 0
+
+
+@pytest.mark.anyio
+async def test_upload_path_traversal_notes(async_client: AsyncClient):
+    import os
+    # Try uploading note with malicious filename containing directory traversal
+    files = {"file": ("../../malicious.txt", b"malicious content", "text/plain")}
+    data = {"title": "Test Safe Upload", "content": "Checking path traversal"}
+    
+    response = await async_client.post(
+        "/api/notes/upload",
+        files=files,
+        data=data
+    )
+    assert response.status_code == 200
+    res_json = response.json()
+    assert "file_path" in res_json
+    # The saved file path should only contain the sanitized base filename (malicious.txt)
+    assert "malicious.txt" in res_json["file_path"]
+    assert ".." not in res_json["file_path"]
+    assert os.path.exists(res_json["file_path"])
+    # Cleanup
+    if os.path.exists(res_json["file_path"]):
+        os.remove(res_json["file_path"])
+
+
+@pytest.mark.anyio
+async def test_speech_path_traversal(async_client: AsyncClient):
+    import os
+    # Register/login user
+    register_response = await async_client.post(
+        "/api/auth/register",
+        json={
+            "email": "speech_traversal@edubridge.com",
+            "name": "Speech Traversal User",
+            "password": "securepassword123",
+            "role": "student"
+        }
+    )
+    token = register_response.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Mock audio file upload with malicious filename
+    files = {"file": ("../../malicious_audio.wav", b"fake audio content", "audio/wav")}
+    data = {"language": "English", "chain_to_chat": "false"}
+    
+    response = await async_client.post(
+        "/api/speech",
+        files=files,
+        data=data,
+        headers=headers
+    )
+    assert response.status_code == 200
+    # The temporary file should have been cleaned up automatically, and no files should be created outside temp/
+    # If the path traversal occurred, a file might have been written to the root
+    assert not os.path.exists("malicious_audio.wav")
+    assert not os.path.exists("../malicious_audio.wav")
+
