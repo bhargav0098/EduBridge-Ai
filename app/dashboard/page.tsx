@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Sidebar } from '@/components/ui/Sidebar';
 import { Navbar } from '@/components/ui/Navbar';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import Link from 'next/link';
@@ -30,13 +31,54 @@ const subjectData = [
 ];
 
 export default function DashboardPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen bg-background text-text-primary tech-grid justify-center items-center">
+        <div className="text-lg font-bold">Loading Dashboard...</div>
+      </div>
+    }>
+      <DashboardContent />
+    </Suspense>
+  );
+}
+
+function DashboardContent() {
   const { user } = useAuthStore();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams ? searchParams.get('tab') : null;
   
   // Role is locked to the signed-in user's role — no manual toggle
   const currentRole: 'student' | 'teacher' = user?.role === 'teacher' ? 'teacher' : 'student';
   const [teacherTab, setTeacherTab] = useState<'home' | 'classes' | 'attendance' | 'students' | 'upload'>('home');
   const [studentTab, setStudentTab] = useState<'overview' | 'attendance'>('overview');
   const [studentSummary, setStudentSummary] = useState<StudentAttendanceSummary | null>(null);
+
+  useEffect(() => {
+    if (currentRole === 'teacher') {
+      if (tabParam && ['home', 'classes', 'attendance', 'students', 'upload'].includes(tabParam)) {
+        setTeacherTab(tabParam as any);
+      } else {
+        setTeacherTab('home');
+      }
+    } else {
+      if (tabParam && ['overview', 'attendance'].includes(tabParam)) {
+        setStudentTab(tabParam as any);
+      } else {
+        setStudentTab('overview');
+      }
+    }
+  }, [tabParam, currentRole]);
+
+  const handleTabChange = (tab: 'home' | 'classes' | 'attendance' | 'students' | 'upload') => {
+    setTeacherTab(tab);
+    router.push(tab === 'home' ? '/dashboard' : `/dashboard?tab=${tab}`);
+  };
+
+  const handleStudentTabChange = (tab: 'overview' | 'attendance') => {
+    setStudentTab(tab);
+    router.push(tab === 'overview' ? '/dashboard' : `/dashboard?tab=${tab}`);
+  };
 
   // Date and Export States
   const [attendanceDate, setAttendanceDate] = useState<string>(() => new Date().toISOString().split('T')[0]);
@@ -253,7 +295,7 @@ export default function DashboardPage() {
               {(['overview', 'attendance'] as const).map(tab => (
                 <button
                   key={tab}
-                  onClick={() => setStudentTab(tab)}
+                  onClick={() => handleStudentTabChange(tab)}
                   className={`px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
                     studentTab === tab
                       ? 'bg-primary/10 text-primary dark:text-primary-light border border-indigo-500/35 shadow-sm shadow-indigo-500/10'
@@ -272,7 +314,7 @@ export default function DashboardPage() {
               {(['home', 'classes', 'attendance', 'students', 'upload'] as const).map(tab => (
                 <button
                   key={tab}
-                  onClick={() => setTeacherTab(tab)}
+                  onClick={() => handleTabChange(tab)}
                   className={`px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
                     teacherTab === tab
                       ? 'bg-primary/10 text-primary dark:text-purple-300 border border-primary/35 shadow-sm shadow-primary/10'
@@ -591,7 +633,7 @@ export default function DashboardPage() {
                               <button
                                 onClick={() => {
                                   setMarkingClassId(c.id);
-                                  setTeacherTab('attendance');
+                                  handleTabChange('attendance');
                                 }}
                                 className="px-3.5 py-1.5 bg-purple-600 text-white text-xs font-semibold rounded-lg hover:bg-purple-700"
                               >
@@ -607,7 +649,7 @@ export default function DashboardPage() {
                     <div className="bg-surface rounded-xl shadow-md p-6 space-y-4">
                       <h2 className="text-xl font-bold text-white">Quick Tasks</h2>
                       <button
-                        onClick={() => setTeacherTab('attendance')}
+                        onClick={() => handleTabChange('attendance')}
                         className="w-full text-left p-3.5 rounded-lg border border-border hover:border-purple-500 transition-colors flex items-center gap-3"
                       >
                         <span className="text-xl">📅</span>
@@ -617,7 +659,7 @@ export default function DashboardPage() {
                         </div>
                       </button>
                       <button
-                        onClick={() => setTeacherTab('upload')}
+                        onClick={() => handleTabChange('upload')}
                         className="w-full text-left p-3.5 rounded-lg border border-border hover:border-purple-500 transition-colors flex items-center gap-3"
                       >
                         <span className="text-xl">📚</span>
@@ -627,7 +669,7 @@ export default function DashboardPage() {
                         </div>
                       </button>
                       <button
-                        onClick={() => setTeacherTab('students')}
+                        onClick={() => handleTabChange('students')}
                         className="w-full text-left p-3.5 rounded-lg border border-border hover:border-purple-500 transition-colors flex items-center gap-3"
                       >
                         <span className="text-xl">🔎</span>
@@ -680,7 +722,7 @@ export default function DashboardPage() {
                           <button
                             onClick={() => {
                               setMarkingClassId(c.id);
-                              setTeacherTab('attendance');
+                              handleTabChange('attendance');
                             }}
                             className="flex-1 py-2 bg-purple-600 text-white rounded-lg text-xs font-bold hover:bg-purple-700"
                           >
@@ -689,7 +731,7 @@ export default function DashboardPage() {
                           <button
                             onClick={() => {
                               setUploadClassId(c.id);
-                              setTeacherTab('upload');
+                              handleTabChange('upload');
                             }}
                             className="px-3 py-2 border border-border text-gray-700 dark:text-text-secondary rounded-lg text-xs hover:bg-gray-50 dark:hover:bg-gray-700"
                           >

@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/cn';
 import { useAuthStore } from '@/store/authStore';
+import { Suspense } from 'react';
 
 const studentMenuItems = [
   { label: 'Dashboard',        href: '/dashboard',  icon: '📊' },
@@ -27,12 +28,27 @@ const teacherMenuItems = [
 ];
 
 export function Sidebar() {
+  return (
+    <Suspense fallback={<aside className="w-64 sidebar-premium h-screen sticky top-0" />}>
+      <SidebarContent />
+    </Suspense>
+  );
+}
+
+function SidebarContent() {
   const pathname  = usePathname();
   const router    = useRouter();
+  const searchParams = useSearchParams();
+  const activeTab = searchParams ? searchParams.get('tab') : null;
   const { user, logout } = useAuthStore();
 
   const isTeacher = user?.role === 'teacher';
-  const menuItems = isTeacher ? teacherMenuItems : studentMenuItems;
+  const menuItems = (isTeacher ? teacherMenuItems : studentMenuItems) as Array<{
+    label: string;
+    href: string;
+    icon: string;
+    tab?: string;
+  }>;
 
   const handleLogout = () => {
     logout();
@@ -74,11 +90,14 @@ export function Sidebar() {
         {/* Nav */}
         <nav className="p-3 space-y-1 pb-24">
           {menuItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+            const isDashboard = item.href === '/dashboard';
+            const isActive = isDashboard
+              ? (pathname === '/dashboard' && (item.tab ? activeTab === item.tab : (!activeTab || activeTab === 'home' || !isTeacher)))
+              : (pathname === item.href || pathname.startsWith(item.href + '/'));
             return (
               <Link
                 key={item.label}
-                href={item.href}
+                href={item.tab ? `${item.href}?tab=${item.tab}` : item.href}
                 className={cn(
                   'sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm',
                   isActive
