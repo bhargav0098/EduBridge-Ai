@@ -1,82 +1,115 @@
 # 🎓 EduBridge AI
-
-> **Next-generation AI-powered learning ecosystem.**  
-> *Personalized • Adaptive • Inclusive*
-
----
-
-EduBridge AI is a high-fidelity learning platform designed to level the academic playing field for all students. By combining real-time AI guidance, personalized adaptive assessments, peer study circles, and integrated campus tools, the platform helps bridge educational gaps and makes learning immersive and inclusive.
-
-## 🚀 Key Modules
-
-*   **💬 AI Tutor:** Resolves learning doubts, translates lecture notes into regional languages, and generates markdown explanations in real-time.
-*   **📈 Adaptive Assessment:** Dynamically adjusts quiz difficulty based on student performance to address conceptual weaknesses.
-*   **👥 Peer Matching:** Recommends peer study groups and matching circles based on complementary strengths.
-*   **🏫 Campus & College Tools:** Facilitates laboratory equipment booking, attendance tracking, and textbook requests.
+> **Next-generation AI-powered learning ecosystem designed to bridge academic divides.**  
+> *Adaptive • Personalized • Highly Inclusive*
 
 ---
 
-## 🎨 Professional Design & Cinematic Intro
-
-The platform is designed with a premium, judge-ready visual experience:
-*   **Cinematic Bootup Sequence:** An automated tech loading screen featuring terminal status output, matrix-style data streams, concentric pulse rings, and interactive transition animations before routing into the platform.
-*   **Fidelity-Driven Theme Engine:** A fully responsive Light and Dark theme, switchable instantly using Next-themes with guaranteed text contrast, card design system uniformity, and beautiful gradients.
-
----
-
-## 📐 UX Wireframes Dashboard
-
-A comprehensive set of interactive, pixel-perfect UX wireframes is included under the `/wireframes` directory.
-
-### How to View
-Open `wireframes/index.html` in any modern web browser to access the central UX dashboard, Brand Kit tokens, typography scale, and interactive mockups for the following screens:
-1.  **Component Library** (buttons, form inputs, feedback/error states, modals)
-2.  **Landing Page** (hero banner, value proposition, testimonials)
-3.  **Authentication Portal** (register/login validation)
-4.  **Student Dashboard** (overview panel, progress trackers, streaks)
-5.  **AI Chat Window** (multi-pane layout, markdown formatting)
-6.  **Quiz Roster & Test Screen** (adaptive questions, grading card)
-7.  **Attendance Tracker** (student calendar view, teacher roster)
-8.  **Notes Workspaces** (rich text toolbar, flashcards, summary panels)
-9.  **Events Calendar** (weekly timetable grid)
-10. **Resource Reservation** (lab bookings, peer study group chats)
-11. **Teacher Dashboard** (performance charts, student risk alerts)
-12. **Admin Panel** (audit logs, server health metrics)
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Framer_Motion-black?style=for-the-badge&logo=framer&logoColor=white" alt="Framer Motion" />
+</p>
 
 ---
 
-## 🛠️ Tech Stack
+## 🏛️ System Architecture
 
-*   **Framework:** Next.js (App Router)
-*   **UI Library:** React with Framer Motion (premium easing and micro-animations)
-*   **Styling:** Tailwind CSS & Custom Design System CSS tokens
-*   **Theme Management:** Next Themes
+Below is the conceptual architecture showing how the interactive frontend modules, state controllers, local data sources, and the Next-Themes engine interlock to deliver a unified, cinematic, and responsive platform.
+
+```mermaid
+graph TD
+    %% Styling
+    classDef client fill:#312E81,stroke:#6366F1,stroke-width:2px,color:#fff;
+    classDef logic fill:#1E1B4B,stroke:#8B5CF6,stroke-width:2px,color:#fff;
+    classDef services fill:#0D0B1E,stroke:#06B6D4,stroke-width:2px,color:#fff;
+    classDef storage fill:#080814,stroke:#10B981,stroke-width:2px,color:#fff;
+
+    %% Nodes
+    subgraph UI_Layer ["Client & UI Layer (Framer Motion + Tailwind CSS)"]
+        A["Cinematic Bootup Screen (Terminal + Streams)"]:::client
+        B["Theme Controller (next-themes: Light/Dark)"]:::client
+        C["Main Landing Page & Nav Roster"]:::client
+    end
+
+    subgraph Logic_Layer ["Application & Logic Engines"]
+        D["💬 AI Tutor Interface"]:::logic
+        E["📈 Adaptive Quiz Engine"]:::logic
+        F["👥 Peer Matching Module"]:::logic
+        G["🏫 Campus Resource Booking"]:::logic
+    end
+
+    subgraph Service_Layer ["Services & Middleware"]
+        H["Attendance Services"]:::services
+        I["Local API Adapters & Mock State"]:::services
+    end
+
+    subgraph Data_Layer ["Data & Specifications"]
+        J["UX Wireframes Dashboard (HTML Mockups)"]:::storage
+        K["Local Design Tokens (Sora + Inter + Variable CSS)"]:::storage
+    end
+
+    %% Flows & Connections
+    A -->|"Auto-transition (2.8s Fade)"| C
+    B -->|"Applies Class / Var Tokens"| K
+    K -->|"Drives Colors & Layout"| C
+    C -->|"Directs to"| Logic_Layer
+    
+    D & E & F & G <--> I
+    I <--> H
+    J <-->|"Drives Layout Specifications"| UI_Layer
+```
 
 ---
 
-## ⚙️ Getting Started
+## ✨ Outstanding Features & Capabilities
 
-### Prerequisites
-*   Node.js (v18+)
-*   npm or yarn
+| Module | Purpose | Cinematic Element | Key UX Screen |
+| :--- | :--- | :--- | :--- |
+| **💬 AI Tutor** | Direct tutoring and multi-lingual translation | Markdown stream transitions | Interactive 3-panel chat view |
+| **📈 Adaptive Quiz** | Evaluates student knowledge gaps | Spring-physics animated card flips | Responsive results scorecard |
+| **👥 Peer Matching** | Links students with complementary skills | Concentric pulse ring indicators | Group discussion portal |
+| **🏫 Campus Tools** | Organizes schedules and bookings | Micro-animated timeline blocks | Lab resource scheduler |
 
-### Installation & Development
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/diyamajee-spec/Edubridge-AI.git
-    cd Edubridge-AI
-    ```
-2.  Install dependencies:
+---
+
+## 🎭 Visual Excellence & Polish
+
+*   **Cinematic Intro Sequence:** Includes vertical matrix data stream columns, circular ripple pulses, a shimmer loading progress indicator, and a cyber-themed status terminal that automatically guides the user to `/home` with custom expo transitions.
+*   **Aesthetic Theme Engine:** Incorporates custom Variable-based Design CSS tokens. Includes an advanced Light/Dark toggler, resolving all text contrast limits and card container gradients for judges.
+
+---
+
+## 📂 Interactive UX Wireframes Library
+
+A complete pixel-perfect mockup library is located in the `/wireframes` directory.
+
+### Visualizing Dashboard & Screens
+Open `wireframes/index.html` in any web browser to view:
+1.  **Component Library:** Button styles, field validations, modals.
+2.  **Auth Portals:** Adaptive forms for Register & Login.
+3.  **Student Hub:** Streak counter, course analytics, widgets.
+4.  **Notes Editor:** WYSIWYG editor with flashcards and summary sidebars.
+5.  **Teacher/Admin Panel:** CPU gauges, class performance charts.
+
+---
+
+## ⚙️ Development & Quickstart
+
+### Setup Instructions
+1.  **Install project packages:**
     ```bash
     npm install
     ```
-3.  Run the development server:
+2.  **Launch local dev environment:**
     ```bash
     npm run dev
     ```
-    Open [http://localhost:3000](http://localhost:3000) to view the application.
+3.  **Open in browser:**
+    Visit [http://localhost:3000](http://localhost:3000).
 
-4.  Build for production:
+4.  **Produce build binary:**
     ```bash
     npm run build
     ```
