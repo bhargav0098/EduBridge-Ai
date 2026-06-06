@@ -24,6 +24,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             error && 'border-red-500 dark:border-red-500',
             className
           )}
+          {...(props.value !== undefined ? { value: props.value } : {})}
           {...props}
         />
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
