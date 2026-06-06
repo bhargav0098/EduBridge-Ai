@@ -1,3 +1,4 @@
+<h1 align="center">🎓 EduBridge AI</h1>
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-16.2-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" />
   <img src="https://img.shields.io/badge/React-19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
@@ -11,7 +12,6 @@
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
 </p>
 
-<h1 align="center">🎓 EduBridge AI</h1>
 
 <p align="center">
   <strong>Next-generation AI-powered learning ecosystem bridging academic divides across India.</strong><br/>
