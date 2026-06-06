@@ -86,13 +86,13 @@ export default function ChatPage() {
 
         <div className="flex flex-1 overflow-hidden">
           {/* Chat History Sidebar */}
-          <div className="w-64 bg-[#0f172a]/60 backdrop-blur-md border-r border-indigo-500/10 p-4 overflow-y-auto hidden lg:block">
+          <div className="w-64 bg-surface-2/40 dark:bg-[#0f172a]/60 backdrop-blur-md border-r border-border p-4 overflow-y-auto hidden lg:block">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold text-xs uppercase tracking-wider text-primary-light/60 font-mono">Chat History</h2>
+              <h2 className="font-bold text-xs uppercase tracking-wider text-text-secondary/60 dark:text-primary-light/60 font-mono">Chat History</h2>
               <button
                 onClick={clearChat}
                 suppressHydrationWarning={true}
-                className="text-xs font-semibold text-red-400 hover:text-red-300 transition-colors bg-red-500/10 px-2 py-1 rounded-lg border border-red-500/20"
+                className="text-xs font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors bg-red-500/10 px-2 py-1 rounded-lg border border-red-500/20"
               >
                 🗑️ Clear
               </button>
@@ -101,7 +101,7 @@ export default function ChatPage() {
               {messages.slice(0, 8).map((msg, idx) => (
                 <div
                   key={idx}
-                  className="p-2.5 rounded-xl bg-surface border border-border-subtle text-xs font-medium text-text-secondary hover:text-white hover:bg-white/[0.08] cursor-pointer transition-all truncate"
+                  className="p-2.5 rounded-xl bg-surface border border-border-subtle text-xs font-medium text-text-secondary hover:text-text-primary dark:hover:text-white hover:bg-primary/5 dark:hover:bg-white/[0.08] cursor-pointer transition-all truncate"
                 >
                   {msg.content.substring(0, 30) || "Image doubt session..."}
                 </div>
@@ -110,7 +110,7 @@ export default function ChatPage() {
           </div>
 
           {/* Main Chat Area */}
-          <div className="flex-1 flex flex-col bg-[#050b18]/40">
+          <div className="flex-1 flex flex-col bg-background/40 dark:bg-[#050b18]/40">
             {/* Messages Container */}
             <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
               {messages.length === 0 ? (
@@ -122,7 +122,7 @@ export default function ChatPage() {
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg text-3xl mb-4 animate-pulse-glow">
                     🤖
                   </div>
-                  <h2 className="text-2xl font-black text-white mb-2">EduBridge AI Tutor</h2>
+                  <h2 className="text-2xl font-black text-text-primary dark:text-white mb-2">EduBridge AI Tutor</h2>
                   <p className="text-text-secondary/50 text-center max-w-sm text-sm">
                     Ask me anything about your studies! Upload images for OCR, use voice input, and get instant explanations.
                   </p>
@@ -153,7 +153,7 @@ export default function ChatPage() {
                       <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                       <p
                         className={`text-[10px] font-mono mt-2 text-right ${
-                          msg.role === 'user' ? 'text-text-secondary/60' : 'text-primary-light/40'
+                          msg.role === 'user' ? 'text-text-secondary/60' : 'text-text-muted/60 dark:text-primary-light/40'
                         }`}
                       >
                         {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -179,7 +179,7 @@ export default function ChatPage() {
             </div>
 
             {/* Input Area */}
-            <div className="border-t border-indigo-500/10 bg-[#0f172a]/40 p-4 md:p-6 backdrop-blur-md">
+            <div className="border-t border-border bg-white/60 dark:bg-[#0f172a]/40 p-4 md:p-6 backdrop-blur-md">
               {uploadedImage && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -217,7 +217,7 @@ export default function ChatPage() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask EduBridge AI..."
-                    className="flex-1 px-4 py-3 bg-surface border border-border text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm placeholder:text-primary-light/30"
+                    className="flex-1 px-4 py-3 bg-surface border border-border text-text-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm placeholder:text-text-muted/50 dark:placeholder:text-primary-light/30"
                     onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                     disabled={isLoading}
                     aria-label="Message input"
@@ -226,7 +226,7 @@ export default function ChatPage() {
 
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-4 bg-surface border border-border hover:bg-white/10 text-primary-light hover:text-white rounded-xl transition-all flex items-center justify-center text-lg"
+                    className="px-4 bg-surface border border-border hover:bg-primary/5 dark:hover:bg-white/10 text-primary dark:text-primary-light hover:text-primary-dark dark:hover:text-white rounded-xl transition-all flex items-center justify-center text-lg"
                     title="Upload image"
                     aria-label="Upload image"
                     suppressHydrationWarning={true}
@@ -236,7 +236,9 @@ export default function ChatPage() {
 
                   <button
                     onClick={handleVoiceInput}
-                    className={`px-4 bg-surface border border-border hover:bg-white/10 text-primary-light hover:text-white rounded-xl transition-all flex items-center justify-center text-lg ${isRecording ? 'ring-2 ring-red-500 bg-red-500/10' : ''}`}
+                    className={`px-4 bg-surface border border-border hover:bg-primary/5 dark:hover:bg-white/10 text-primary dark:text-primary-light hover:text-primary-dark dark:hover:text-white rounded-xl transition-all flex items-center justify-center text-lg ${
+                      isRecording ? 'ring-2 ring-red-500 bg-red-500/10 text-red-500 hover:text-red-600' : ''
+                    }`}
                     title="Voice input"
                     aria-label="Toggle voice input"
                     suppressHydrationWarning={true}

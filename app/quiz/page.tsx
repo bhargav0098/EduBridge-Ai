@@ -122,19 +122,19 @@ export default function QuizPage() {
               animate={{ opacity: 1, y: 0 }}
               className="max-w-2xl mx-auto"
             >
-              <div className="bg-gradient-to-br from-indigo-900/80 via-indigo-950/40 to-[#030712] border border-indigo-500/20 text-white rounded-2xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
+              <div className="bg-surface border border-border text-text-primary rounded-2xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
-                <h1 className="text-4xl md:text-5xl font-black mb-4">
+                <h1 className="text-4xl md:text-5xl font-black mb-4 text-text-primary dark:text-white">
                   📝 Adaptive <span className="gradient-text">Quiz</span>
                 </h1>
-                <p className="text-sm text-text-secondary/60 mb-8 leading-relaxed max-w-xl">
+                <p className="text-sm text-text-secondary/80 dark:text-text-secondary/60 mb-8 leading-relaxed max-w-xl">
                   Test your knowledge with our intelligent quiz system. Your answers will be analyzed to provide
                   personalized learning recommendations and identify strengths or weaknesses.
                 </p>
 
-                <div className="bg-surface border border-border rounded-xl p-6 mb-8 backdrop-blur-sm">
-                  <h2 className="text-lg font-bold mb-4 text-white uppercase tracking-wider font-mono text-xs">Quiz Parameters</h2>
-                  <ul className="space-y-3.5 text-sm text-indigo-100">
+                <div className="bg-surface-2 border border-border rounded-xl p-6 mb-8 backdrop-blur-sm">
+                  <h2 className="text-lg font-bold mb-4 text-text-primary dark:text-white uppercase tracking-wider font-mono text-xs">Quiz Parameters</h2>
+                  <ul className="space-y-3.5 text-sm text-text-secondary dark:text-indigo-100">
                     <li className="flex items-center gap-3">
                       <span className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">📊</span>
                       <span>5 Targeted Questions</span>
@@ -191,7 +191,7 @@ export default function QuizPage() {
           <Navbar />
           <main className="flex-1 overflow-auto p-6 md:p-8">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto space-y-8">
-              <h1 className="text-4xl font-black text-white">Quiz Results 🎉</h1>
+              <h1 className="text-4xl font-black text-text-primary dark:text-white">Quiz Results 🎉</h1>
 
               {/* Score Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -201,9 +201,9 @@ export default function QuizPage() {
                   transition={{ delay: 0.1 }}
                   className="bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20 rounded-2xl p-6 shadow-lg relative overflow-hidden"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-wider text-green-400/80">Correct Answers</p>
-                  <p className="text-5xl font-black text-white mt-2">{correctCount}</p>
-                  <p className="text-xs text-primary-light/40 mt-1">out of {totalCount} total questions</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-green-600 dark:text-green-400/80">Correct Answers</p>
+                  <p className="text-5xl font-black text-text-primary dark:text-white mt-2">{correctCount}</p>
+                  <p className="text-xs text-text-secondary/60 dark:text-primary-light/40 mt-1">out of {totalCount} total questions</p>
                 </motion.div>
 
                 <motion.div
@@ -212,9 +212,9 @@ export default function QuizPage() {
                   transition={{ delay: 0.2 }}
                   className="bg-gradient-to-br from-indigo-500/10 to-indigo-600/5 border border-indigo-500/20 rounded-2xl p-6 shadow-lg relative overflow-hidden"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-wider text-indigo-400/80">Accuracy Rate</p>
-                  <p className="text-5xl font-black text-white mt-2">{results.accuracy}%</p>
-                  <p className="text-xs text-primary-light/40 mt-1">Success Performance</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400/80">Accuracy Rate</p>
+                  <p className="text-5xl font-black text-text-primary dark:text-white mt-2">{results.accuracy}%</p>
+                  <p className="text-xs text-text-secondary/60 dark:text-primary-light/40 mt-1">Success Performance</p>
                 </motion.div>
 
                 <motion.div
@@ -223,11 +223,11 @@ export default function QuizPage() {
                   transition={{ delay: 0.3 }}
                   className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20 rounded-2xl p-6 shadow-lg relative overflow-hidden"
                 >
-                  <p className="text-xs font-semibold uppercase tracking-wider text-purple-400/80">Evaluation Grade</p>
-                  <p className="text-5xl font-black text-white mt-2">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400/80">Evaluation Grade</p>
+                  <p className="text-5xl font-black text-text-primary dark:text-white mt-2">
                     {results.accuracy >= 90 ? 'A' : results.accuracy >= 80 ? 'B' : results.accuracy >= 70 ? 'C' : 'D'}
                   </p>
-                  <p className="text-xs text-primary-light/40 mt-1">AI Assessed Rank</p>
+                  <p className="text-xs text-text-secondary/60 dark:text-primary-light/40 mt-1">AI Assessed Rank</p>
                 </motion.div>
               </div>
 
@@ -297,7 +297,7 @@ export default function QuizPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-surface border border-border rounded-2xl p-6 backdrop-blur-sm"
               >
-                <h2 className="text-md font-bold mb-6 text-white uppercase tracking-wider font-mono text-xs">Review Details</h2>
+                <h2 className="text-md font-bold mb-6 text-text-primary dark:text-white uppercase tracking-wider font-mono text-xs">Review Details</h2>
                 <div className="space-y-4">
                   {questions.map((question, idx) => {
                     const isCorrect = answers[idx] === question.correct;
@@ -311,8 +311,8 @@ export default function QuizPage() {
                         }`}
                       >
                         <div className="flex items-start justify-between mb-2">
-                          <h3 className="font-bold text-white text-sm">Q{idx + 1}: {question.question}</h3>
-                          <span className={`text-xs font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
+                          <h3 className="font-bold text-text-primary dark:text-white text-sm">Q{idx + 1}: {question.question}</h3>
+                          <span className={`text-xs font-bold ${isCorrect ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                             {isCorrect ? '✓ Correct' : '✗ Incorrect'}
                           </span>
                         </div>
@@ -322,7 +322,7 @@ export default function QuizPage() {
                         <p className="text-xs text-text-secondary/70 mb-2">
                           <span className="font-bold">Correct Selection:</span> {question.options[question.correct]}
                         </p>
-                        <p className="text-xs text-primary-light/40 italic font-mono mt-3 border-t border-border-subtle pt-2">{question.explanation}</p>
+                        <p className="text-xs text-text-muted/60 dark:text-primary-light/40 italic font-mono mt-3 border-t border-border-subtle pt-2">{question.explanation}</p>
                       </div>
                     );
                   })}
@@ -354,10 +354,10 @@ export default function QuizPage() {
   // Quiz in progress
   if (questions.length === 0) {
     return (
-      <div className="flex h-screen bg-[#030712] items-center justify-center">
+      <div className="flex h-screen bg-background items-center justify-center">
         <div className="text-center">
           <div className="animate-spin text-5xl mb-4">📚</div>
-          <p className="text-xs text-primary-light/60 font-mono">Loading Quiz Instance...</p>
+          <p className="text-xs text-text-secondary/60 dark:text-primary-light/60 font-mono">Loading Quiz Instance...</p>
         </div>
       </div>
     );
@@ -398,7 +398,7 @@ export default function QuizPage() {
               animate={{ opacity: 1, y: 0 }}
               className="bg-surface border border-border backdrop-blur-sm rounded-2xl p-8 mb-8 relative overflow-hidden"
             >
-              <h2 className="text-xl font-bold mb-8 text-white">{question.question}</h2>
+              <h2 className="text-xl font-bold mb-8 text-text-primary dark:text-white">{question.question}</h2>
 
               {/* Options */}
               <div className="space-y-3 mb-8">
@@ -409,8 +409,8 @@ export default function QuizPage() {
                     onClick={() => handleAnswerSelect(idx)}
                     className={`w-full p-4 text-left rounded-xl border-2 font-medium transition-all text-sm ${
                       answers[currentQuestion] === idx
-                        ? 'border-indigo-500 bg-indigo-500/10 text-white font-bold'
-                        : 'border-border-subtle hover:border-indigo-500/30 text-text-secondary/70 hover:text-white bg-white/[0.02]'
+                        ? 'border-indigo-500 bg-indigo-500/10 text-primary dark:text-white font-bold'
+                        : 'border-border-subtle hover:border-indigo-500/30 text-text-secondary/70 hover:text-text-primary dark:hover:text-white bg-white/[0.02]'
                     }`}
                   >
                     <span className="flex items-center gap-3">
@@ -418,7 +418,7 @@ export default function QuizPage() {
                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center text-xs ${
                           answers[currentQuestion] === idx
                             ? 'border-indigo-400 bg-indigo-500 text-white'
-                            : 'border-white/20'
+                            : 'border-border'
                         }`}
                       >
                         {answers[currentQuestion] === idx && '✓'}

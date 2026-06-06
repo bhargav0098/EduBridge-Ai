@@ -408,18 +408,18 @@ export default function ResourceAllocatorPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#0b1224] border border-border rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden relative"
+              className="bg-surface border border-border rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden relative"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] pointer-events-none" />
               {/* Modal Header */}
               <div className="p-5 border-b border-border flex justify-between items-center">
                 <div>
-                  <h3 className="text-lg font-black text-white">Reserve Resource</h3>
-                  <p className="text-xs text-primary-light/50">{selectedResource.name}</p>
+                  <h3 className="text-lg font-black text-text-primary dark:text-white">Reserve Resource</h3>
+                  <p className="text-xs text-text-secondary/60 dark:text-primary-light/50">{selectedResource.name}</p>
                 </div>
                 <button
                   onClick={() => setSelectedResource(null)}
-                  className="text-primary-light/60 hover:text-white text-xl transition-colors"
+                  className="text-text-secondary/60 hover:text-text-primary dark:text-primary-light/60 dark:hover:text-white text-xl transition-colors"
                 >
                   ✕
                 </button>
@@ -428,7 +428,7 @@ export default function ResourceAllocatorPage() {
               <form onSubmit={handleConfirmBooking} className="p-6 space-y-5">
                 {/* Date Picker */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-primary-light/60 font-mono">Select Date:</label>
+                  <label className="text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-primary-light/60 font-mono">Select Date:</label>
                   <input
                     type="date"
                     required
@@ -438,13 +438,13 @@ export default function ResourceAllocatorPage() {
                       setBookingDate(e.target.value);
                       setSelectedTimeSlot(''); // reset slot when date changes
                     }}
-                    className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 text-sm text-text-primary outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                    className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 text-sm text-text-primary outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                   />
                 </div>
 
                 {/* Time Slot Grid */}
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-primary-light/60 font-mono">Select Time Slot:</label>
+                  <label className="text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-primary-light/60 font-mono">Select Time Slot:</label>
                   <div className="grid grid-cols-2 gap-2">
                     {TIME_SLOTS.map(slot => {
                       const available = isSlotAvailable(slot);
@@ -458,15 +458,15 @@ export default function ResourceAllocatorPage() {
                           onClick={() => setSelectedTimeSlot(slot)}
                           className={`p-2.5 rounded-xl text-left text-xs font-bold border transition-all ${
                             !available
-                              ? 'bg-surface border-transparent text-primary-light/20 cursor-not-allowed'
+                              ? 'bg-surface-2 border-transparent text-text-muted/20 dark:text-primary-light/20 cursor-not-allowed'
                               : isSelected
-                              ? 'bg-indigo-500 border-indigo-500 text-white shadow-sm'
-                              : 'bg-indigo-500/10 hover:bg-indigo-500/20 border-indigo-500/20 text-primary-light'
+                              ? 'bg-primary border-primary text-white shadow-sm'
+                              : 'bg-primary/10 hover:bg-primary/20 border-primary/20 text-primary dark:text-primary-light'
                           }`}
                         >
                           <div className="flex justify-between items-center">
                             <span>{slot.split(' - ')[0]}</span>
-                            <span className={`text-[8px] px-1 py-0.5 rounded font-mono uppercase font-black ${available ? 'bg-indigo-500/20 text-primary-light' : 'bg-surface text-primary-light/10'}`}>
+                            <span className={`text-[8px] px-1 py-0.5 rounded font-mono uppercase font-black ${available ? 'bg-primary/20 text-primary dark:text-primary-light' : 'bg-surface-2 text-text-muted/10 dark:text-primary-light/10'}`}>
                               {available ? 'Free' : 'Taken'}
                             </span>
                           </div>
@@ -482,7 +482,7 @@ export default function ResourceAllocatorPage() {
                   <button
                     type="button"
                     onClick={() => setSelectedResource(null)}
-                    className="px-4 py-2 bg-surface border border-border text-text-secondary/60 text-xs font-bold rounded-xl hover:bg-white/10 hover:text-white transition-all"
+                    className="px-4 py-2 bg-surface border border-border text-text-secondary/60 text-xs font-bold rounded-xl hover:bg-primary/5 hover:text-text-primary dark:hover:bg-white/10 dark:hover:text-white transition-all"
                   >
                     Cancel
                   </button>

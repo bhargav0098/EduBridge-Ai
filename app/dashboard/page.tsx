@@ -214,7 +214,7 @@ export default function DashboardPage() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.22, ease: 'easeOut' },
+      transition: { duration: 0.22, ease: 'easeOut' as const },
     },
   };
 
@@ -227,17 +227,17 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="flex h-screen bg-background text-white text-slate-900 tech-grid">
+    <div className="flex h-screen bg-background text-text-primary tech-grid">
       <Toaster position="top-right" />
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar />
 
         {/* Role-locked header bar with contextual tabs */}
-        <div className="bg-[#0f172a]/80 backdrop-blur-md border-b border-indigo-500/10 px-6 py-3.5 flex items-center justify-between flex-shrink-0">
+        <div className="bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur-md border-b border-border px-6 py-3.5 flex items-center justify-between flex-shrink-0">
           {/* Read-only role badge */}
           <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary-light/60 font-mono">Signed in as:</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary/60 dark:text-primary-light/60 font-mono">Signed in as:</span>
             <div className={`px-4 py-1.5 rounded-lg text-xs font-bold ${
               currentRole === 'teacher'
                 ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-lg shadow-purple-500/20'
@@ -256,7 +256,7 @@ export default function DashboardPage() {
                   onClick={() => setStudentTab(tab)}
                   className={`px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
                     studentTab === tab
-                      ? 'bg-indigo-500/10 text-primary-light border border-indigo-500/35 shadow-sm shadow-indigo-500/10'
+                      ? 'bg-primary/10 text-primary dark:text-primary-light border border-indigo-500/35 shadow-sm shadow-indigo-500/10'
                       : 'bg-transparent text-text-secondary/40 hover:text-text-secondary/70 border border-transparent'
                   }`}
                 >
@@ -275,7 +275,7 @@ export default function DashboardPage() {
                   onClick={() => setTeacherTab(tab)}
                   className={`px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
                     teacherTab === tab
-                      ? 'bg-purple-500/10 text-purple-300 border border-purple-500/35 shadow-sm shadow-purple-500/10'
+                      ? 'bg-primary/10 text-primary dark:text-purple-300 border border-primary/35 shadow-sm shadow-primary/10'
                       : 'bg-transparent text-text-secondary/40 hover:text-text-secondary/70 border border-transparent'
                   }`}
                 >
@@ -333,9 +333,9 @@ export default function DashboardPage() {
                       <div className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={progressData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                            <XAxis dataKey="name" stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
-                            <YAxis stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" vertical={false} />
+                            <XAxis dataKey="name" stroke="var(--border)" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                            <YAxis stroke="var(--border)" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
                             <Tooltip
                               contentStyle={{
                                 backgroundColor: 'rgba(15, 23, 42, 0.9)',
@@ -373,9 +373,9 @@ export default function DashboardPage() {
                       <div className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                           <BarChart data={subjectData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                            <XAxis dataKey="name" stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
-                            <YAxis stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" vertical={false} />
+                            <XAxis dataKey="name" stroke="var(--border)" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                            <YAxis stroke="var(--border)" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
                             <Tooltip
                               contentStyle={{
                                 backgroundColor: 'rgba(15, 23, 42, 0.9)',

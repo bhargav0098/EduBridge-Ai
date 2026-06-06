@@ -161,10 +161,10 @@ export default function LandingPage() {
               { target: 24, suffix: 'h MVP', label: 'Platform Build Cycle' },
             ].map((s, i) => (
               <div key={i} className="space-y-1">
-                <div className="text-3xl sm:text-4xl font-black text-white">
+                <div className="text-3xl sm:text-4xl font-black text-white-force">
                   <StatCounter target={s.target} suffix={s.suffix} />
                 </div>
-                <p className="text-xs sm:text-sm text-primary-light/70 font-medium">{s.label}</p>
+                <p className="text-xs sm:text-sm text-white-force opacity-70 font-medium">{s.label}</p>
               </div>
             ))}
           </div>
@@ -267,14 +267,14 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-12 bg-gray-50 dark:bg-transparent" style={{ background: undefined }}>
+      <footer className="border-t border-border py-12 bg-surface-2 dark:bg-surface" style={{ background: undefined }}>
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           <div className="space-y-4">
             <span className="text-lg font-extrabold gradient-text">EduBridge AI</span>
             <p className="text-xs text-text-muted leading-relaxed">Personalized learning portals leveling academic progression for every student.</p>
           </div>
           <div className="space-y-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-text-disabled">Resources</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-text-primary dark:text-primary-light">Resources</span>
             <div className="flex flex-col gap-2 text-xs text-text-muted">
               <Link href="/dashboard" className="hover:text-indigo-600 dark:hover:text-white transition-colors">Platform Dashboard</Link>
               <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-indigo-600 dark:hover:text-white transition-colors">GitHub Repository</a>
@@ -282,7 +282,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="space-y-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-text-disabled">Platform Developer</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-text-primary dark:text-primary-light">Platform Developer</span>
             <div className="text-xs text-text-muted space-y-1">
               <div>Created by Team: <strong className="text-text-primary">Achievers</strong></div>
               <div>License: MIT Open Source</div>
@@ -290,7 +290,7 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-6 border-t border-gray-200 dark:border-gray-800 mt-8 pt-6 text-center text-xs text-gray-500">
+        <div className="max-w-7xl mx-auto px-6 border-t border-border mt-8 pt-6 text-center text-xs text-text-muted/60">
           <p>&copy; {new Date().getFullYear()} EduBridge AI. Open-source under Team Achievers.</p>
         </div>
       </footer>

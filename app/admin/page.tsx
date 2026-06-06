@@ -170,9 +170,9 @@ export default function AdminDashboard() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={analyticsData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                      <XAxis dataKey="date" stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
-                      <YAxis stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" vertical={false} />
+                      <XAxis dataKey="date" stroke="var(--border)" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                      <YAxis stroke="var(--border)" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
                       <Tooltip
                         contentStyle={{
                           backgroundColor: 'rgba(15, 23, 42, 0.9)',
@@ -209,9 +209,9 @@ export default function AdminDashboard() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={analyticsData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                      <XAxis dataKey="date" stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
-                      <YAxis stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" vertical={false} />
+                      <XAxis dataKey="date" stroke="var(--border)" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                      <YAxis stroke="var(--border)" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
                       <Tooltip
                         contentStyle={{
                           backgroundColor: 'rgba(15, 23, 42, 0.9)',
@@ -364,21 +364,21 @@ export default function AdminDashboard() {
               {actionModal && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                   <motion.div
-                    className="bg-[#0b1224] border border-border rounded-2xl shadow-2xl p-6 max-w-sm w-full relative overflow-hidden"
+                    className="bg-surface border border-border rounded-2xl shadow-2xl p-6 max-w-sm w-full relative overflow-hidden"
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.95, opacity: 0 }}
                   >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-[40px] pointer-events-none" />
                     
-                    <h3 className="text-lg font-black mb-2 text-white relative z-10 flex items-center gap-2">
+                    <h3 className="text-lg font-black mb-2 text-text-primary dark:text-white relative z-10 flex items-center gap-2">
                       {actionModal.type === 'delete'
                         ? '🗑️ Confirm Deletion'
                         : actionModal.type === 'ban'
                         ? '⚠️ Change Access Status'
                         : '🔑 Security Reset'}
                     </h3>
-                    <p className="text-xs text-primary-light/60 mb-6 leading-relaxed relative z-10 font-mono">
+                    <p className="text-xs text-text-secondary/60 dark:text-primary-light/60 mb-6 leading-relaxed relative z-10 font-mono">
                       {actionModal.type === 'delete'
                         ? 'Are you absolutely sure you want to permanently purge this user record? This action cannot be reversed.'
                         : actionModal.type === 'ban'
@@ -388,7 +388,7 @@ export default function AdminDashboard() {
                     <div className="flex gap-3 justify-end relative z-10 pt-4 border-t border-border">
                       <button 
                         onClick={() => setActionModal(null)}
-                        className="px-4 py-2 bg-surface border border-border text-text-secondary/60 text-xs font-bold rounded-xl hover:bg-white/10 hover:text-white transition-all"
+                        className="px-4 py-2 bg-surface border border-border text-text-secondary/60 text-xs font-bold rounded-xl hover:bg-primary/5 hover:text-text-primary dark:hover:bg-white/10 dark:hover:text-white transition-all"
                       >
                         Abort
                       </button>

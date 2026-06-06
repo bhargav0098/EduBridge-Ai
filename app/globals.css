@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ============================================================
    EduBridge AI — Design Tokens (From Wireframes)
    ============================================================ */
@@ -819,8 +821,13 @@ html:not(.dark) .from-purple-500.text-white,
 html:not(.dark) .from-green-500.text-white,
 html:not(.dark) .text-white-force,
 html:not(.dark) button .text-white,
-html:not(.dark) button.text-white {
+html:not(.dark) button.text-white,
+.text-white-force {
   color: #ffffff !important;
+}
+
+.text-white-force-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 /* Ensure placeholder texts inside inputs are visible in light mode */
