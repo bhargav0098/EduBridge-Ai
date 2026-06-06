@@ -7,11 +7,15 @@ from functools import wraps
 
 from ..database import get_db
 from ..models.models import User, UserRole, StudentProfile, OTPRequest
-from ..schemas.schemas import UserRegister, UserLogin, TokenSchema, UserSchema, PasswordResetRequest, PasswordResetVerify
+from ..schemas.schemas import UserRegister, UserLogin, TokenSchema, UserSchema, PasswordResetRequest, PasswordResetVerify, AuthResponseSchema
 from ..services.auth_service import AuthService
 from ..services.email_service import EmailService
 import random
+import logging
 from datetime import datetime, timedelta
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 router = APIRouter()
 security = HTTPBearer()
@@ -59,11 +63,17 @@ class RoleChecker:
             )
         return current_user
 
-@router.post("/register", response_model=TokenSchema, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=AuthResponseSchema, status_code=status.HTTP_201_CREATED)
 def register(user_data: UserRegister, db: Session = Depends(get_db)):
+    normalized_email = user_data.email.strip().lower()
+    logger.info("=== REGISTER ATTEMPT ===")
+    logger.info(f"EMAIL: {normalized_email}")
+    logger.info(f"PASSWORD LENGTH: {len(user_data.password)}")
+    
     # Check if user already exists
-    existing_user = db.query(User).filter(User.email == user_data.email).first()
+    existing_user = db.query(User).filter(User.email == normalized_email).first()
     if existing_user:
+        logger.info("RESULT: Email already registered")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered",
@@ -71,12 +81,13 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
 
     # Hash password
     hashed_pw = AuthService.hash_password(user_data.password)
+    logger.info(f"PASSWORD HASHED (len={len(hashed_pw)})")
 
     # Create user
     user_id = str(uuid.uuid4())
     new_user = User(
         id=user_id,
-        email=user_data.email,
+        email=normalized_email,
         name=user_data.name,
         hashed_password=hashed_pw,
         role=user_data.role or UserRole.STUDENT,
@@ -84,6 +95,7 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+    logger.info(f"USER CREATED (id={user_id})")
 
     # Create StudentProfile if user is STUDENT
     if new_user.role == UserRole.STUDENT:
@@ -101,18 +113,40 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
     access_token = AuthService.create_access_token(data={"sub": new_user.email, "role": new_user.role.value})
     refresh_token = AuthService.create_refresh_token(data={"sub": new_user.email})
 
-    return TokenSchema(access_token=access_token, refresh_token=refresh_token)
+    return AuthResponseSchema(
+        access_token=access_token, 
+        refresh_token=refresh_token,
+        user=UserSchema.model_validate(new_user)
+    )
 
-@router.post("/login", response_model=TokenSchema)
+@router.post("/login", response_model=AuthResponseSchema)
 def login(credentials: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == credentials.email).first()
-    if not user or not user.hashed_password:
+    normalized_email = credentials.email.strip().lower()
+    logger.info("=== LOGIN ATTEMPT ===")
+    logger.info(f"EMAIL: {normalized_email}")
+    
+    user = db.query(User).filter(User.email == normalized_email).first()
+    logger.info(f"USER FOUND: {user is not None}")
+    
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+        )
+        
+    has_hash = bool(user.hashed_password)
+    logger.info(f"HASH EXISTS: {has_hash}")
+    
+    if not has_hash:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
         )
 
-    if not AuthService.verify_password(credentials.password, user.hashed_password):
+    password_match = AuthService.verify_password(credentials.password, user.hashed_password)
+    logger.info(f"PASSWORD MATCH: {password_match}")
+    
+    if not password_match:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
@@ -121,8 +155,13 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
     # Generate tokens
     access_token = AuthService.create_access_token(data={"sub": user.email, "role": user.role.value})
     refresh_token = AuthService.create_refresh_token(data={"sub": user.email})
+    logger.info(f"JWT GENERATED: True (len={len(access_token)})")
 
-    return TokenSchema(access_token=access_token, refresh_token=refresh_token)
+    return AuthResponseSchema(
+        access_token=access_token, 
+        refresh_token=refresh_token,
+        user=UserSchema.model_validate(user)
+    )
 
 @router.get("/me", response_model=UserSchema)
 def get_me(current_user: User = Depends(verify_token)):

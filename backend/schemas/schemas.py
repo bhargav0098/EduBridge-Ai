@@ -172,6 +172,9 @@ class TokenSchema(BaseModel):
     refresh_token: str
     token_type: str = "bearer"
 
+class AuthResponseSchema(TokenSchema):
+    user: UserSchema
+
 class PasswordResetRequest(BaseModel):
     email: EmailStr
 

@@ -107,10 +107,15 @@ export default function LoginPage() {
     setIsLoading(true);
     setApiError('');
     try {
+      const payload = {
+        ...data,
+        email: data.email.trim(),
+      };
+      
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
