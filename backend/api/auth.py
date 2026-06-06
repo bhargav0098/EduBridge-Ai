@@ -144,7 +144,7 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
         )
 
     password_match = AuthService.verify_password(credentials.password, user.hashed_password)
-    logger.info(f"PASSWORD MATCH: {password_match}")
+    logger.info("Password verification completed")
     
     if not password_match:
         raise HTTPException(
