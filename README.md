@@ -1,5 +1,28 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## 📐 EduBridge AI — UX Wireframes
+
+We have designed a complete set of highly interactive, pixel-perfect UX wireframes under the `/wireframes` directory that represent all screens and modules of the system.
+
+### How to View the Wireframes
+Open [wireframes/index.html](file:///c:/Users/hp/Edubridge-AI/wireframes/index.html) in any modern web browser to access the central UX dashboard, Brand Kit tokens, typography scale, and links to all interactive mockups.
+
+### Available Mockup Screens
+1.  **Component Library:** Interactive button states, input validation errors/successes, cards, and modal dialogs.
+2.  **Landing Page:** Full marketing website layout with hero banner, pricing metrics, and feature lists.
+3.  **Login & Register Flows:** Dual view showing field verification, role selector tabs, and strength indicators.
+4.  **Student Dashboard:** Core layout with sidebar navigation, progress trackers, and streaks.
+5.  **AI Chat Interface:** 3-panel chat window with code blocks, typing markers, and context references.
+6.  **Adaptive Quiz Module:** Config screen, active selection state with details, and final scorecard.
+7.  **Attendance Tracking:** Student calendar visual layout and teacher mark-attendance roster.
+8.  **Smart Notes Editor:** Workspaces with rich markdown toolbar, AI summary panels, and flashcards.
+9.  **Events Scheduler:** Weekly grid timeline blocks, category tags, and calendar entries.
+10. **Resources & Peer Groups:** Room reservation slots and peer study group real-time chats.
+11. **Teacher Dashboard:** Course average performance charts and at-risk student warnings.
+12. **Admin Control Panel:** Server CPU health gauges, user management rosters, and audit logs.
+
+---
+
 ## Getting Started
 
 First, run the development server:
@@ -15,22 +38,3 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import { Sidebar } from '@/components/ui/Sidebar';
 import { Navbar } from '@/components/ui/Navbar';
-import { Button } from '@/components/ui/Button';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface User {
   id: number;
@@ -97,10 +96,10 @@ export default function AdminDashboard() {
   };
 
   const stats = [
-    { label: 'Total Users', value: '1,245', icon: '👥', color: 'from-blue-500 to-blue-600' },
-    { label: 'Active Users', value: '892', icon: '✅', color: 'from-green-500 to-green-600' },
-    { label: 'Quizzes Taken', value: '3,421', icon: '📝', color: 'from-purple-500 to-purple-600' },
-    { label: 'Chat Sessions', value: '5,678', icon: '💬', color: 'from-pink-500 to-pink-600' },
+    { label: 'Total Users', value: '1,245', icon: '👥', color: 'from-blue-600 to-indigo-600' },
+    { label: 'Active Users', value: '892', icon: '✅', color: 'from-emerald-500 to-teal-600' },
+    { label: 'Quizzes Taken', value: '3,421', icon: '📝', color: 'from-purple-500 to-fuchsia-600' },
+    { label: 'Chat Sessions', value: '5,678', icon: '💬', color: 'from-pink-500 to-rose-600' },
   ];
 
   const containerVariants = {
@@ -119,16 +118,16 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-screen bg-background text-text-primary tech-grid">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar />
-        <main className="flex-1 overflow-auto p-6 md:p-8">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <main className="flex-1 overflow-auto p-6 md:p-8 relative">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative z-10">
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-4xl font-bold dark:text-white">Admin Dashboard</h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">Manage users, monitor activity, and view analytics</p>
+              <h1 className="text-3xl font-black text-white">System <span className="gradient-text">Administration</span> 🛡️</h1>
+              <p className="text-xs text-primary-light/50 mt-1 uppercase tracking-wider font-mono">Manage users, monitor platform activity, and view global analytics</p>
             </div>
 
             {/* Stats Cards */}
@@ -141,14 +140,17 @@ export default function AdminDashboard() {
               {stats.map((stat, idx) => (
                 <motion.div key={idx} variants={itemVariants}>
                   <div
-                    className={`bg-gradient-to-br ${stat.color} text-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow`}
+                    className="tech-card p-6 relative overflow-hidden group"
                   >
-                    <div className="flex items-start justify-between">
+                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.color} opacity-[0.05] group-hover:opacity-[0.15] rounded-full blur-[40px] transition-opacity duration-500 pointer-events-none`} />
+                    <div className="flex items-start justify-between relative z-10">
                       <div>
-                        <p className="text-sm opacity-90 font-medium">{stat.label}</p>
-                        <p className="text-3xl font-bold mt-2">{stat.value}</p>
+                        <p className="text-[10px] text-primary-light/60 uppercase tracking-wider font-mono">{stat.label}</p>
+                        <p className="text-3xl font-black text-white mt-1 group-hover:text-indigo-400 transition-colors">{stat.value}</p>
                       </div>
-                      <span className="text-4xl">{stat.icon}</span>
+                      <div className="w-12 h-12 rounded-xl bg-surface flex items-center justify-center text-2xl border border-border shadow-sm group-hover:scale-110 transition-transform">
+                        {stat.icon}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -159,176 +161,196 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               {/* User Growth */}
               <motion.div
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
+                className="bg-surface border border-border rounded-2xl p-6 backdrop-blur-sm relative"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <h2 className="text-xl font-bold mb-4 dark:text-white">User Growth</h2>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={analyticsData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="date" stroke="#6b7280" />
-                    <YAxis stroke="#6b7280" />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: '#1f2937',
-                        border: 'none',
-                        borderRadius: '8px',
-                        color: '#fff',
-                      }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="users"
-                      stroke="#3b82f6"
-                      strokeWidth={2}
-                      dot={{ fill: '#3b82f6', r: 4 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <h2 className="text-xs font-bold mb-6 text-primary-light/60 uppercase tracking-wider font-mono">Platform Growth Trajectory</h2>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={analyticsData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                      <XAxis dataKey="date" stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                      <YAxis stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: '12px',
+                          color: '#fff',
+                          backdropFilter: 'blur(10px)',
+                          fontSize: '12px',
+                          fontFamily: 'monospace'
+                        }}
+                        itemStyle={{ color: '#818cf8' }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="users"
+                        stroke="#818cf8"
+                        strokeWidth={3}
+                        dot={{ fill: '#818cf8', r: 4, strokeWidth: 0 }}
+                        activeDot={{ r: 6, fill: '#fff', stroke: '#818cf8', strokeWidth: 2 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
               </motion.div>
 
               {/* Activity Metrics */}
               <motion.div
-                className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
+                className="bg-surface border border-border rounded-2xl p-6 backdrop-blur-sm relative"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <h2 className="text-xl font-bold mb-4 dark:text-white">Platform Activity</h2>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={analyticsData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="date" stroke="#6b7280" />
-                    <YAxis stroke="#6b7280" />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: '#1f2937',
-                        border: 'none',
-                        borderRadius: '8px',
-                        color: '#fff',
-                      }}
-                    />
-                    <Bar dataKey="quizzes" fill="#10b981" radius={[8, 8, 0, 0]} />
-                    <Bar dataKey="chats" fill="#f59e0b" radius={[8, 8, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+                <h2 className="text-xs font-bold mb-6 text-primary-light/60 uppercase tracking-wider font-mono">Global System Activity</h2>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={analyticsData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                      <XAxis dataKey="date" stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                      <YAxis stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 10 }} tickLine={false} axisLine={false} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: '12px',
+                          color: '#fff',
+                          backdropFilter: 'blur(10px)',
+                          fontSize: '12px',
+                          fontFamily: 'monospace'
+                        }}
+                      />
+                      <Bar dataKey="quizzes" fill="url(#colorQuizzes)" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="chats" fill="url(#colorChats)" radius={[4, 4, 0, 0]} />
+                      <defs>
+                        <linearGradient id="colorQuizzes" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#10b981" stopOpacity={0.8}/>
+                          <stop offset="100%" stopColor="#10b981" stopOpacity={0.2}/>
+                        </linearGradient>
+                        <linearGradient id="colorChats" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#818cf8" stopOpacity={0.8}/>
+                          <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0.2}/>
+                        </linearGradient>
+                      </defs>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </motion.div>
             </div>
 
             {/* Users Table */}
             <motion.div
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden"
+              className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm backdrop-blur-sm"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                <h2 className="text-xl font-bold dark:text-white">Users Management</h2>
-                <span className="text-sm text-gray-600 dark:text-gray-400">{users.length} users</span>
+              <div className="p-5 border-b border-border flex justify-between items-center bg-black/20">
+                <h2 className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                  <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" /> Global Users Registry
+                </h2>
+                <span className="text-[10px] font-mono text-primary-light/40 bg-surface px-2 py-0.5 rounded-md">{users.length} registered</span>
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        Name
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        Email
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        Role
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        Last Active
-                      </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                        Actions
-                      </th>
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-surface border-b border-border text-[10px] uppercase tracking-wider font-mono text-primary-light/60">
+                      <th className="px-6 py-4 font-semibold">User Ident</th>
+                      <th className="px-6 py-4 font-semibold">Contact Email</th>
+                      <th className="px-6 py-4 font-semibold">Privilege Level</th>
+                      <th className="px-6 py-4 font-semibold">Account Status</th>
+                      <th className="px-6 py-4 font-semibold">Last Telemetry</th>
+                      <th className="px-6 py-4 font-semibold">Administrative Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  <tbody className="divide-y divide-white/5">
                     {users.map((user) => (
                       <motion.tr
                         key={user.id}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        className="hover:bg-white/[0.02] transition-colors"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                       >
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white font-medium">
-                          {user.name}
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-border flex items-center justify-center font-bold text-xs text-primary-light">
+                              {user.name.charAt(0)}
+                            </div>
+                            <span className="text-sm font-bold text-white">{user.name}</span>
+                          </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-400 text-sm">
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-text-secondary/50 font-mono">
                           {user.email}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            className={`px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-wider border ${
                               user.role === 'student'
-                                ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200'
+                                ? 'bg-blue-500/10 border-blue-500/20 text-blue-400'
                                 : user.role === 'teacher'
-                                ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200'
-                                : 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200'
+                                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                                : 'bg-purple-500/10 border-purple-500/20 text-purple-400'
                             }`}
                           >
-                            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                            {user.role}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            className={`px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-wider border flex items-center gap-1.5 w-fit ${
                               user.status === 'active'
-                                ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200'
+                                ? 'bg-green-500/10 border-green-500/20 text-green-400'
                                 : user.status === 'inactive'
-                                ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200'
-                                : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200'
+                                ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                                : 'bg-red-500/10 border-red-500/20 text-red-400'
                             }`}
                           >
-                            {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                            <span className={`w-1.5 h-1.5 rounded-full ${
+                              user.status === 'active' ? 'bg-green-500' : user.status === 'inactive' ? 'bg-amber-500' : 'bg-red-500'
+                            }`} />
+                            {user.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-400 text-sm">
+                        <td className="px-6 py-4 whitespace-nowrap text-xs text-text-secondary/50 font-mono">
                           {user.lastActive}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2 flex">
-                          <Button
-                            size="sm"
-                            variant="secondary"
+                        <td className="px-6 py-4 whitespace-nowrap text-sm flex gap-2">
+                          <button
                             onClick={() => setSelectedUser(user)}
-                            className="text-xs"
+                            className="w-8 h-8 rounded-lg bg-surface border border-border hover:bg-white/10 flex items-center justify-center text-xs transition-colors"
+                            title="Edit User"
                           >
-                            Edit
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="secondary"
+                            ✏️
+                          </button>
+                          <button
                             onClick={() => setActionModal({ type: 'resetPassword', userId: user.id })}
-                            className="text-xs"
+                            className="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs transition-colors"
+                            title="Reset Password"
                           >
                             🔑
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant={user.status === 'banned' ? 'secondary' : 'danger'}
+                          </button>
+                          <button
                             onClick={() => setActionModal({ type: 'ban', userId: user.id })}
-                            className="text-xs"
+                            className={`w-8 h-8 rounded-lg border flex items-center justify-center text-xs transition-colors ${
+                              user.status === 'banned'
+                                ? 'bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/20'
+                                : 'bg-amber-500/10 border-amber-500/20 text-amber-400 hover:bg-amber-500/20'
+                            }`}
+                            title={user.status === 'banned' ? 'Unban User' : 'Ban User'}
                           >
-                            {user.status === 'banned' ? 'Unban' : 'Ban'}
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="danger"
+                            {user.status === 'banned' ? '🛡️' : '⚠️'}
+                          </button>
+                          <button
                             onClick={() => setActionModal({ type: 'delete', userId: user.id })}
-                            className="text-xs"
+                            className="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 text-red-400 flex items-center justify-center text-xs transition-colors"
+                            title="Delete User"
                           >
-                            Delete
-                          </Button>
+                            🗑️
+                          </button>
                         </td>
                       </motion.tr>
                     ))}
@@ -338,49 +360,63 @@ export default function AdminDashboard() {
             </motion.div>
 
             {/* Confirmation Modal */}
-            {actionModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                <motion.div
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 max-w-sm w-full"
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                >
-                  <h3 className="text-xl font-bold mb-4 dark:text-white">
-                    {actionModal.type === 'delete'
-                      ? 'Delete User'
-                      : actionModal.type === 'ban'
-                      ? 'Ban User'
-                      : 'Reset Password'}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    {actionModal.type === 'delete'
-                      ? 'Are you sure you want to delete this user? This action cannot be undone.'
-                      : actionModal.type === 'ban'
-                      ? 'Are you sure you want to ban this user?'
-                      : 'Send password reset link to this user?'}
-                  </p>
-                  <div className="flex gap-3 justify-end">
-                    <Button onClick={() => setActionModal(null)} variant="secondary">
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        if (actionModal.type === 'delete') {
-                          handleDeleteUser(actionModal.userId);
-                        } else if (actionModal.type === 'ban') {
-                          handleBanUser(actionModal.userId);
-                        } else {
-                          handleResetPassword(actionModal.userId);
-                        }
-                      }}
-                      variant={actionModal.type === 'delete' ? 'danger' : 'primary'}
-                    >
-                      {actionModal.type === 'delete' ? 'Delete' : actionModal.type === 'ban' ? 'Ban' : 'Send'}
-                    </Button>
-                  </div>
-                </motion.div>
-              </div>
-            )}
+            <AnimatePresence>
+              {actionModal && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                  <motion.div
+                    className="bg-[#0b1224] border border-border rounded-2xl shadow-2xl p-6 max-w-sm w-full relative overflow-hidden"
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.95, opacity: 0 }}
+                  >
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-[40px] pointer-events-none" />
+                    
+                    <h3 className="text-lg font-black mb-2 text-white relative z-10 flex items-center gap-2">
+                      {actionModal.type === 'delete'
+                        ? '🗑️ Confirm Deletion'
+                        : actionModal.type === 'ban'
+                        ? '⚠️ Change Access Status'
+                        : '🔑 Security Reset'}
+                    </h3>
+                    <p className="text-xs text-primary-light/60 mb-6 leading-relaxed relative z-10 font-mono">
+                      {actionModal.type === 'delete'
+                        ? 'Are you absolutely sure you want to permanently purge this user record? This action cannot be reversed.'
+                        : actionModal.type === 'ban'
+                        ? 'Are you sure you want to modify this user\'s platform access privileges?'
+                        : 'Transmit a secure password reset token to this user\'s registered email address?'}
+                    </p>
+                    <div className="flex gap-3 justify-end relative z-10 pt-4 border-t border-border">
+                      <button 
+                        onClick={() => setActionModal(null)}
+                        className="px-4 py-2 bg-surface border border-border text-text-secondary/60 text-xs font-bold rounded-xl hover:bg-white/10 hover:text-white transition-all"
+                      >
+                        Abort
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (actionModal.type === 'delete') {
+                            handleDeleteUser(actionModal.userId);
+                          } else if (actionModal.type === 'ban') {
+                            handleBanUser(actionModal.userId);
+                          } else {
+                            handleResetPassword(actionModal.userId);
+                          }
+                        }}
+                        className={`px-5 py-2 text-xs font-bold rounded-xl shadow-md transition-all ${
+                          actionModal.type === 'delete' 
+                            ? 'bg-red-500/10 text-red-400 border border-red-500/30 hover:bg-red-500/20' 
+                            : actionModal.type === 'ban' 
+                            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20' 
+                            : 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700'
+                        }`}
+                      >
+                        {actionModal.type === 'delete' ? 'Confirm Purge' : actionModal.type === 'ban' ? 'Execute Action' : 'Dispatch Link'}
+                      </button>
+                    </div>
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </main>
       </div>

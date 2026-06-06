@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduBridge AI — Attendance</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--p:#6C63FF;--pl:#a89dff;--pd:#4f47cc;--pg:rgba(108,99,255,.2);
+--a:#F59E0B;--s:#1DB954;--e:#EF4444;
+--bg:#080814;--sf:#111026;--sf2:#181632;--sf3:#1e1a3e;
+--br:rgba(108,99,255,.15);--brs:rgba(108,99,255,.35);
+--t1:#f1f0ff;--t2:#a89dff;--tm:#94a3b8;
+--fh:'Sora',sans-serif;--fb:'Inter',sans-serif;
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);min-height:100vh;display:flex;flex-direction:column}
+.wf-bar{background:rgba(108,99,255,.1);border-bottom:1px dashed rgba(108,99,255,.4);padding:8px 24px;font-family:monospace;font-size:.75rem;color:var(--pl);display:flex;justify-content:space-between;flex-shrink:0}
+
+/* VIEW SWITCHER */
+.view-switcher{background:var(--sf);border-bottom:1px solid var(--br);padding:0 24px;display:flex;gap:4px;align-items:center}
+.vs-tab{padding:14px 18px;font-family:monospace;font-size:.8rem;color:var(--tm);cursor:pointer;border-bottom:2px solid transparent;transition:.2s}
+.vs-tab.active{color:var(--pl);border-bottom-color:var(--p)}
+
+/* TWO-PANEL LAYOUT */
+.panels{display:grid;grid-template-columns:1fr 1fr;border-top:2px dashed rgba(108,99,255,.2)}
+.panel-view{padding:28px;border-right:2px dashed rgba(108,99,255,.15)}
+.panel-view:last-child{border-right:none}
+.pv-label{font-family:monospace;font-size:.75rem;color:var(--pl);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.pv-label span{background:rgba(108,99,255,.12);border:1px solid var(--br);border-radius:999px;padding:3px 10px}
+
+/* SECTION */
+.section-title{font-family:var(--fh);font-size:1.25rem;font-weight:700;margin-bottom:4px}
+.section-sub{font-size:.875rem;color:var(--tm);margin-bottom:20px}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.sc{background:var(--sf2);border:1px solid var(--br);border-radius:10px;padding:14px;text-align:center}
+.sc-val{font-family:var(--fh);font-size:1.375rem;font-weight:700;margin-bottom:4px}
+.sc-lbl{font-size:.7rem;color:var(--tm);font-family:monospace}
+
+/* CALENDAR */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-title{font-family:var(--fh);font-size:.9375rem;font-weight:700}
+.cal-nav{display:flex;gap:8px}
+.cal-nav-btn{background:var(--sf2);border:1px solid var(--br);border-radius:6px;padding:5px 10px;color:var(--tm);cursor:pointer;font-size:.8rem}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:20px}
+.cal-day-label{text-align:center;font-family:monospace;font-size:.65rem;color:var(--tm);padding:4px 0}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;cursor:pointer;font-family:monospace;transition:.15s;border:1px solid transparent}
+.cal-day:hover{background:var(--sf3)}
+.cal-day.present{background:rgba(29,185,84,.15);border-color:rgba(29,185,84,.3);color:var(--s)}
+.cal-day.absent{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.25);color:var(--e)}
+.cal-day.late{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.25);color:var(--a)}
+.cal-day.holiday{background:rgba(108,99,255,.08);border-color:var(--br);color:var(--pl);opacity:.7}
+.cal-day.today{border-color:var(--p);font-weight:700;color:var(--p)}
+.cal-day.empty{opacity:0;pointer-events:none}
+
+/* LEGEND */
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:.75rem;color:var(--tm);font-family:monospace}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+
+/* SUBJECT TABLE */
+.subject-table{width:100%;border-collapse:collapse}
+.subject-table th{font-family:monospace;font-size:.7rem;color:var(--tm);text-align:left;padding:8px 12px;border-bottom:1px solid var(--br)}
+.subject-table td{padding:10px 12px;border-bottom:1px solid var(--br);font-size:.875rem}
+.subject-table tr:last-child td{border-bottom:none}
+.att-pct{font-family:monospace;font-weight:600}
+.mini-bar{height:4px;background:var(--sf3);border-radius:2px;margin-top:4px;width:80px;overflow:hidden}
+.mini-fill{height:100%;border-radius:2px}
+.warning-row{background:rgba(239,68,68,.05)}
+.att-tag{font-family:monospace;font-size:.65rem;padding:3px 8px;border-radius:999px;font-weight:600}
+
+/* === TEACHER VIEW === */
+/* CLASS SELECTOR */
+.class-selector{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.class-chip{background:var(--sf2);border:1.5px solid var(--br);border-radius:8px;padding:7px 14px;font-size:.8125rem;cursor:pointer;transition:.2s;font-family:monospace}
+.class-chip.active{background:rgba(108,99,255,.15);border-color:var(--p);color:var(--pl)}
+
+/* ATTENDANCE MARKING */
+.marking-date{font-family:monospace;font-size:.8rem;color:var(--tm);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.mark-all-row{display:flex;gap:8px;margin-bottom:14px}
+.mark-all-btn{background:transparent;border:1px solid var(--br);border-radius:7px;padding:6px 12px;font-family:monospace;font-size:.75rem;cursor:pointer;color:var(--tm);transition:.2s}
+.mark-all-btn.present{border-color:var(--s);color:var(--s)}
+.mark-all-btn.absent{border-color:var(--e);color:var(--e)}
+
+.student-list{display:flex;flex-direction:column;gap:6px;max-height:380px;overflow-y:auto}
+.student-row{display:flex;align-items:center;gap:12px;background:var(--sf2);border:1px solid var(--br);border-radius:9px;padding:10px 14px;transition:.2s}
+.student-row:hover{border-color:var(--brs)}
+.stu-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--a));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.stu-name{flex:1;font-size:.875rem;font-weight:500}
+.stu-roll{font-family:monospace;font-size:.7rem;color:var(--tm)}
+.att-toggle{display:flex;gap:4px}
+.att-btn{width:28px;height:28px;border-radius:6px;border:1.5px solid var(--br);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:.15s;background:transparent}
+.att-btn.p.active{background:rgba(29,185,84,.2);border-color:var(--s)}
+.att-btn.a.active{background:rgba(239,68,68,.2);border-color:var(--e)}
+.att-btn.l.active{background:rgba(245,158,11,.2);border-color:var(--a)}
+
+/* SUBMIT */
+.submit-bar{background:var(--sf);border-top:1px solid var(--br);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-radius:10px}
+.submit-summary{font-family:monospace;font-size:.8rem;color:var(--tm)}
+.submit-btn{background:var(--p);border:none;color:#fff;border-radius:8px;padding:10px 24px;font-family:var(--fh);font-weight:600;cursor:pointer;box-shadow:0 0 16px var(--pg);font-size:.9rem}
+
+/* TEACHER STATS */
+.t-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+</style>
+</head>
+<body>
+
+<div class="wf-bar">
+  <span>📐 WIREFRAME · Screen 07 — Attendance (Student View + Teacher View)</span>
+  <span>Two role-based views side by side</span>
+</div>
+
+<div class="view-switcher">
+  <div class="vs-tab active">📅 Student View</div>
+  <div class="vs-tab">📖 Teacher View</div>
+  <div style="margin-left:auto;font-family:monospace;font-size:.75rem;color:var(--tm)">// Shown as split for wireframe purposes</div>
+</div>
+
+<div class="panels">
+
+  <!-- ── STUDENT VIEW ── -->
+  <div class="panel-view">
+    <div class="pv-label">STUDENT VIEW <span>Role: Student</span></div>
+    <div class="section-title">My Attendance</div>
+    <div class="section-sub">June 2025 — CS-3A Batch</div>
+
+    <div class="stat-row">
+      <div class="sc"><div class="sc-val" style="color:var(--s)">76%</div><div class="sc-lbl">OVERALL</div></div>
+      <div class="sc"><div class="sc-val" style="color:var(--p)">19</div><div class="sc-lbl">PRESENT</div></div>
+      <div class="sc"><div class="sc-val" style="color:var(--e)">6</div><div class="sc-lbl">ABSENT</div></div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="cal-head">
+      <div class="cal-title">June 2025</div>
+      <div class="cal-nav">
+        <div class="cal-nav-btn">‹</div>
+        <div class="cal-nav-btn">›</div>
+      </div>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-day-label">Mon</div><div class="cal-day-label">Tue</div><div class="cal-day-label">Wed</div>
+      <div class="cal-day-label">Thu</div><div class="cal-day-label">Fri</div><div class="cal-day-label">Sat</div>
+      <div class="cal-day-label">Sun</div>
+      <!-- Week 1 -->
+      <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div>
+      <div class="cal-day empty"></div><div class="cal-day empty"></div>
+      <div class="cal-day holiday">1</div><div class="cal-day holiday">2</div>
+      <!-- Week 2 -->
+      <div class="cal-day present">3</div><div class="cal-day present">4</div><div class="cal-day present">5</div>
+      <div class="cal-day today">6</div><div class="cal-day">7</div>
+      <div class="cal-day holiday">8</div><div class="cal-day holiday">9</div>
+      <!-- Week 3 -->
+      <div class="cal-day absent">10</div><div class="cal-day present">11</div><div class="cal-day present">12</div>
+      <div class="cal-day late">13</div><div class="cal-day present">14</div>
+      <div class="cal-day holiday">15</div><div class="cal-day holiday">16</div>
+      <!-- Week 4 -->
+      <div class="cal-day present">17</div><div class="cal-day present">18</div><div class="cal-day absent">19</div>
+      <div class="cal-day present">20</div><div class="cal-day present">21</div>
+      <div class="cal-day holiday">22</div><div class="cal-day holiday">23</div>
+      <!-- Week 5 -->
+      <div class="cal-day present">24</div><div class="cal-day present">25</div><div class="cal-day present">26</div>
+      <div class="cal-day present">27</div><div class="cal-day absent">28</div>
+      <div class="cal-day holiday">29</div><div class="cal-day holiday">30</div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--s)"></div>Present</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--e)"></div>Absent</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--a)"></div>Late</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--pl)"></div>Holiday</div>
+    </div>
+
+    <!-- SUBJECT BREAKDOWN -->
+    <div style="font-family:var(--fh);font-size:.9375rem;font-weight:700;margin-bottom:12px">Subject Breakdown</div>
+    <table class="subject-table">
+      <thead>
+        <tr>
+          <th>SUBJECT</th>
+          <th>PRESENT</th>
+          <th>TOTAL</th>
+          <th>%</th>
+          <th>STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Data Structures</td><td>18</td><td>20</td>
+          <td><div class="att-pct" style="color:var(--s)">90%</div><div class="mini-bar"><div class="mini-fill" style="width:90%;background:var(--s)"></div></div></td>
+          <td><span class="att-tag" style="background:rgba(29,185,84,.12);color:var(--s)">SAFE</span></td>
+        </tr>
+        <tr>
+          <td>Mathematics</td><td>16</td><td>20</td>
+          <td><div class="att-pct" style="color:var(--a)">80%</div><div class="mini-bar"><div class="mini-fill" style="width:80%;background:var(--a)"></div></div></td>
+          <td><span class="att-tag" style="background:rgba(245,158,11,.12);color:var(--a)">OK</span></td>
+        </tr>
+        <tr class="warning-row">
+          <td>English Lit</td><td>13</td><td>20</td>
+          <td><div class="att-pct" style="color:var(--e)">65%</div><div class="mini-bar"><div class="mini-fill" style="width:65%;background:var(--e)"></div></div></td>
+          <td><span class="att-tag" style="background:rgba(239,68,68,.12);color:var(--e)">⚠ LOW</span></td>
+        </tr>
+        <tr>
+          <td>Physics</td><td>19</td><td>20</td>
+          <td><div class="att-pct" style="color:var(--s)">95%</div><div class="mini-bar"><div class="mini-fill" style="width:95%;background:var(--s)"></div></div></td>
+          <td><span class="att-tag" style="background:rgba(29,185,84,.12);color:var(--s)">SAFE</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:12px;margin-top:14px;font-size:.8125rem;color:var(--tm)">
+      ⚠️ <strong style="color:var(--e)">Warning:</strong> Your English Lit attendance (65%) is below the required 75%. You need to attend at least <strong style="color:var(--t1)">3 more classes</strong> this month.
+    </div>
+  </div>
+
+  <!-- ── TEACHER VIEW ── -->
+  <div class="panel-view" style="border-right:none">
+    <div class="pv-label">TEACHER VIEW <span>Role: Teacher</span></div>
+    <div class="section-title">Mark Attendance</div>
+    <div class="section-sub">Today — Friday, 6 June 2025</div>
+
+    <div class="t-stat-row">
+      <div class="sc"><div class="sc-val" style="color:var(--p)">3</div><div class="sc-lbl">CLASSES TODAY</div></div>
+      <div class="sc"><div class="sc-val" style="color:var(--s)">38</div><div class="sc-lbl">TOTAL PRESENT</div></div>
+      <div class="sc"><div class="sc-val" style="color:var(--e)">4</div><div class="sc-lbl">ABSENT</div></div>
+      <div class="sc"><div class="sc-val" style="color:var(--a)">2</div><div class="sc-lbl">LATE</div></div>
+    </div>
+
+    <!-- CLASS SELECTOR -->
+    <div style="font-family:monospace;font-size:.75rem;color:var(--tm);margin-bottom:8px">SELECT CLASS</div>
+    <div class="class-selector">
+      <div class="class-chip active">CS-3A (44 students)</div>
+      <div class="class-chip">CS-3B (40 students)</div>
+      <div class="class-chip">CS-4A (38 students)</div>
+    </div>
+
+    <div class="marking-date">
+      <span>CS-3A · Data Structures · 09:00 AM</span>
+      <span style="color:var(--p);cursor:pointer">📅 Change date</span>
+    </div>
+
+    <div class="mark-all-row">
+      <div class="mark-all-btn present">✓ Mark All Present</div>
+      <div class="mark-all-btn absent">✗ Mark All Absent</div>
+      <div class="mark-all-btn" style="border-color:var(--p);color:var(--pl)">🔍 Search student</div>
+    </div>
+
+    <div class="student-list">
+      <div class="student-row">
+        <div class="stu-avatar">AK</div>
+        <div style="flex:1">
+          <div class="stu-name">Aditya Kumar</div>
+          <div class="stu-roll">// roll: 2301 · Att: 88%</div>
+        </div>
+        <div class="att-toggle">
+          <div class="att-btn p active" title="Present">✓</div>
+          <div class="att-btn a" title="Absent">✗</div>
+          <div class="att-btn l" title="Late">⏱</div>
+        </div>
+      </div>
+      <div class="student-row">
+        <div class="stu-avatar" style="background:linear-gradient(135deg,var(--a),var(--e))">PS</div>
+        <div style="flex:1">
+          <div class="stu-name">Priya Singh</div>
+          <div class="stu-roll">// roll: 2302 · Att: 65% ⚠</div>
+        </div>
+        <div class="att-toggle">
+          <div class="att-btn p" title="Present">✓</div>
+          <div class="att-btn a active" title="Absent">✗</div>
+          <div class="att-btn l" title="Late">⏱</div>
+        </div>
+      </div>
+      <div class="student-row">
+        <div class="stu-avatar" style="background:linear-gradient(135deg,var(--s),var(--p))">RV</div>
+        <div style="flex:1">
+          <div class="stu-name">Rahul Verma</div>
+          <div class="stu-roll">// roll: 2303 · Att: 92%</div>
+        </div>
+        <div class="att-toggle">
+          <div class="att-btn p active" title="Present">✓</div>
+          <div class="att-btn a" title="Absent">✗</div>
+          <div class="att-btn l" title="Late">⏱</div>
+        </div>
+      </div>
+      <div class="student-row">
+        <div class="stu-avatar" style="background:linear-gradient(135deg,var(--pl),var(--a))">SM</div>
+        <div style="flex:1">
+          <div class="stu-name">Shreya Mehta</div>
+          <div class="stu-roll">// roll: 2304 · Att: 79%</div>
+        </div>
+        <div class="att-toggle">
+          <div class="att-btn p" title="Present">✓</div>
+          <div class="att-btn a" title="Absent">✗</div>
+          <div class="att-btn l active" title="Late">⏱</div>
+        </div>
+      </div>
+      <div class="student-row">
+        <div class="stu-avatar" style="background:linear-gradient(135deg,var(--e),var(--a))">NK</div>
+        <div style="flex:1">
+          <div class="stu-name">Nikhil Kapoor</div>
+          <div class="stu-roll">// roll: 2305 · Att: 71%</div>
+        </div>
+        <div class="att-toggle">
+          <div class="att-btn p active" title="Present">✓</div>
+          <div class="att-btn a" title="Absent">✗</div>
+          <div class="att-btn l" title="Late">⏱</div>
+        </div>
+      </div>
+      <div class="student-row">
+        <div class="stu-avatar" style="background:linear-gradient(135deg,var(--p),var(--s))">AT</div>
+        <div style="flex:1">
+          <div class="stu-name">Ananya Trivedi</div>
+          <div class="stu-roll">// roll: 2306 · Att: 95%</div>
+        </div>
+        <div class="att-toggle">
+          <div class="att-btn p active" title="Present">✓</div>
+          <div class="att-btn a" title="Absent">✗</div>
+          <div class="att-btn l" title="Late">⏱</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-bar">
+      <div class="submit-summary">Marked: <strong style="color:var(--s)">32 Present</strong> · <strong style="color:var(--e)">4 Absent</strong> · <strong style="color:var(--a)">2 Late</strong> of 44 students</div>
+      <button class="submit-btn">Save Attendance →</button>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

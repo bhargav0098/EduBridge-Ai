@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduBridge AI — Resource Allocator & Peer Groups</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--p:#6C63FF;--pl:#a89dff;--pd:#4f47cc;--pg:rgba(108,99,255,.2);
+--a:#F59E0B;--s:#1DB954;--e:#EF4444;
+--bg:#080814;--sf:#111026;--sf2:#181632;--sf3:#1e1a3e;
+--br:rgba(108,99,255,.15);--brs:rgba(108,99,255,.35);
+--t1:#f1f0ff;--t2:#a89dff;--tm:#94a3b8;
+--fh:'Sora',sans-serif;--fb:'Inter',sans-serif;
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);min-height:100vh;display:flex;flex-direction:column}
+.wf-bar{background:rgba(108,99,255,.1);border-bottom:1px dashed rgba(108,99,255,.4);padding:8px 24px;font-family:monospace;font-size:.75rem;color:var(--pl);display:flex;justify-content:space-between;flex-shrink:0}
+
+/* TWO SCREENS SIDE BY SIDE */
+.split{display:grid;grid-template-columns:1fr 1fr;border-top:2px dashed rgba(108,99,255,.2);min-height:calc(100vh - 29px)}
+.screen-half{padding:24px;border-right:2px dashed rgba(108,99,255,.15);overflow-y:auto}
+.screen-half:last-child{border-right:none}
+.sh-label{font-family:monospace;font-size:.7rem;color:var(--pl);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.sh-label span{background:rgba(108,99,255,.12);border:1px solid var(--br);border-radius:999px;padding:3px 10px}
+.sh-title{font-family:var(--fh);font-size:1.25rem;font-weight:700;margin-bottom:4px}
+.sh-sub{font-size:.875rem;color:var(--tm);margin-bottom:20px}
+
+/* COMMON */
+.row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.btn-sm{background:var(--p);border:none;color:#fff;border-radius:7px;padding:7px 14px;font-size:.8125rem;cursor:pointer;font-family:var(--fh);font-weight:600}
+.btn-ghost{background:var(--sf2);border:1.5px solid var(--br);color:var(--tm);border-radius:7px;padding:7px 14px;font-size:.8125rem;cursor:pointer;font-family:var(--fb)}
+.search-box{background:var(--sf2);border:1.5px solid var(--br);border-radius:8px;padding:8px 13px;font-size:.875rem;color:var(--tm);display:flex;gap:8px;align-items:center;flex:1;cursor:text}
+.panel{background:var(--sf);border:1px solid var(--br);border-radius:12px;margin-bottom:16px}
+.panel-head{padding:14px 16px;border-bottom:1px solid var(--br);display:flex;justify-content:space-between;align-items:center}
+.ph-title{font-family:var(--fh);font-size:.9rem;font-weight:700}
+.ph-action{font-size:.8rem;color:var(--pl);cursor:pointer}
+.panel-body{padding:14px 16px}
+
+/* === RESOURCE ALLOCATOR === */
+.resource-tabs{display:flex;background:var(--sf2);border:1px solid var(--br);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.rt-btn{flex:1;padding:8px;font-family:monospace;font-size:.75rem;cursor:pointer;color:var(--tm);border:none;background:transparent;transition:.15s;text-align:center}
+.rt-btn.active{background:rgba(108,99,255,.15);color:var(--pl)}
+
+.resource-list{display:flex;flex-direction:column;gap:10px}
+.res-card{background:var(--sf2);border:1px solid var(--br);border-radius:10px;padding:14px}
+.res-card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.res-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.res-name{font-size:.9rem;font-weight:600;margin-bottom:2px}
+.res-meta{font-size:.75rem;color:var(--tm);font-family:monospace}
+.res-avail{margin-left:auto;text-align:right}
+.res-count{font-family:var(--fh);font-size:1.125rem;font-weight:700}
+.res-label{font-size:.7rem;color:var(--tm);font-family:monospace}
+.capacity-bar{height:5px;background:var(--sf3);border-radius:3px;margin-bottom:8px;overflow:hidden}
+.cap-fill{height:100%;border-radius:3px}
+.res-footer{display:flex;gap:8px;align-items:center}
+.res-status-tag{font-family:monospace;font-size:.65rem;padding:3px 8px;border-radius:999px;font-weight:600}
+.book-btn{margin-left:auto;background:var(--p);border:none;color:#fff;border-radius:6px;padding:5px 14px;font-size:.75rem;cursor:pointer;font-family:var(--fh);font-weight:600}
+.book-btn:disabled{background:var(--sf3);color:var(--tm);cursor:not-allowed}
+
+/* BOOKING MODAL INLINE */
+.booking-panel{background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(108,99,255,.04));border:1px solid rgba(108,99,255,.25);border-radius:10px;padding:14px;margin-top:10px}
+.bp-title{font-family:monospace;font-size:.75rem;color:var(--pl);margin-bottom:10px}
+.bp-slots{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.time-slot-chip{background:var(--sf2);border:1.5px solid var(--br);border-radius:6px;padding:5px 10px;font-family:monospace;font-size:.7rem;cursor:pointer;color:var(--tm);transition:.12s}
+.time-slot-chip.selected{border-color:var(--p);background:rgba(108,99,255,.15);color:var(--pl)}
+.time-slot-chip.taken{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+
+/* AI RECOMMENDATION BOX */
+.ai-rec{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:10px 12px;margin-top:12px;font-size:.8rem;color:var(--tm)}
+.ai-rec strong{color:var(--a)}
+
+/* === PEER GROUPS === */
+.groups-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.group-card{background:var(--sf2);border:1px solid var(--br);border-radius:12px;padding:14px;cursor:pointer;transition:.2s;position:relative}
+.group-card:hover{border-color:var(--brs)}
+.group-card.active-group{border-color:rgba(108,99,255,.4);background:rgba(108,99,255,.06)}
+.gc-badge{position:absolute;top:10px;right:10px;background:var(--s);color:#fff;font-family:monospace;font-size:.65rem;padding:2px 7px;border-radius:999px}
+.gc-icon{font-size:24px;margin-bottom:8px}
+.gc-name{font-family:var(--fh);font-size:.9375rem;font-weight:700;margin-bottom:4px}
+.gc-meta{font-size:.75rem;color:var(--tm);font-family:monospace;margin-bottom:10px}
+.gc-members{display:flex;gap:-4px;align-items:center}
+.gc-avatar{width:24px;height:24px;border-radius:50%;border:2px solid var(--sf);margin-left:-6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.gc-avatar:first-child{margin-left:0}
+.gc-count{font-size:.75rem;color:var(--tm);margin-left:8px;font-family:monospace}
+
+/* ACTIVE GROUP CHAT */
+.group-chat{background:var(--sf);border:1px solid var(--br);border-radius:12px}
+.gc-topbar{padding:12px 14px;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:10px}
+.gct-name{font-family:var(--fh);font-size:.875rem;font-weight:700;flex:1}
+.gct-meta{font-size:.75rem;color:var(--s);font-family:monospace;display:flex;align-items:center;gap:4px}
+.online-dot{width:6px;height:6px;border-radius:50%;background:var(--s)}
+.chat-msgs{padding:12px 14px;max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.chat-msg{display:flex;gap:8px}
+.chat-msg.mine{flex-direction:row-reverse}
+.cm-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.cm-bubble{background:var(--sf2);border:1px solid var(--br);border-radius:10px;padding:8px 12px;font-size:.8125rem;max-width:75%;line-height:1.5}
+.chat-msg.mine .cm-bubble{background:rgba(108,99,255,.15);border-color:rgba(108,99,255,.3)}
+.cm-time{font-family:monospace;font-size:.65rem;color:var(--tm);margin-top:3px}
+.chat-input-row{border-top:1px solid var(--br);padding:10px 14px;display:flex;gap:8px}
+.chat-in{flex:1;background:var(--sf2);border:1.5px solid var(--br);border-radius:8px;padding:8px 12px;font-size:.875rem;color:var(--t1);font-family:var(--fb)}
+.chat-in:focus{outline:none;border-color:var(--p)}
+.chat-send{background:var(--p);border:none;color:#fff;border-radius:7px;padding:8px 14px;cursor:pointer;font-size:14px}
+
+/* SHARED RESOURCES IN GROUP */
+.shared-files{margin-top:12px}
+.sf-title{font-family:monospace;font-size:.7rem;color:var(--tm);margin-bottom:8px}
+.sf-item{background:var(--sf2);border:1px solid var(--br);border-radius:7px;padding:8px 10px;display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:.8125rem}
+.sf-item:hover{border-color:var(--brs)}
+.sf-icon{font-size:16px}
+.sf-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sf-meta{font-family:monospace;font-size:.65rem;color:var(--tm)}
+</style>
+</head>
+<body>
+
+<div class="wf-bar">
+  <span>📐 WIREFRAME · Screen 10 — Resource Allocator · Screen 11 — Peer Groups</span>
+  <span>Side-by-side comparison</span>
+</div>
+
+<div class="split">
+
+  <!-- ══ RESOURCE ALLOCATOR ══ -->
+  <div class="screen-half">
+    <div class="sh-label">SCREEN 10 · RESOURCE ALLOCATOR <span>Role: Student / Teacher</span></div>
+    <div class="sh-title">Resource Booking</div>
+    <div class="sh-sub">Reserve labs, classrooms, and study materials</div>
+
+    <div class="row">
+      <div class="search-box">🔍 Search resources...</div>
+      <button class="btn-sm">+ Book</button>
+    </div>
+
+    <div class="resource-tabs">
+      <div class="rt-btn active">🏫 Classrooms</div>
+      <div class="rt-btn">🔬 Labs</div>
+      <div class="rt-btn">📚 Materials</div>
+      <div class="rt-btn">💻 Devices</div>
+    </div>
+
+    <div class="resource-list">
+      <!-- Resource 1 -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-icon" style="background:rgba(108,99,255,.15)">🏫</div>
+          <div style="flex:1">
+            <div class="res-name">Seminar Hall A</div>
+            <div class="res-meta">Capacity: 80 · Projector · AC</div>
+          </div>
+          <div class="res-avail">
+            <div class="res-count" style="color:var(--s)">Available</div>
+            <div class="res-label">TODAY</div>
+          </div>
+        </div>
+        <div class="capacity-bar"><div class="cap-fill" style="width:45%;background:var(--s)"></div></div>
+        <div class="res-footer">
+          <span class="res-status-tag" style="background:rgba(29,185,84,.12);color:var(--s)">AVAILABLE</span>
+          <span style="font-size:.75rem;color:var(--tm);margin-left:4px">3 slots free today</span>
+          <button class="book-btn">Book →</button>
+        </div>
+        <!-- Inline booking for this resource -->
+        <div class="booking-panel">
+          <div class="bp-title">// SELECT TIME SLOT · Today, Jun 6</div>
+          <div class="bp-slots">
+            <div class="time-slot-chip taken">08:00</div>
+            <div class="time-slot-chip taken">09:00</div>
+            <div class="time-slot-chip selected">10:00</div>
+            <div class="time-slot-chip">11:00</div>
+            <div class="time-slot-chip taken">12:00</div>
+            <div class="time-slot-chip">13:00</div>
+            <div class="time-slot-chip">14:00</div>
+            <div class="time-slot-chip taken">15:00</div>
+          </div>
+          <button class="btn-sm" style="font-size:.8rem;padding:7px 16px">Confirm Booking for 10:00 AM →</button>
+        </div>
+      </div>
+
+      <!-- Resource 2 -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-icon" style="background:rgba(245,158,11,.12)">🔬</div>
+          <div style="flex:1">
+            <div class="res-name">Chemistry Lab 1</div>
+            <div class="res-meta">Capacity: 30 · Fume hood · Safety kit</div>
+          </div>
+          <div class="res-avail">
+            <div class="res-count" style="color:var(--e)">Busy</div>
+            <div class="res-label">NOW</div>
+          </div>
+        </div>
+        <div class="capacity-bar"><div class="cap-fill" style="width:85%;background:var(--e)"></div></div>
+        <div class="res-footer">
+          <span class="res-status-tag" style="background:rgba(239,68,68,.12);color:var(--e)">OCCUPIED</span>
+          <span style="font-size:.75rem;color:var(--tm);margin-left:4px">Free at 2:00 PM</span>
+          <button class="book-btn" disabled>Full</button>
+        </div>
+      </div>
+
+      <!-- Resource 3 -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-icon" style="background:rgba(29,185,84,.1)">💻</div>
+          <div style="flex:1">
+            <div class="res-name">Computer Lab 3</div>
+            <div class="res-meta">40 PCs · High-speed internet · AC</div>
+          </div>
+          <div class="res-avail">
+            <div class="res-count" style="color:var(--a)">12 free</div>
+            <div class="res-label">OF 40</div>
+          </div>
+        </div>
+        <div class="capacity-bar"><div class="cap-fill" style="width:70%;background:var(--a)"></div></div>
+        <div class="res-footer">
+          <span class="res-status-tag" style="background:rgba(245,158,11,.12);color:var(--a)">PARTIAL</span>
+          <span style="font-size:.75rem;color:var(--tm);margin-left:4px">12 seats available</span>
+          <button class="book-btn">Book →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-rec">
+      <strong>⚡ AI Suggestion:</strong> Seminar Hall B is free all day tomorrow and fits your study group of 12. Book it early — it fills up fast on Saturdays!
+    </div>
+  </div>
+
+  <!-- ══ PEER GROUPS ══ -->
+  <div class="screen-half">
+    <div class="sh-label">SCREEN 11 · PEER GROUPS <span>Role: Student</span></div>
+    <div class="sh-title">Study Groups</div>
+    <div class="sh-sub">Collaborate with classmates in AI-facilitated rooms</div>
+
+    <div class="row">
+      <div class="search-box">🔍 Find or create a group...</div>
+      <button class="btn-sm">+ Create</button>
+    </div>
+
+    <div class="groups-grid">
+      <div class="group-card active-group">
+        <div class="gc-badge">● LIVE</div>
+        <div class="gc-icon">📊</div>
+        <div class="gc-name">DSA Prep Squad</div>
+        <div class="gc-meta">CS-3A · 6 members</div>
+        <div class="gc-members">
+          <div class="gc-avatar" style="background:linear-gradient(135deg,var(--p),var(--a))">AS</div>
+          <div class="gc-avatar" style="background:linear-gradient(135deg,var(--s),var(--p))">RV</div>
+          <div class="gc-avatar" style="background:linear-gradient(135deg,var(--a),var(--e))">PS</div>
+          <div class="gc-avatar" style="background:var(--sf3);font-size:9px;color:var(--tm)">+3</div>
+          <span class="gc-count">4 online</span>
+        </div>
+      </div>
+      <div class="group-card">
+        <div class="gc-icon">➗</div>
+        <div class="gc-name">Math Masters</div>
+        <div class="gc-meta">Mixed · 8 members</div>
+        <div class="gc-members">
+          <div class="gc-avatar" style="background:linear-gradient(135deg,var(--a),var(--pd))">NK</div>
+          <div class="gc-avatar" style="background:linear-gradient(135deg,var(--pl),var(--s))">AT</div>
+          <div class="gc-avatar" style="background:var(--sf3);font-size:9px;color:var(--tm)">+6</div>
+          <span class="gc-count">2 online</span>
+        </div>
+      </div>
+      <div class="group-card">
+        <div class="gc-icon">⚗️</div>
+        <div class="gc-name">Chem Lab Group</div>
+        <div class="gc-meta">CS-3A · 5 members</div>
+        <div class="gc-members">
+          <div class="gc-avatar" style="background:linear-gradient(135deg,var(--e),var(--a))">SM</div>
+          <div class="gc-avatar" style="background:var(--sf3);font-size:9px;color:var(--tm)">+4</div>
+          <span class="gc-count">0 online</span>
+        </div>
+      </div>
+      <div class="group-card" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:110px">
+        <div style="font-size:28px;margin-bottom:6px">＋</div>
+        <div style="font-family:monospace;font-size:.75rem;color:var(--tm)">Create New Group</div>
+      </div>
+    </div>
+
+    <!-- ACTIVE GROUP: DSA PREP SQUAD -->
+    <div class="group-chat">
+      <div class="gc-topbar">
+        <div>
+          <div class="gct-name">📊 DSA Prep Squad</div>
+          <div class="gct-meta"><span class="online-dot"></span>4 members online</div>
+        </div>
+        <div style="display:flex;gap:6px;margin-left:auto">
+          <div style="background:rgba(108,99,255,.12);border:1px solid var(--br);border-radius:6px;padding:5px 10px;font-family:monospace;font-size:.7rem;color:var(--pl);cursor:pointer">🤖 AI Help</div>
+          <div style="background:var(--sf2);border:1px solid var(--br);border-radius:6px;padding:5px 10px;font-family:monospace;font-size:.7rem;color:var(--tm);cursor:pointer">📁 Files</div>
+          <div style="background:var(--sf2);border:1px solid var(--br);border-radius:6px;padding:5px 10px;font-family:monospace;font-size:.7rem;color:var(--tm);cursor:pointer">⚙️</div>
+        </div>
+      </div>
+
+      <div class="chat-msgs">
+        <div class="chat-msg">
+          <div class="cm-avatar" style="background:linear-gradient(135deg,var(--s),var(--p))">RV</div>
+          <div>
+            <div style="font-size:.7rem;color:var(--tm);margin-bottom:2px;font-family:monospace">Rahul · 10:02 AM</div>
+            <div class="cm-bubble">Has anyone understood BST deletion? It's confusing me 😅</div>
+          </div>
+        </div>
+        <div class="chat-msg">
+          <div class="cm-avatar" style="background:linear-gradient(135deg,var(--a),var(--e))">PS</div>
+          <div>
+            <div style="font-size:.7rem;color:var(--tm);margin-bottom:2px;font-family:monospace">Priya · 10:04 AM</div>
+            <div class="cm-bubble">Yes! The tricky part is the 3-case handling. I'll share my notes</div>
+          </div>
+        </div>
+        <div class="chat-msg">
+          <div class="cm-avatar" style="background:rgba(108,99,255,.3);color:var(--pl);font-size:12px">🤖</div>
+          <div>
+            <div style="font-size:.7rem;color:var(--pl);margin-bottom:2px;font-family:monospace">AI Tutor · 10:05 AM</div>
+            <div class="cm-bubble" style="border-color:rgba(108,99,255,.25);background:rgba(108,99,255,.06)">
+              <strong style="color:var(--pl)">BST Deletion has 3 cases:</strong><br>
+              1. Node has no children → just delete<br>
+              2. Node has 1 child → replace with child<br>
+              3. Node has 2 children → replace with in-order successor<br>
+              Want me to generate a visual walkthrough? 🎯
+            </div>
+          </div>
+        </div>
+        <div class="chat-msg mine">
+          <div class="cm-avatar" style="background:linear-gradient(135deg,var(--p),var(--a))">AS</div>
+          <div>
+            <div style="font-size:.7rem;color:var(--tm);margin-bottom:2px;font-family:monospace;text-align:right">You · just now</div>
+            <div class="cm-bubble">Yes please! Also can you create a group quiz on BST? 🙏</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-row">
+        <input class="chat-in" placeholder="Type a message or @AI to ask the tutor...">
+        <button class="chat-send">↑</button>
+      </div>
+    </div>
+
+    <div class="shared-files">
+      <div class="sf-title">// SHARED IN DSA PREP SQUAD</div>
+      <div class="sf-item">
+        <span class="sf-icon">📒</span>
+        <span class="sf-name">BST Notes — Priya's notes</span>
+        <span class="sf-meta">PDF · 2h ago</span>
+      </div>
+      <div class="sf-item">
+        <span class="sf-icon">📝</span>
+        <span class="sf-name">Group Practice Quiz #3</span>
+        <span class="sf-meta">Quiz · Yesterday</span>
+      </div>
+      <div class="sf-item">
+        <span class="sf-icon">🖼</span>
+        <span class="sf-name">Tree Traversal Diagram.png</span>
+        <span class="sf-meta">Image · 3 days ago</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
