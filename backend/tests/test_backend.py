@@ -241,3 +241,27 @@ async def test_speech_path_traversal(async_client: AsyncClient):
     assert not os.path.exists("malicious_audio.wav")
     assert not os.path.exists("../malicious_audio.wav")
 
+
+@pytest.mark.anyio
+async def test_jwt_crit_header_bypass(async_client: AsyncClient):
+    import hmac, hashlib, base64, json
+    # Construct a token with the 'crit' header specifying an unknown extension
+    header = {"alg": "HS256", "crit": ["x-custom-policy"], "x-custom-policy": "require-mfa"}
+    payload = {"sub": "demo_student_1", "role": "student"}
+
+    def b64url(data):
+        return base64.urlsafe_b64encode(data).rstrip(b"=").decode()
+
+    h = b64url(json.dumps(header, separators=(",", ":")).encode())
+    p = b64url(json.dumps(payload, separators=(",", ":")).encode())
+    
+    from backend.config import settings
+    sig = b64url(hmac.new(settings.SECRET_KEY.encode(), f"{h}.{p}".encode(), hashlib.sha256).digest())
+    token = f"{h}.{p}.{sig}"
+
+    # Try decoding the token using our AuthService.decode_token
+    from backend.services.auth_service import AuthService
+    decoded = AuthService.decode_token(token)
+    assert decoded is None
+
+
