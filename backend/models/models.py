@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Text, Inte
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
-from .database import Base
+from ..database import Base
 
 class UserRole(str, enum.Enum):
     STUDENT = "student"
@@ -14,6 +14,7 @@ class User(Base):
     id = Column(String, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     name = Column(String, nullable=False)
+    hashed_password = Column(String, nullable=True)
     role = Column(Enum(UserRole), default=UserRole.STUDENT)
     profile_image = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -134,6 +135,7 @@ class StudentProfile(Base):
     weak_subjects = Column(JSON) # List of strings
     study_time_preference = Column(String) # Morning, Afternoon, Evening
     class_name = Column(String)
+    elo = Column(Integer, default=1200)
     
     user = relationship("User", back_populates="student_profile")
 
@@ -177,4 +179,43 @@ class Notification(Base):
     message = Column(Text)
     type = Column(String) # attendance, event, booking
     is_read = Column(Boolean, default=False)
-    created_at = Column(DateTime(timezone=True), server_default=func_now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+# AI Chat history models
+class ChatSession(Base):
+    __tablename__ = "chat_sessions"
+    id = Column(String, primary_key=True, index=True)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    messages = relationship("ChatMessage", back_populates="session", cascade="all, delete-orphan")
+
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
+    id = Column(Integer, primary_key=True, index=True)
+    session_id = Column(String, ForeignKey("chat_sessions.id"), nullable=False)
+    role = Column(String, nullable=False) # "user" or "assistant"
+    content = Column(Text, nullable=False)
+    sources = Column(JSON, nullable=True) # Chunk source IDs or details
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    session = relationship("ChatSession", back_populates="messages")
+
+# Adaptive Quiz models
+class Question(Base):
+    __tablename__ = "questions"
+    id = Column(Integer, primary_key=True, index=True)
+    subject = Column(String, index=True, nullable=False)
+    topic = Column(String, index=True)
+    difficulty = Column(Integer, default=1) # 1-5
+    type = Column(String, default="MCQ") # MCQ or SHORT
+    options = Column(JSON, nullable=True)
+    answer = Column(String, nullable=False)
+
+class StudentPerformance(Base):
+    __tablename__ = "student_performance"
+    id = Column(Integer, primary_key=True, index=True)
+    student_id = Column(String, ForeignKey("users.id"), nullable=False)
+    question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
+    correct = Column(Boolean, nullable=False)
+    attempt_time = Column(DateTime(timezone=True), server_default=func.now())

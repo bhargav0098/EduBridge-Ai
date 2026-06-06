@@ -21,6 +21,12 @@ class Settings(BaseSettings):
     # Sentry DSN (optional)
     SENTRY_DSN: Optional[str] = None
 
+    # Custom environment variables
+    DATABASE_URL: Optional[str] = None
+    SECRET_KEY: str = "yoursecretkeyhere"
+    GEMINI_API_KEY: Optional[str] = None
+    OPENAI_API_KEY: Optional[str] = None
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

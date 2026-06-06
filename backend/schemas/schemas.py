@@ -155,3 +155,39 @@ class NotificationSchema(BaseModel):
     
     class Config:
         from_attributes = True
+
+# Auth Schemas
+class UserRegister(BaseModel):
+    email: EmailStr
+    name: str
+    password: str
+    role: Optional[UserRole] = UserRole.STUDENT
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class TokenSchema(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+class PasswordResetVerify(BaseModel):
+    email: EmailStr
+    otp: str
+    new_password: str
+
+class ChatInput(BaseModel):
+    message: str
+    language: str = "English"
+    session_id: Optional[str] = None
+
+class ChatResponse(BaseModel):
+    answer: str
+    sources: List[str]
+    session_id: str
+
+
