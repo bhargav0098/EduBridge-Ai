@@ -32,8 +32,8 @@ const subjectData = [
 export default function DashboardPage() {
   const { user } = useAuthStore();
   
-  // Demo Mode Role Toggle
-  const [currentRole, setCurrentRole] = useState<'student' | 'teacher'>('student');
+  // Role is locked to the signed-in user's role — no manual toggle
+  const currentRole: 'student' | 'teacher' = user?.role === 'teacher' ? 'teacher' : 'student';
   const [teacherTab, setTeacherTab] = useState<'home' | 'classes' | 'attendance' | 'students' | 'upload'>('home');
   const [studentTab, setStudentTab] = useState<'overview' | 'attendance'>('overview');
   const [studentSummary, setStudentSummary] = useState<StudentAttendanceSummary | null>(null);
@@ -79,12 +79,7 @@ export default function DashboardPage() {
     { id: 3, title: 'English Essay', time: 'June 6 at 4:00 PM', status: 'upcoming' },
   ];
 
-  // Sync role with authStore if available
-  useEffect(() => {
-    if (user?.role === 'teacher') {
-      setCurrentRole('teacher');
-    }
-  }, [user]);
+  // currentRole is derived directly from user.role — no sync needed
 
   // Load dashboard data
   useEffect(() => {
@@ -210,16 +205,16 @@ export default function DashboardPage() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+      transition: { staggerChildren: 0.05, delayChildren: 0.05 },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 12 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5 },
+      transition: { duration: 0.22, ease: 'easeOut' },
     },
   };
 
@@ -238,33 +233,32 @@ export default function DashboardPage() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar />
 
-        {/* Dynamic Header with Role Switcher */}
+        {/* Role-locked header bar with contextual tabs */}
         <div className="bg-[#0f172a]/80 backdrop-blur-md border-b border-indigo-500/10 px-6 py-3.5 flex items-center justify-between flex-shrink-0">
+          {/* Read-only role badge */}
           <div className="flex items-center gap-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary-light/60 font-mono">Workspace Role:</span>
-            <div className="flex bg-surface border border-border rounded-xl p-1">
-              <button
-                onClick={() => setCurrentRole('student')}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${currentRole === 'student' ? 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-lg shadow-indigo-500/20' : 'text-text-secondary/50 hover:text-white'}`}
-              >
-                Student
-              </button>
-              <button
-                onClick={() => setCurrentRole('teacher')}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${currentRole === 'teacher' ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-lg shadow-purple-500/20' : 'text-text-secondary/50 hover:text-white'}`}
-              >
-                Teacher
-              </button>
+            <span className="text-xs font-semibold uppercase tracking-wider text-primary-light/60 font-mono">Signed in as:</span>
+            <div className={`px-4 py-1.5 rounded-lg text-xs font-bold ${
+              currentRole === 'teacher'
+                ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-lg shadow-purple-500/20'
+                : 'bg-gradient-to-r from-indigo-500 to-blue-500 text-white shadow-lg shadow-indigo-500/20'
+            }`}>
+              {currentRole === 'teacher' ? '🎓 Teacher' : '📖 Student'}
             </div>
           </div>
 
+          {/* Student tabs */}
           {currentRole === 'student' && (
             <div className="flex gap-2">
               {(['overview', 'attendance'] as const).map(tab => (
                 <button
                   key={tab}
                   onClick={() => setStudentTab(tab)}
-                  className={`px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${studentTab === tab ? 'bg-indigo-500/10 text-primary-light border border-indigo-500/35 shadow-sm shadow-indigo-500/10' : 'bg-transparent text-text-secondary/40 hover:text-text-secondary/70 border border-transparent'}`}
+                  className={`px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+                    studentTab === tab
+                      ? 'bg-indigo-500/10 text-primary-light border border-indigo-500/35 shadow-sm shadow-indigo-500/10'
+                      : 'bg-transparent text-text-secondary/40 hover:text-text-secondary/70 border border-transparent'
+                  }`}
                 >
                   {tab}
                 </button>
@@ -272,13 +266,18 @@ export default function DashboardPage() {
             </div>
           )}
 
+          {/* Teacher tabs */}
           {currentRole === 'teacher' && (
             <div className="flex gap-2">
               {(['home', 'classes', 'attendance', 'students', 'upload'] as const).map(tab => (
                 <button
                   key={tab}
                   onClick={() => setTeacherTab(tab)}
-                  className={`px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${teacherTab === tab ? 'bg-purple-500/10 text-purple-300 border border-purple-500/35 shadow-sm shadow-purple-500/10' : 'bg-transparent text-text-secondary/40 hover:text-text-secondary/70 border border-transparent'}`}
+                  className={`px-4 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+                    teacherTab === tab
+                      ? 'bg-purple-500/10 text-purple-300 border border-purple-500/35 shadow-sm shadow-purple-500/10'
+                      : 'bg-transparent text-text-secondary/40 hover:text-text-secondary/70 border border-transparent'
+                  }`}
                 >
                   {tab}
                 </button>
@@ -291,11 +290,11 @@ export default function DashboardPage() {
           
           {/* STUDENT DASHBOARD VIEW */}
           {currentRole === 'student' && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.18 }}>
               {studentTab === 'overview' ? (
                 <>
                   <div className="mb-8">
-                    <h1 className="text-3xl md:text-4xl font-bold text-white">Welcome Back, Student! 👋</h1>
+                    <h1 className="text-3xl md:text-4xl font-bold text-white">Welcome Back, {user?.name || 'Student'}! 👋</h1>
                     <p className="text-gray-600 dark:text-text-muted mt-2">Here's your learning progress today</p>
                   </div>
 
@@ -325,9 +324,9 @@ export default function DashboardPage() {
                     {/* Progress Chart */}
                     <motion.div
                       className="bg-surface border border-border rounded-2xl shadow-lg p-6 backdrop-blur-sm relative overflow-hidden"
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
+                      transition={{ delay: 0.08, duration: 0.22 }}
                     >
                       <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-[40px] pointer-events-none" />
                       <h2 className="text-xs font-bold mb-6 text-primary-light/60 uppercase tracking-wider font-mono">Weekly Progress</h2>
@@ -365,9 +364,9 @@ export default function DashboardPage() {
                     {/* Subject Performance */}
                     <motion.div
                       className="bg-surface border border-border rounded-2xl shadow-lg p-6 backdrop-blur-sm relative overflow-hidden"
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4 }}
+                      transition={{ delay: 0.13, duration: 0.22 }}
                     >
                       <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-[40px] pointer-events-none" />
                       <h2 className="text-xs font-bold mb-6 text-primary-light/60 uppercase tracking-wider font-mono">Subject Performance</h2>
@@ -407,9 +406,9 @@ export default function DashboardPage() {
                     {/* Quick Actions */}
                     <motion.div
                       className="lg:col-span-2 bg-surface border border-border rounded-2xl shadow-lg p-6 backdrop-blur-sm relative overflow-hidden"
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 }}
+                      transition={{ delay: 0.16, duration: 0.22 }}
                     >
                       <h2 className="text-xs font-bold mb-5 text-primary-light/60 uppercase tracking-wider font-mono">Quick Actions</h2>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
@@ -440,9 +439,9 @@ export default function DashboardPage() {
                     {/* Upcoming Events */}
                     <motion.div
                       className="bg-surface border border-border rounded-2xl shadow-lg p-6 backdrop-blur-sm relative overflow-hidden"
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.6 }}
+                      transition={{ delay: 0.2, duration: 0.22 }}
                     >
                       <h2 className="text-xs font-bold mb-5 text-primary-light/60 uppercase tracking-wider font-mono">Upcoming Events</h2>
                       <div className="space-y-4 relative z-10">
@@ -561,7 +560,7 @@ export default function DashboardPage() {
               
               {/* TAB 1: TEACHER HOME */}
               {teacherTab === 'home' && (
-                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+                <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="space-y-6">
                   <div>
                     <h1 className="text-3xl font-bold text-white">Teacher Workspace Overview</h1>
                     <p className="text-gray-600 dark:text-text-muted mt-1">Real-time attendance analysis and schedule monitoring.</p>

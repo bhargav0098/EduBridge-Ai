@@ -1,28 +1,48 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/cn';
 import { useAuthStore } from '@/store/authStore';
 
-const menuItems = [
-  { label: 'Dashboard', href: '/dashboard', icon: '📊' },
-  { label: 'AI Chat', href: '/chat', icon: '💬' },
-  { label: 'Quiz', href: '/quiz', icon: '📝' },
-  { label: 'Notes', href: '/notes', icon: '📚' },
-  { label: 'Events', href: '/events', icon: '📅' },
-  { label: 'Resource Allocator', href: '/resources', icon: '🏢' },
-  { label: 'Peer Matching', href: '/peers', icon: '👥' },
-  { label: 'Admin', href: '/admin', icon: '⚙️' },
+const studentMenuItems = [
+  { label: 'Dashboard',        href: '/dashboard',  icon: '📊' },
+  { label: 'AI Chat',          href: '/chat',       icon: '💬' },
+  { label: 'Quiz',             href: '/quiz',       icon: '📝' },
+  { label: 'Notes',            href: '/notes',      icon: '📚' },
+  { label: 'Events',           href: '/events',     icon: '📅' },
+  { label: 'Resources',        href: '/resources',  icon: '🏢' },
+  { label: 'Peer Matching',    href: '/peers',      icon: '👥' },
+];
+
+const teacherMenuItems = [
+  { label: 'Dashboard',        href: '/dashboard',  icon: '📊' },
+  { label: 'AI Chat',          href: '/chat',       icon: '💬' },
+  { label: 'Classes',          href: '/dashboard',  icon: '🏫', tab: 'classes'   },
+  { label: 'Mark Attendance',  href: '/dashboard',  icon: '📅', tab: 'attendance' },
+  { label: 'Student Roster',   href: '/dashboard',  icon: '👥', tab: 'students'  },
+  { label: 'Upload Materials', href: '/dashboard',  icon: '📤', tab: 'upload'    },
+  { label: 'Events',           href: '/events',     icon: '🎉' },
+  { label: 'Admin',            href: '/admin',      icon: '⚙️' },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { logout } = useAuthStore();
+  const router   = useRouter();
+  const { user, logout } = useAuthStore();
+
+  const isTeacher = user?.role === 'teacher';
+  const menuItems = isTeacher ? teacherMenuItems : studentMenuItems;
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
 
   return (
     <aside className="w-64 sidebar-premium h-screen sticky top-0 overflow-y-auto flex flex-col justify-between">
       <div>
+        {/* Logo */}
         <div className="p-6 border-b border-indigo-500/10">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md">
@@ -35,12 +55,29 @@ export function Sidebar() {
           </Link>
         </div>
 
+        {/* Role badge */}
+        {user && (
+          <div className="px-5 pt-4 pb-2">
+            <div className={cn(
+              'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border',
+              isTeacher
+                ? 'bg-purple-500/10 text-purple-300 border-purple-500/20'
+                : 'bg-indigo-500/10 text-indigo-300 border-indigo-500/20'
+            )}>
+              <span>{isTeacher ? '🎓' : '📖'}</span>
+              {isTeacher ? 'Teacher' : 'Student'}
+            </div>
+            <p className="mt-1.5 text-xs text-gray-400 truncate">{user.name}</p>
+          </div>
+        )}
+
+        {/* Nav */}
         <nav className="p-3 space-y-1 pb-24">
           {menuItems.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
             return (
               <Link
-                key={item.href}
+                key={item.label}
                 href={item.href}
                 className={cn(
                   'sidebar-item flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm',
@@ -60,9 +97,10 @@ export function Sidebar() {
         </nav>
       </div>
 
+      {/* Logout */}
       <div className="p-4 border-t border-indigo-500/10 bg-surface">
         <button
-          onClick={logout}
+          onClick={handleLogout}
           suppressHydrationWarning={true}
           className="w-full px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition-all text-sm font-medium"
         >

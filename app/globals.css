@@ -61,9 +61,9 @@
   --shadow-accent-glow: 0 0 20px rgba(245,158,11,0.15);
 
   /* ── Transitions ────────────────────────────────────────── */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 80ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ── Layout ─────────────────────────────────────────────── */
   --radius-sm:   6px;
@@ -129,6 +129,8 @@
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Eliminate paint on non-composited properties */
+  box-sizing: border-box;
 }
 
 html {
@@ -191,12 +193,14 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.2), 0 0 60px rgba(99, 102, 241, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.4), 0 0 80px rgba(99, 102, 241, 0.2);
-  }
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50%       { transform: scale(1.04); opacity: 1; }
+}
+
+/* Compositor-only (opacity) pulse for the online dot */
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
 }
 
 @keyframes gradient-shift {
@@ -333,15 +337,16 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 .glass {
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  will-change: auto;
 }
 
 .glass-light {
   background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
@@ -392,6 +397,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-shimmer {
@@ -402,11 +408,13 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     transparent 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 3s ease-in-out infinite;
+  animation: shimmer 2s ease-in-out infinite;
+  will-change: background-position;
 }
 
 .animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
+  animation: pulse-glow 2.5s ease-in-out infinite;
+  will-change: opacity;
 }
 
 .animate-gradient {
@@ -415,7 +423,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .animate-fade-up {
-  animation: fade-up 0.6s ease-out forwards;
+  animation: fade-up 0.3s ease-out forwards;
+  will-change: opacity, transform;
 }
 
 /* Tech grid background pattern */
@@ -548,9 +557,10 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-base);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
   position: relative;
   overflow: hidden;
+  will-change: transform;
 }
 
 .tech-card::before {
@@ -562,13 +572,13 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   height: 2px;
   background: var(--gradient-brand);
   opacity: 0;
-  transition: opacity var(--transition-base);
+  transition: opacity var(--transition-fast);
 }
 
 .tech-card:hover {
   box-shadow: var(--shadow-lg);
   border-color: rgba(99, 102, 241, 0.2);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .tech-card:hover::before {
@@ -597,11 +607,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   padding: 12px 32px;
   border: none;
   cursor: pointer;
-  transition: all var(--transition-base);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
   position: relative;
   overflow: hidden;
   font-size: 0.875rem;
   letter-spacing: 0.025em;
+  will-change: transform;
 }
 
 .btn-primary::before {
@@ -610,12 +621,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   inset: 0;
   background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%);
   opacity: 0;
-  transition: opacity var(--transition-base);
+  transition: opacity var(--transition-fast);
 }
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
 }
 
 .btn-primary:hover::before {
@@ -660,7 +671,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 .sidebar-item {
   position: relative;
-  transition: all var(--transition-base);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
   border-radius: var(--radius-md);
 }
 
@@ -674,7 +685,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   height: 0;
   background: var(--gradient-brand);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  transition: height var(--transition-base);
+  transition: height var(--transition-fast);
+  will-change: height;
 }
 
 .sidebar-item.active::before,
@@ -692,14 +704,17 @@ h1, h2, h3, h4, h5, h6, .font-heading {
    ═══════════════════ */
 
 .navbar-premium {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
+  /* Promote to own GPU layer so blur doesn't repaint on scroll */
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 .dark .navbar-premium {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(15, 23, 42, 0.92);
   border-bottom: 1px solid rgba(99, 102, 241, 0.08);
 }
 
@@ -721,7 +736,9 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   background: #22c55e;
   border-radius: 50%;
   border: 2px solid var(--surface-elevated);
-  animation: pulse-glow 2s ease-in-out infinite;
+  /* Use opacity-only animation — compositor-only, zero layout/paint cost */
+  animation: status-pulse 2.5s ease-in-out infinite;
+  will-change: opacity;
 }
 
 /* ═══════════════════

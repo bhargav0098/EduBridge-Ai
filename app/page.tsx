@@ -267,11 +267,11 @@ function LoadingSequence({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
-        const next = prev + Math.random() * 15 + 5;
+        const next = prev + Math.random() * 20 + 8;
         if (next >= 100) {
           clearInterval(interval);
           setStatusText('System ready.');
-          setTimeout(onComplete, 600);
+          setTimeout(onComplete, 300);
           return 100;
         }
 
@@ -282,7 +282,7 @@ function LoadingSequence({ onComplete }: { onComplete: () => void }) {
         setStatusText(statusMessages[index]);
         return next;
       });
-    }, 400);
+    }, 220);
 
     return () => clearInterval(interval);
   }, [onComplete]);
@@ -290,17 +290,17 @@ function LoadingSequence({ onComplete }: { onComplete: () => void }) {
   return (
     <motion.div
       className="w-full max-w-md space-y-3"
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ delay: 0.2, duration: 0.6 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ delay: 0.1, duration: 0.28 }}
     >
       {/* Progress bar */}
       <div className="h-[2px] bg-white/5 rounded-full overflow-hidden relative">
         <motion.div
           className="h-full rounded-full relative"
           animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
           style={{
             background: 'linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4)',
             boxShadow: '0 0 12px rgba(99, 102, 241, 0.6), 0 0 30px rgba(99, 102, 241, 0.2)',
@@ -352,8 +352,8 @@ export default function IntroPage() {
         setIsExiting(true);
         setTimeout(() => {
           router.push('/home');
-        }, 900);
-      }, 2800); // Wait for title + chips + orbital reveal to finish
+        }, 450);
+      }, 1500); // Wait for title + chips + orbital reveal to finish
       return () => clearTimeout(timer);
     }
   }, [phase, isExiting, router]);
@@ -368,7 +368,7 @@ export default function IntroPage() {
           scale: isExiting ? 1.02 : 1,
           filter: isExiting ? 'blur(8px)' : 'blur(0px)',
         }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       >
         {/* Particle canvas background */}
         <ParticleField />
@@ -450,7 +450,7 @@ export default function IntroPage() {
             className="space-y-2 mb-4"
             initial={{ opacity: 0, y: 30, scale: 0.9 }}
             animate={phase === 'ready' ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 30, scale: 0.9 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight">
               <span className="intro-title-gradient intro-glitch" data-text="EduBridge">EduBridge</span>
@@ -463,7 +463,7 @@ export default function IntroPage() {
             className="text-base sm:text-lg text-text-secondary/50 font-light max-w-xl mb-6 leading-relaxed"
             initial={{ opacity: 0, y: 20, letterSpacing: '0.3em' }}
             animate={phase === 'ready' ? { opacity: 1, y: 0, letterSpacing: '0em' } : { opacity: 0, y: 20, letterSpacing: '0.3em' }}
-            transition={{ delay: 0.2, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ delay: 0.1, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           >
             Next-generation AI-powered learning ecosystem.
             <br />
@@ -475,7 +475,7 @@ export default function IntroPage() {
             className="flex flex-wrap gap-3 justify-center mb-10"
             initial={{ opacity: 0, y: 15 }}
             animate={phase === 'ready' ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
           >
             {phase === 'ready' && (
               <>
@@ -500,7 +500,7 @@ export default function IntroPage() {
           className="absolute bottom-6 left-0 right-0 flex justify-center gap-8 text-[10px] text-indigo-400/30 font-mono tracking-wider uppercase z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 3, duration: 1 }}
+          transition={{ delay: 1.5, duration: 0.4 }}
         >
           <span>v2.0.0</span>
           <span>·</span>

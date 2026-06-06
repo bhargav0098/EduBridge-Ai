@@ -107,14 +107,14 @@ export default function AdminDashboard() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.05,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: 'easeOut' as const } },
   };
 
   return (
@@ -162,9 +162,9 @@ export default function AdminDashboard() {
               {/* User Growth */}
               <motion.div
                 className="bg-surface border border-border rounded-2xl p-6 backdrop-blur-sm relative"
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.1, duration: 0.2 }}
               >
                 <h2 className="text-xs font-bold mb-6 text-primary-light/60 uppercase tracking-wider font-mono">Platform Growth Trajectory</h2>
                 <div className="h-[300px]">
@@ -201,9 +201,9 @@ export default function AdminDashboard() {
               {/* Activity Metrics */}
               <motion.div
                 className="bg-surface border border-border rounded-2xl p-6 backdrop-blur-sm relative"
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.15, duration: 0.2 }}
               >
                 <h2 className="text-xs font-bold mb-6 text-primary-light/60 uppercase tracking-wider font-mono">Global System Activity</h2>
                 <div className="h-[300px]">
@@ -244,9 +244,9 @@ export default function AdminDashboard() {
             {/* Users Table */}
             <motion.div
               className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm backdrop-blur-sm"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.15, duration: 0.2 }}
             >
               <div className="p-5 border-b border-border flex justify-between items-center bg-black/20">
                 <h2 className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
