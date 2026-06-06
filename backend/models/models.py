@@ -26,6 +26,16 @@ class User(Base):
     student_profile = relationship("StudentProfile", back_populates="user", uselist=False)
     study_groups = relationship("StudyGroupMember", back_populates="user")
 
+# Authentication Models
+class OTPRequest(Base):
+    __tablename__ = "otp_requests"
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, index=True, nullable=False)
+    otp = Column(String, nullable=False)
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    is_used = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
 # Attendance Models
 class AttendanceSession(Base):
     __tablename__ = "attendance_sessions"

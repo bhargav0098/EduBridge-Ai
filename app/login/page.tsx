@@ -9,7 +9,13 @@ import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+      remember: false,
+    }
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState('');
 
@@ -36,16 +42,19 @@ export default function LoginPage() {
         const response = await fetch('/api/reset-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: forgotEmail }),
+          body: JSON.stringify({ email: forgotEmail.trim() }),
         });
 
-        if (response.ok) {
-          setForgotSuccess('A verification code (OTP) has been sent to your email.');
-          setForgotStep(2);
-        } else {
-          const errData = await response.json().catch(() => ({}));
-          setForgotError(errData.error || errData.message || 'Failed to send OTP. Please try again.');
+        if (!response.ok) {
+          if (response.status === 400 || response.status === 401) {
+            const errData = await response.json().catch(() => ({}));
+            setForgotError(errData.error || errData.message || 'Failed to send OTP. Please try again.');
+            return;
+          }
+          throw new Error('API failed');
         }
+        setForgotSuccess('A verification code (OTP) has been sent to your email.');
+        setForgotStep(2);
       } else {
         if (!forgotOtp || !forgotNewPassword) {
           setForgotError('Both OTP and new password are required');
@@ -61,35 +70,21 @@ export default function LoginPage() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            email: forgotEmail,
+            email: forgotEmail.trim(),
             otp: forgotOtp,
             new_password: forgotNewPassword,
           }),
         });
 
-        if (response.ok) {
-          setForgotSuccess('Password reset successfully! Redirecting to login...');
-          setTimeout(() => {
-            setView('login');
-            setForgotStep(1);
-            setForgotEmail('');
-            setForgotOtp('');
-            setForgotNewPassword('');
-            setForgotSuccess('');
-            setForgotError('');
-          }, 2000);
-        } else {
-          const errData = await response.json().catch(() => ({}));
-          setForgotError(errData.error || errData.message || 'Failed to reset password. Check your OTP.');
+        if (!response.ok) {
+          if (response.status === 400 || response.status === 401) {
+            const errData = await response.json().catch(() => ({}));
+            setForgotError(errData.error || errData.message || 'Failed to reset password. Check your OTP.');
+            return;
+          }
+          throw new Error('API failed');
         }
-      }
-    } catch (err) {
-      console.warn('Backend reset API failed, using client-side mock fallback', err);
-      if (forgotStep === 1) {
-        setForgotSuccess('Mock Verification Code (OTP: 123456) sent to your email!');
-        setForgotStep(2);
-      } else {
-        setForgotSuccess('Mock password reset successful! Redirecting to login...');
+        setForgotSuccess('Password reset successfully! Redirecting to login...');
         setTimeout(() => {
           setView('login');
           setForgotStep(1);
@@ -100,6 +95,9 @@ export default function LoginPage() {
           setForgotError('');
         }, 2000);
       }
+    } catch (err) {
+      console.error('Backend reset API failed', err);
+      setForgotError((err as Error).message || 'An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -109,34 +107,32 @@ export default function LoginPage() {
     setIsLoading(true);
     setApiError('');
     try {
+      const payload = {
+        ...data,
+        email: data.email.trim(),
+      };
+      
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
-      if (response.ok) {
-        const resData = await response.json();
-        // Import or get useAuthStore via dynamic import or direct store manipulation
-        const { useAuthStore } = await import('@/store/authStore');
-        useAuthStore.setState({ user: resData.user });
-        router.push('/dashboard');
-      } else {
-        setApiError('Login failed. Please check your credentials.');
-      }
-    } catch (error) {
-      console.warn('Backend login API failed, using client-side mock credentials', error);
-      const { useAuthStore } = await import('@/store/authStore');
-      const role = data.email.toLowerCase().includes('teacher') ? 'teacher' : 'student';
-      useAuthStore.setState({
-        user: {
-          id: 'mock-user-id',
-          email: data.email,
-          name: data.email.split('@')[0],
-          role: role
+      if (!response.ok) {
+        if (response.status === 400 || response.status === 401) {
+          setApiError('Login failed. Please check your credentials.');
+          return;
         }
-      });
+        throw new Error('API failed');
+      }
+      const resData = await response.json();
+      // Import or get useAuthStore via dynamic import or direct store manipulation
+      const { useAuthStore } = await import('@/store/authStore');
+      useAuthStore.setState({ user: resData.user, token: resData.access_token || resData.token || null });
       router.push('/dashboard');
+    } catch (error) {
+      console.error('Backend login API failed', error);
+      setApiError((error as Error).message || 'An unexpected error occurred.');
     } finally {
       setIsLoading(false);
     }

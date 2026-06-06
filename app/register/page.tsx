@@ -9,7 +9,15 @@ import Link from 'next/link';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      role: '',
+      password: '',
+      confirmPassword: '',
+    }
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState('');
   const password = watch('password');
@@ -22,7 +30,7 @@ export default function RegisterPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: data.email,
+          email: data.email.trim(),
           password: data.password,
           name: data.name,
           role: data.role,
@@ -32,34 +40,15 @@ export default function RegisterPage() {
       if (response.ok) {
         const resData = await response.json();
         const { useAuthStore } = await import('@/store/authStore');
-        useAuthStore.setState({ user: resData.user });
+        useAuthStore.setState({ user: resData.user, token: resData.access_token || resData.token || null });
         router.push('/dashboard');
       } else {
-        // Fallback to client-side mock registration if server returned an error (e.g., 404, 500)
-        console.warn('API returned non-OK status, falling back to mock user session');
-        const { useAuthStore } = await import('@/store/authStore');
-        useAuthStore.setState({
-          user: {
-            id: 'mock-user-id',
-            email: data.email,
-            name: data.name,
-            role: data.role as 'student' | 'teacher'
-          }
-        });
-        router.push('/dashboard');
+        const errData = await response.json().catch(() => ({}));
+        setApiError(errData.detail || errData.error || errData.message || 'Registration failed.');
       }
     } catch (error) {
-      console.warn('Backend registration API failed, using client-side mock credentials fallback', error);
-      const { useAuthStore } = await import('@/store/authStore');
-      useAuthStore.setState({
-        user: {
-          id: 'mock-user-id',
-          email: data.email,
-          name: data.name,
-          role: data.role as 'student' | 'teacher'
-        }
-      });
-      router.push('/dashboard');
+      console.error('Backend registration API failed', error);
+      setApiError((error as Error).message || 'An unexpected error occurred.');
     } finally {
       setIsLoading(false);
     }
