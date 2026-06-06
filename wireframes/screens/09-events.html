@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduBridge AI — Events</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--p:#6C63FF;--pl:#a89dff;--pd:#4f47cc;--pg:rgba(108,99,255,.2);
+--a:#F59E0B;--s:#1DB954;--e:#EF4444;
+--bg:#080814;--sf:#111026;--sf2:#181632;--sf3:#1e1a3e;
+--br:rgba(108,99,255,.15);--brs:rgba(108,99,255,.35);
+--t1:#f1f0ff;--t2:#a89dff;--tm:#94a3b8;
+--fh:'Sora',sans-serif;--fb:'Inter',sans-serif;
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);min-height:100vh;display:flex;flex-direction:column}
+.wf-bar{background:rgba(108,99,255,.1);border-bottom:1px dashed rgba(108,99,255,.4);padding:8px 24px;font-family:monospace;font-size:.75rem;color:var(--pl);display:flex;justify-content:space-between;flex-shrink:0}
+
+/* TOPBAR */
+.topbar{background:var(--sf);border-bottom:1px solid var(--br);padding:14px 28px;display:flex;align-items:center;gap:16px}
+.topbar-title{font-family:var(--fh);font-size:1.125rem;font-weight:700;flex:1}
+.view-toggle{display:flex;background:var(--sf2);border:1px solid var(--br);border-radius:8px;overflow:hidden}
+.vt-btn{padding:7px 14px;font-family:monospace;font-size:.75rem;cursor:pointer;color:var(--tm);transition:.15s;border:none;background:transparent}
+.vt-btn.active{background:rgba(108,99,255,.2);color:var(--pl)}
+.tb-btn{background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:7px 14px;font-size:.8125rem;color:var(--tm);cursor:pointer;font-family:var(--fb);display:flex;align-items:center;gap:6px;transition:.15s}
+.tb-btn:hover{border-color:var(--brs);color:var(--t1)}
+.add-btn{background:var(--p);border:none;color:#fff;border-radius:8px;padding:8px 16px;font-family:var(--fh);font-size:.875rem;font-weight:600;cursor:pointer;box-shadow:0 0 16px var(--pg)}
+
+/* FILTER BAR */
+.filter-bar{background:var(--sf);border-bottom:1px solid var(--br);padding:10px 28px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.filter-chip{background:var(--sf2);border:1.5px solid var(--br);border-radius:999px;padding:5px 14px;font-family:monospace;font-size:.75rem;cursor:pointer;color:var(--tm);transition:.15s}
+.filter-chip.active{border-color:var(--p);color:var(--pl);background:rgba(108,99,255,.1)}
+.filter-chip.exam{border-color:var(--e);color:var(--e);background:rgba(239,68,68,.08)}
+.filter-chip.event{border-color:var(--s);color:var(--s);background:rgba(29,185,84,.08)}
+.filter-chip.lab{border-color:var(--a);color:var(--a);background:rgba(245,158,11,.08)}
+
+/* CONTENT GRID */
+.content{display:grid;grid-template-columns:300px 1fr;gap:0;flex:1}
+
+/* MINI CALENDAR SIDEBAR */
+.cal-sidebar{background:var(--sf);border-right:1px solid var(--br);padding:20px}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-month{font-family:var(--fh);font-size:.9375rem;font-weight:700}
+.cal-nav-btn{background:var(--sf2);border:1px solid var(--br);border-radius:6px;padding:4px 10px;font-size:.8rem;color:var(--tm);cursor:pointer}
+.mini-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:20px}
+.mc-label{text-align:center;font-family:monospace;font-size:.6rem;color:var(--tm);padding:3px 0}
+.mc-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:5px;font-size:.75rem;cursor:pointer;font-family:monospace;transition:.12s;position:relative}
+.mc-day:hover{background:var(--sf3)}
+.mc-day.today{background:var(--p);color:#fff;font-weight:700}
+.mc-day.has-event::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--a)}
+.mc-day.empty{opacity:0;pointer-events:none}
+
+/* UPCOMING EVENTS */
+.up-section{margin-top:4px}
+.up-title{font-family:monospace;font-size:.7rem;color:var(--tm);text-transform:uppercase;margin-bottom:10px}
+.up-event{background:var(--sf2);border:1px solid var(--br);border-radius:8px;padding:10px;margin-bottom:8px;border-left:3px solid}
+.ue-name{font-size:.8125rem;font-weight:500;margin-bottom:3px}
+.ue-meta{font-size:.7rem;color:var(--tm);font-family:monospace}
+
+/* MAIN CALENDAR VIEW */
+.cal-main{overflow-y:auto;padding:20px 24px}
+.cal-week-header{display:grid;grid-template-columns:60px repeat(7,1fr);margin-bottom:4px}
+.cwh-cell{text-align:center;padding:6px 4px}
+.cwh-day{font-family:monospace;font-size:.65rem;color:var(--tm)}
+.cwh-date{font-family:var(--fh);font-size:1.125rem;font-weight:700;line-height:1}
+.cwh-date.today-d{color:var(--p)}
+.cwh-today-ring{width:32px;height:32px;border-radius:50%;background:rgba(108,99,255,.15);border:2px solid var(--p);display:flex;align-items:center;justify-content:center;margin:0 auto;font-family:var(--fh);font-size:1.125rem;font-weight:700;color:var(--p)}
+
+/* TIME GRID */
+.time-grid{display:grid;grid-template-columns:60px repeat(7,1fr);position:relative}
+.time-slot{font-family:monospace;font-size:.65rem;color:var(--tm);text-align:right;padding-right:10px;padding-top:2px;height:56px;border-top:1px solid var(--br)}
+.day-col{border-left:1px solid var(--br);position:relative}
+.day-hour{height:56px;border-top:1px solid rgba(108,99,255,.06);cursor:pointer}
+.day-hour:hover{background:rgba(108,99,255,.04)}
+
+/* EVENT BLOCKS */
+.ev-block{position:absolute;left:4px;right:4px;border-radius:6px;padding:6px 8px;cursor:pointer;overflow:hidden;transition:.15s;border-left:3px solid}
+.ev-block:hover{filter:brightness(1.15)}
+.ev-title{font-size:.75rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-time{font-family:monospace;font-size:.65rem;opacity:.8}
+.ev-exam{background:rgba(239,68,68,.15);border-color:var(--e);color:var(--e)}
+.ev-lab{background:rgba(245,158,11,.12);border-color:var(--a);color:var(--a)}
+.ev-event{background:rgba(29,185,84,.1);border-color:var(--s);color:var(--s)}
+.ev-class{background:rgba(108,99,255,.12);border-color:var(--p);color:var(--pl)}
+
+/* MODAL OVERLAY */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal{background:var(--sf);border:1px solid var(--br);border-radius:16px;padding:28px;width:460px;box-shadow:0 8px 48px rgba(0,0,0,.7)}
+.modal-title{font-family:var(--fh);font-size:1.125rem;font-weight:700;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:var(--sf2);border:1px solid var(--br);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--tm);font-size:14px}
+.form-row{margin-bottom:14px}
+.form-label{font-family:monospace;font-size:.75rem;color:var(--t2);margin-bottom:6px;display:block}
+.form-input{width:100%;background:var(--sf2);border:1.5px solid var(--br);border-radius:8px;padding:9px 12px;color:var(--t1);font-family:var(--fb);font-size:.9rem;outline:none}
+.form-input:focus{border-color:var(--p)}
+.type-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.type-chip{background:var(--sf2);border:1.5px solid var(--br);border-radius:7px;padding:8px;text-align:center;cursor:pointer;font-size:.75rem;font-family:monospace;transition:.15s}
+.type-chip.active{border-color:var(--p);background:rgba(108,99,255,.12);color:var(--pl)}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.modal-btn{padding:9px 20px;border-radius:8px;font-family:var(--fb);font-size:.875rem;cursor:pointer;transition:.2s}
+.modal-btn-cancel{background:var(--sf2);border:1.5px solid var(--br);color:var(--tm)}
+.modal-btn-save{background:var(--p);border:none;color:#fff;font-weight:600;box-shadow:0 0 16px var(--pg)}
+</style>
+</head>
+<body>
+
+<div class="wf-bar">
+  <span>📐 WIREFRAME · Screen 09 — Events Calendar (Weekly View + Add Modal)</span>
+  <span>Calendar · Filters · Event Creation</span>
+</div>
+
+<div class="topbar">
+  <div class="topbar-title">Events & Schedule</div>
+  <div class="view-toggle">
+    <button class="vt-btn">Month</button>
+    <button class="vt-btn active">Week</button>
+    <button class="vt-btn">Day</button>
+    <button class="vt-btn">Agenda</button>
+  </div>
+  <button class="tb-btn">📅 Today</button>
+  <button class="add-btn" onclick="document.getElementById('add-modal').style.display='flex'">+ Add Event</button>
+</div>
+
+<div class="filter-bar">
+  <span style="font-family:monospace;font-size:.75rem;color:var(--tm)">Filter:</span>
+  <div class="filter-chip active">All</div>
+  <div class="filter-chip exam">📝 Exams</div>
+  <div class="filter-chip event">🎉 Events</div>
+  <div class="filter-chip lab">🔬 Labs</div>
+  <div class="filter-chip" style="border-color:var(--p);color:var(--pl);background:rgba(108,99,255,.08)">📚 Classes</div>
+  <div class="filter-chip">🏖 Holidays</div>
+</div>
+
+<div class="content">
+  <!-- MINI CALENDAR SIDEBAR -->
+  <div class="cal-sidebar">
+    <div class="cal-nav">
+      <div class="cal-nav-btn">‹</div>
+      <div class="cal-month">June 2025</div>
+      <div class="cal-nav-btn">›</div>
+    </div>
+
+    <div class="mini-cal">
+      <div class="mc-label">M</div><div class="mc-label">T</div><div class="mc-label">W</div>
+      <div class="mc-label">T</div><div class="mc-label">F</div><div class="mc-label">S</div><div class="mc-label">S</div>
+      <div class="mc-day empty"></div><div class="mc-day empty"></div><div class="mc-day empty"></div>
+      <div class="mc-day empty"></div><div class="mc-day empty"></div><div class="mc-day">1</div><div class="mc-day">2</div>
+      <div class="mc-day">3</div><div class="mc-day has-event">4</div><div class="mc-day">5</div>
+      <div class="mc-day today">6</div><div class="mc-day has-event">7</div><div class="mc-day">8</div><div class="mc-day">9</div>
+      <div class="mc-day has-event">10</div><div class="mc-day">11</div><div class="mc-day has-event">12</div>
+      <div class="mc-day has-event">13</div><div class="mc-day">14</div><div class="mc-day">15</div><div class="mc-day">16</div>
+      <div class="mc-day">17</div><div class="mc-day has-event">18</div><div class="mc-day">19</div>
+      <div class="mc-day">20</div><div class="mc-day has-event">21</div><div class="mc-day">22</div><div class="mc-day">23</div>
+      <div class="mc-day">24</div><div class="mc-day">25</div><div class="mc-day has-event">26</div>
+      <div class="mc-day">27</div><div class="mc-day">28</div><div class="mc-day">29</div><div class="mc-day">30</div>
+    </div>
+
+    <div class="up-section">
+      <div class="up-title">// upcoming events</div>
+      <div class="up-event" style="border-color:var(--e)">
+        <div class="ue-name" style="color:var(--e)">Math Mid-term</div>
+        <div class="ue-meta">Jun 9 · 09:00 AM · Hall B</div>
+      </div>
+      <div class="up-event" style="border-color:var(--p)">
+        <div class="ue-name" style="color:var(--pl)">DS Lab Session</div>
+        <div class="ue-meta">Jun 11 · 02:00 PM · Lab 3</div>
+      </div>
+      <div class="up-event" style="border-color:var(--s)">
+        <div class="ue-name" style="color:var(--s)">Science Fair 2025</div>
+        <div class="ue-meta">Jun 13 · 10:00 AM · Auditorium</div>
+      </div>
+      <div class="up-event" style="border-color:var(--a)">
+        <div class="ue-name" style="color:var(--a)">Chemistry Lab</div>
+        <div class="ue-meta">Jun 18 · 11:00 AM · Lab 1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEKLY CALENDAR GRID -->
+  <div class="cal-main">
+    <div class="cal-week-header">
+      <div></div>
+      <div class="cwh-cell"><div class="cwh-day">MON</div><div class="cwh-date">2</div></div>
+      <div class="cwh-cell"><div class="cwh-day">TUE</div><div class="cwh-date">3</div></div>
+      <div class="cwh-cell"><div class="cwh-day">WED</div><div class="cwh-date">4</div></div>
+      <div class="cwh-cell"><div class="cwh-day">THU</div><div class="cwh-date">5</div></div>
+      <div class="cwh-cell"><div class="cwh-day">FRI</div><div class="cwh-today-ring">6</div></div>
+      <div class="cwh-cell" style="opacity:.4"><div class="cwh-day">SAT</div><div class="cwh-date">7</div></div>
+      <div class="cwh-cell" style="opacity:.4"><div class="cwh-day">SUN</div><div class="cwh-date">8</div></div>
+    </div>
+
+    <div class="time-grid">
+      <!-- TIME LABELS -->
+      <div>
+        <div class="time-slot">8 AM</div>
+        <div class="time-slot">9 AM</div>
+        <div class="time-slot">10 AM</div>
+        <div class="time-slot">11 AM</div>
+        <div class="time-slot">12 PM</div>
+        <div class="time-slot">1 PM</div>
+        <div class="time-slot">2 PM</div>
+        <div class="time-slot">3 PM</div>
+        <div class="time-slot">4 PM</div>
+        <div class="time-slot">5 PM</div>
+      </div>
+
+      <!-- MON -->
+      <div class="day-col">
+        <div class="day-hour"></div>
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-class" style="top:4px;height:100px">
+            <div class="ev-title">Data Structures</div>
+            <div class="ev-time">09:00–11:00 AM</div>
+          </div>
+        </div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-lab" style="top:0;height:56px">
+            <div class="ev-title">Physics Lab</div>
+            <div class="ev-time">1–2 PM</div>
+          </div>
+        </div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+      </div>
+
+      <!-- TUE -->
+      <div class="day-col">
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-class" style="top:0;height:56px">
+            <div class="ev-title">Mathematics</div>
+            <div class="ev-time">10–11 AM</div>
+          </div>
+        </div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-class" style="top:0;height:56px">
+            <div class="ev-title">English Lit</div>
+            <div class="ev-time">1–2 PM</div>
+          </div>
+        </div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+      </div>
+
+      <!-- WED -->
+      <div class="day-col">
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-class" style="top:0;height:56px">
+            <div class="ev-title">Chemistry</div>
+            <div class="ev-time">8–9 AM</div>
+          </div>
+        </div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-event" style="top:0;height:112px">
+            <div class="ev-title">🎉 Tech Seminar</div>
+            <div class="ev-time">11 AM–1 PM</div>
+          </div>
+        </div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+      </div>
+
+      <!-- THU -->
+      <div class="day-col">
+        <div class="day-hour"></div>
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-class" style="top:0;height:56px">
+            <div class="ev-title">Data Structures</div>
+            <div class="ev-time">9–10 AM</div>
+          </div>
+        </div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-class" style="top:0;height:56px">
+            <div class="ev-title">Mathematics</div>
+            <div class="ev-time">1–2 PM</div>
+          </div>
+        </div>
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-lab" style="top:0;height:56px">
+            <div class="ev-title">CS Lab</div>
+            <div class="ev-time">2–3 PM</div>
+          </div>
+        </div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+      </div>
+
+      <!-- FRI (TODAY) -->
+      <div class="day-col" style="background:rgba(108,99,255,.03)">
+        <div class="day-hour"></div>
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-class" style="top:0;height:56px;border-color:var(--p);box-shadow:0 0 12px var(--pg)">
+            <div class="ev-title">Data Structures ←NOW</div>
+            <div class="ev-time">9–10 AM</div>
+          </div>
+        </div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour" style="position:relative">
+          <div class="ev-block ev-exam" style="top:0;height:56px">
+            <div class="ev-title">📝 Mock Exam</div>
+            <div class="ev-time">2–3 PM</div>
+          </div>
+        </div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+        <div class="day-hour"></div>
+      </div>
+
+      <!-- SAT/SUN -->
+      <div class="day-col" style="opacity:.3">
+        <div class="day-hour"></div><div class="day-hour"></div><div class="day-hour"></div><div class="day-hour"></div>
+        <div class="day-hour"></div><div class="day-hour"></div><div class="day-hour"></div><div class="day-hour"></div>
+        <div class="day-hour"></div><div class="day-hour"></div>
+      </div>
+      <div class="day-col" style="opacity:.3">
+        <div class="day-hour"></div><div class="day-hour"></div><div class="day-hour"></div><div class="day-hour"></div>
+        <div class="day-hour"></div><div class="day-hour"></div><div class="day-hour"></div><div class="day-hour"></div>
+        <div class="day-hour"></div><div class="day-hour"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD EVENT MODAL -->
+<div class="modal-overlay" id="add-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title">
+      Add New Event
+      <div class="modal-close" onclick="document.getElementById('add-modal').style.display='none'">✕</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">EVENT TITLE</label>
+      <input class="form-input" placeholder="e.g. Math Quiz, Science Fair..." value="">
+    </div>
+    <div class="form-row">
+      <label class="form-label">EVENT TYPE</label>
+      <div class="type-row">
+        <div class="type-chip">📚 Class</div>
+        <div class="type-chip active">📝 Exam</div>
+        <div class="type-chip">🔬 Lab</div>
+        <div class="type-chip">🎉 Event</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-row">
+        <label class="form-label">DATE</label>
+        <input class="form-input" type="date" value="2025-06-09">
+      </div>
+      <div class="form-row">
+        <label class="form-label">TIME</label>
+        <input class="form-input" type="time" value="09:00">
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">LOCATION / ROOM</label>
+      <input class="form-input" placeholder="e.g. Hall B, Lab 3, Room 204...">
+    </div>
+    <div class="form-row">
+      <label class="form-label">DESCRIPTION (optional)</label>
+      <textarea class="form-input" rows="2" placeholder="Add notes about this event..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-cancel" onclick="document.getElementById('add-modal').style.display='none'">Cancel</button>
+      <button class="modal-btn modal-btn-save">Save Event</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

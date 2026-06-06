@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduBridge AI — Component Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--p:#6C63FF;--pl:#a89dff;--pd:#4f47cc;--pg:rgba(108,99,255,.2);
+--a:#F59E0B;--s:#1DB954;--e:#EF4444;
+--bg:#080814;--sf:#111026;--sf2:#181632;--sf3:#1e1a3e;
+--br:rgba(108,99,255,.15);--brs:rgba(108,99,255,.35);
+--t1:#f1f0ff;--t2:#a89dff;--tm:#94a3b8;
+--fh:'Sora',sans-serif;--fb:'Inter',sans-serif;
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);padding:40px;min-height:100vh}
+
+.header{margin-bottom:40px;border-bottom:1px solid var(--br);padding-bottom:24px}
+.header h1{font-family:var(--fh);font-size:2.25rem;margin-bottom:8px}
+.header p{color:var(--tm);font-size:1rem}
+
+.section{margin-bottom:48px}
+.section-title{font-family:var(--fh);font-size:1.5rem;margin-bottom:24px;color:var(--pl);border-bottom:1px dashed var(--br);padding-bottom:8px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-bottom:24px}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+
+/* Labels */
+.comp-label{font-family:monospace;font-size:.7rem;color:var(--tm);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em}
+
+/* Card Wrapper for demo */
+.demo-card{background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:24px;position:relative}
+
+/* BUTTONS */
+.btn{font-family:var(--fb);font-size:.875rem;font-weight:500;padding:10px 20px;border-radius:8px;cursor:pointer;border:none;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:var(--p);color:#fff;box-shadow:0 0 16px var(--pg)}
+.btn-primary:hover{background:var(--pd)}
+.btn-primary:focus{box-shadow:0 0 0 3px rgba(108,99,255,0.4)}
+.btn-primary:disabled{background:var(--sf3);color:var(--tm);cursor:not-allowed;box-shadow:none}
+
+.btn-secondary{background:var(--sf2);color:var(--t1);border:1.5px solid var(--br)}
+.btn-secondary:hover{border-color:var(--brs);background:var(--sf3)}
+.btn-secondary:focus{box-shadow:0 0 0 3px rgba(108,99,255,0.25)}
+
+.btn-accent{background:var(--a);color:#fff}
+.btn-accent:hover{filter:brightness(1.1)}
+.btn-success{background:var(--s);color:#fff}
+.btn-success:hover{filter:brightness(1.1)}
+.btn-error{background:var(--e);color:#fff}
+.btn-error:hover{filter:brightness(1.1)}
+
+.btn-ghost{background:transparent;color:var(--tm);border:1px solid transparent}
+.btn-ghost:hover{background:var(--sf2);color:var(--t1)}
+
+/* INPUTS */
+.form-group{margin-bottom:20px;width:100%}
+.form-group label{display:block;font-size:.8125rem;font-weight:500;color:var(--t2);margin-bottom:6px;font-family:monospace}
+.input{width:100%;background:var(--sf2);border:1.5px solid var(--br);border-radius:9px;padding:11px 14px;color:var(--t1);font-family:var(--fb);font-size:.9375rem;outline:none;transition:.2s}
+.input:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pg)}
+.input::placeholder{color:var(--tm)}
+.input-error{border-color:var(--e)!important}
+.input-success{border-color:var(--s)!important}
+.field-hint{font-size:.75rem;color:var(--tm);margin-top:4px}
+.field-error{font-size:.75rem;color:var(--e);margin-top:4px}
+.field-success{font-size:.75rem;color:var(--s);margin-top:4px}
+
+/* CARDS */
+.card-simple{background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:20px}
+.card-title{font-family:var(--fh);font-size:1.0625rem;font-weight:600;margin-bottom:8px}
+.card-desc{font-size:.875rem;color:var(--tm);line-height:1.6}
+
+.card-stat{background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:18px 20px}
+.cs-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cs-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;background:rgba(108,99,255,.15)}
+.cs-trend{font-size:.7rem;font-family:monospace;padding:3px 7px;border-radius:999px;background:rgba(29,185,84,.12);color:var(--s)}
+.cs-val{font-family:var(--fh);font-size:1.625rem;font-weight:700;margin-bottom:4px}
+.cs-lbl{font-size:.8rem;color:var(--tm)}
+.cs-bar{height:3px;background:var(--sf3);border-radius:2px;margin-top:12px;overflow:hidden}
+.cs-fill{height:100%;border-radius:2px;background:var(--p)}
+
+.card-rich{background:linear-gradient(135deg,var(--sf),var(--sf2));border:1.5px solid var(--brs);border-radius:14px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(108,99,255,.12);border:1px solid var(--br);border-radius:999px;padding:6px 14px;font-size:.75rem;color:var(--pl);font-family:monospace;margin-bottom:16px}
+
+/* MODAL DEMO */
+.modal-demo{background:var(--sf);border:1px solid var(--brs);border-radius:16px;width:100%;max-width:440px;box-shadow:0 8px 48px rgba(0,0,0,.7);margin:0 auto}
+.modal-header{padding:20px;border-bottom:1px solid var(--br);display:flex;justify-content:space-between;align-items:center}
+.modal-title{font-family:var(--fh);font-size:1.125rem;font-weight:700}
+.modal-close{width:28px;height:28px;background:var(--sf2);border:1px solid var(--br);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--tm);font-size:14px}
+.modal-body{padding:20px}
+.modal-footer{padding:16px 20px;border-top:1px solid var(--br);display:flex;gap:12px;justify-content:flex-end;background:var(--sf2);border-bottom-left-radius:16px;border-bottom-right-radius:16px}
+</style>
+</head>
+<body>
+
+<div style="background:rgba(108,99,255,.1);border-bottom:1px dashed rgba(108,99,255,.4);padding:8px 24px;font-family:monospace;font-size:.75rem;color:var(--pl);display:flex;justify-content:space-between;margin:-40px -40px 40px -40px">
+  <span>📐 WIREFRAME · Figma Component Library Equivalent</span>
+  <span>EduBridge AI · UI Components</span>
+</div>
+
+<div class="header">
+  <h1>EduBridge AI Components</h1>
+  <p>Standardized interactive states, colors, sizes, and layout structures used throughout all wireframe screens.</p>
+</div>
+
+<!-- BUTTON STATES -->
+<div class="section">
+  <div class="comp-label">Component Set</div>
+  <h2 class="section-title">Button States & Variants</h2>
+  <div class="row">
+    <div>
+      <div class="comp-label">Primary (Default)</div>
+      <button class="btn btn-primary">Primary Action</button>
+    </div>
+    <div>
+      <div class="comp-label">Primary (Hover)</div>
+      <button class="btn btn-primary" style="background:var(--pd)">Primary Action</button>
+    </div>
+    <div>
+      <div class="comp-label">Primary (Focus)</div>
+      <button class="btn btn-primary" style="box-shadow:0 0 0 3px rgba(108,99,255,0.4)">Primary Action</button>
+    </div>
+    <div>
+      <div class="comp-label">Primary (Disabled)</div>
+      <button class="btn btn-primary" disabled>Primary Action</button>
+    </div>
+  </div>
+  <div class="row" style="margin-top:24px">
+    <div>
+      <div class="comp-label">Secondary (Default)</div>
+      <button class="btn btn-secondary">Secondary Action</button>
+    </div>
+    <div>
+      <div class="comp-label">Accent</div>
+      <button class="btn btn-accent">Accent Action</button>
+    </div>
+    <div>
+      <div class="comp-label">Success</div>
+      <button class="btn btn-success">Success Action</button>
+    </div>
+    <div>
+      <div class="comp-label">Error</div>
+      <button class="btn btn-error">Danger Action</button>
+    </div>
+    <div>
+      <div class="comp-label">Ghost</div>
+      <button class="btn btn-ghost">Ghost Button</button>
+    </div>
+  </div>
+</div>
+
+<!-- INPUT STATES -->
+<div class="section">
+  <div class="comp-label">Component Set</div>
+  <h2 class="section-title">Form Input Fields</h2>
+  <div class="grid">
+    <div class="demo-card">
+      <div class="comp-label">Default State</div>
+      <div class="form-group">
+        <label>EMAIL ADDRESS</label>
+        <input class="input" type="email" placeholder="you@example.com">
+        <div class="field-hint">We will never share your email.</div>
+      </div>
+    </div>
+    <div class="demo-card">
+      <div class="comp-label">Focus State</div>
+      <div class="form-group">
+        <label>EMAIL ADDRESS</label>
+        <input class="input" type="email" placeholder="you@example.com" style="border-color:var(--p);box-shadow:0 0 0 3px var(--pg)">
+        <div class="field-hint">Typing mode active.</div>
+      </div>
+    </div>
+    <div class="demo-card">
+      <div class="comp-label">Error State</div>
+      <div class="form-group">
+        <label>EMAIL ADDRESS</label>
+        <input class="input input-error" type="email" value="invalid-email@example" placeholder="you@example.com">
+        <div class="field-error">⚠ Please enter a valid email address.</div>
+      </div>
+    </div>
+    <div class="demo-card">
+      <div class="comp-label">Success State</div>
+      <div class="form-group">
+        <label>EMAIL ADDRESS</label>
+        <input class="input input-success" type="email" value="correct@edubridge.ai" placeholder="you@example.com">
+        <div class="field-success">✓ Email available and validated.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CARD VARIANTS -->
+<div class="section">
+  <div class="comp-label">Component Set</div>
+  <h2 class="section-title">Card Variants</h2>
+  <div class="grid">
+    <div>
+      <div class="comp-label">Simple Info Card</div>
+      <div class="card-simple">
+        <h3 class="card-title">Data Structures</h3>
+        <p class="card-desc">Learn about Binary Trees, Stacks, Queues, Graphs, and asymptotic space-time analysis.</p>
+      </div>
+    </div>
+    <div>
+      <div class="comp-label">Stats Tracker Card</div>
+      <div class="card-stat">
+        <div class="cs-top">
+          <div class="cs-icon">📊</div>
+          <div class="cs-trend">↑ 12%</div>
+        </div>
+        <div class="cs-val">87%</div>
+        <div class="cs-lbl">Quiz Accuracy</div>
+        <div class="cs-bar"><div class="cs-fill" style="width:87%"></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="comp-label">Premium/Featured Card</div>
+      <div class="card-rich">
+        <span class="badge">🤖 AI RECOMMENDATION</span>
+        <h3 class="card-title" style="font-size:1.2rem;margin-bottom:8px">Boost Your Physics Score</h3>
+        <p class="card-desc" style="margin-bottom:16px">Our AI has generated a personalized practice review of Newton's third law just for you.</p>
+        <button class="btn btn-primary" style="padding:8px 16px;font-size:.8rem">Start Review →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL COMPONENT -->
+<div class="section">
+  <div class="comp-label">Component Set</div>
+  <h2 class="section-title">Dialog Modal Component</h2>
+  <div class="modal-demo">
+    <div class="modal-header">
+      <div class="modal-title">Confirm Action</div>
+      <div class="modal-close">✕</div>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:.9rem;color:var(--tm);line-height:1.6">Are you sure you want to book Seminar Hall A for Friday, June 6th at 10:00 AM? This action will block the room for your study group.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" style="padding:8px 16px;font-size:.8rem">Cancel</button>
+      <button class="btn btn-primary" style="padding:8px 16px;font-size:.8rem">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

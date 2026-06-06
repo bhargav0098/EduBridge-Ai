@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduBridge AI — UX Wireframe Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--p:#6C63FF;--pl:#a89dff;--pd:#4f47cc;--pg:rgba(108,99,255,.25);
+--a:#F59E0B;--s:#1DB954;--e:#EF4444;
+--bg:#080814;--bg2:#0d0b1e;--sf:#111026;--sf2:#181632;--sf3:#1e1a3e;
+--br:rgba(108,99,255,.15);--brs:rgba(108,99,255,.35);
+--t1:#f1f0ff;--t2:#a89dff;--tm:#94a3b8;
+--fh:'Sora',sans-serif;--fb:'Inter',sans-serif;
+--fm:'JetBrains Mono',monospace;
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);min-height:100vh;padding:48px 24px}
+
+.container{max-width:1200px;margin:0 auto}
+
+/* Header */
+header{margin-bottom:48px;border-bottom:1px solid var(--br);padding-bottom:32px;position:relative}
+.header-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(108,99,255,.12);border:1px solid var(--br);border-radius:999px;padding:6px 14px;font-size:.75rem;color:var(--pl);font-family:var(--fm);margin-bottom:16px}
+h1{font-family:var(--fh);font-size:2.5rem;font-weight:800;margin-bottom:12px;background:linear-gradient(135deg,#fff,var(--pl));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{font-size:1.0625rem;color:var(--tm);max-width:700px;line-height:1.6}
+
+/* Brand Kit Section */
+.brand-kit{display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:48px}
+.panel{background:var(--sf);border:1px solid var(--br);border-radius:16px;padding:24px}
+.panel-title{font-family:var(--fh);font-size:1.125rem;font-weight:700;margin-bottom:20px;color:var(--t2);border-bottom:1px solid rgba(108,99,255,0.08);padding-bottom:10px}
+
+.color-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.color-card{background:var(--sf2);border:1px solid var(--br);border-radius:10px;padding:12px;text-align:center}
+.color-swatch{height:48px;border-radius:6px;margin-bottom:10px}
+.color-name{font-size:.8125rem;font-weight:600;margin-bottom:4px}
+.color-hex{font-family:var(--fm);font-size:.7rem;color:var(--tm)}
+
+.font-card{background:var(--sf2);border:1px solid var(--br);border-radius:10px;padding:16px;margin-bottom:12px}
+.font-name{font-family:var(--fm);font-size:.75rem;color:var(--pl);margin-bottom:6px}
+.font-preview{font-size:1.125rem;font-weight:600}
+
+/* Screens Grid */
+.screens-section{margin-bottom:48px}
+.section-title{font-family:var(--fh);font-size:1.5rem;font-weight:700;margin-bottom:24px;color:var(--t1)}
+.screens-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+.screen-card{background:var(--sf);border:1px solid var(--br);border-radius:14px;padding:20px;transition:.2s;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;color:inherit}
+.screen-card:hover{border-color:var(--brs);box-shadow:0 8px 32px rgba(108,99,255,0.12);transform:translateY(-2px)}
+.sc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.sc-num{font-family:var(--fm);font-size:.75rem;color:var(--pl);background:rgba(108,99,255,0.1);padding:3px 8px;border-radius:4px}
+.sc-name{font-family:var(--fh);font-size:1.125rem;font-weight:700;margin-bottom:8px;color:var(--t1)}
+.sc-desc{font-size:.875rem;color:var(--tm);line-height:1.5;margin-bottom:20px}
+.sc-footer{display:flex;justify-content:space-between;align-items:center}
+.sc-tag{font-family:var(--fm);font-size:.65rem;padding:3px 8px;border-radius:999px;background:var(--sf2);color:var(--tm);border:1px solid var(--br)}
+.sc-link{font-size:.875rem;color:var(--pl);font-weight:600;display:flex;align-items:center;gap:4px}
+.sc-link:hover{color:var(--p)}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-tag">📐 FIGMA DESIGN SYSTEM · WIREFRAMES</div>
+    <h1>EduBridge AI UX Wireframe Dashboard</h1>
+    <p class="subtitle">Complete UX wireframe layouts for all modules. Handcrafted using raw CSS design tokens matching the requested brand guidelines, grid layouts, and Figma components.</p>
+  </header>
+
+  <!-- Brand Tokens -->
+  <div class="brand-kit">
+    <div class="panel">
+      <div class="panel-title">Colors & Palette Tokens</div>
+      <div class="color-row">
+        <div class="color-card">
+          <div class="color-swatch" style="background:#6C63FF"></div>
+          <div class="color-name">Primary</div>
+          <div class="color-hex">#6C63FF</div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#F59E0B"></div>
+          <div class="color-name">Accent</div>
+          <div class="color-hex">#F59E0B</div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#1DB954"></div>
+          <div class="color-name">Success</div>
+          <div class="color-hex">#1DB954</div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#EF4444"></div>
+          <div class="color-name">Error</div>
+          <div class="color-hex">#EF4444</div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#0d0b1e"></div>
+          <div class="color-name">Dark Gray</div>
+          <div class="color-hex">#0D0B1E</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="panel">
+      <div class="panel-title">Typography Scale</div>
+      <div class="font-card">
+        <div class="font-name">Sora Bold (Headings)</div>
+        <div class="font-preview" style="font-family:'Sora',sans-serif">The Quick Brown Fox</div>
+      </div>
+      <div class="font-card">
+        <div class="font-name">Inter Regular (Body)</div>
+        <div class="font-preview" style="font-family:'Inter',sans-serif;font-weight:400;font-size:.9rem">Pack my box with five dozen liquor jugs.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screens -->
+  <div class="screens-section">
+    <div class="section-title">All Screen Wireframes</div>
+    <div class="screens-grid">
+      <!-- Screen 0 -->
+      <a class="screen-card" href="screens/components.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">COMPONENTS</span>
+            <span class="sc-tag">Figma Equivalents</span>
+          </div>
+          <div class="sc-name">Component Library</div>
+          <p class="sc-desc">Button states, input validations (default, active, error, success), card variations, and modal dialog layouts.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Interactive</span>
+          <span class="sc-link">Open Library →</span>
+        </div>
+      </a>
+
+      <!-- Screen 1 -->
+      <a class="screen-card" href="screens/01-landing.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREEN 01</span>
+            <span class="sc-tag">Marketing</span>
+          </div>
+          <div class="sc-name">Landing Page</div>
+          <p class="sc-desc">Hero banner with metrics dashboard mockup, feature benefits grid, call-to-actions, stats row, and footer.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Landing</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+
+      <!-- Screen 2-3 -->
+      <a class="screen-card" href="screens/02-03-auth.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREENS 02-03</span>
+            <span class="sc-tag">Authentication</span>
+          </div>
+          <div class="sc-name">Login & Register Flow</div>
+          <p class="sc-desc">Side-by-side sign in and registration. Demonstrates error validation, password strength meters, and role selector tabs.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Auth</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+
+      <!-- Screen 4 -->
+      <a class="screen-card" href="screens/04-student-dashboard.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREEN 04</span>
+            <span class="sc-tag">Dashboard</span>
+          </div>
+          <div class="sc-name">Student Dashboard</div>
+          <p class="sc-desc">Sidebar layout, progress cards, streak trackers, upcoming exams list, and daily AI tutoring tips.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Student</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+
+      <!-- Screen 5 -->
+      <a class="screen-card" href="screens/05-ai-chat.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREEN 05</span>
+            <span class="sc-tag">Tutoring</span>
+          </div>
+          <div class="sc-name">AI Chat Interface</div>
+          <p class="sc-desc">3-panel layout: chat history, main chat window (showing code snippets and typing indicators), and context/references sidebar.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">AI Chat</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+
+      <!-- Screen 6 -->
+      <a class="screen-card" href="screens/06-quiz.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREEN 06</span>
+            <span class="sc-tag">Assessment</span>
+          </div>
+          <div class="sc-name">Adaptive Quiz Module</div>
+          <p class="sc-desc">Shows 3 states: start configuration screen, active question (showing selected/correct/wrong styles), and final scorecard with AI analysis.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Quiz</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+
+      <!-- Screen 7 -->
+      <a class="screen-card" href="screens/07-attendance.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREEN 07</span>
+            <span class="sc-tag">Management</span>
+          </div>
+          <div class="sc-name">Attendance Tracking</div>
+          <p class="sc-desc">Split views: student calendar display with subject breakdown thresholds, and teacher mark-attendance roster.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Roster</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+
+      <!-- Screen 8 -->
+      <a class="screen-card" href="screens/08-notes.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREEN 08</span>
+            <span class="sc-tag">Editor</span>
+          </div>
+          <div class="sc-name">Smart Notes Editor</div>
+          <p class="sc-desc">Rich-text workspace with markdown styling, side notes browser, and integrated AI assistant for summary and flashcards.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Notes</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+
+      <!-- Screen 9 -->
+      <a class="screen-card" href="screens/09-events.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREEN 09</span>
+            <span class="sc-tag">Schedule</span>
+          </div>
+          <div class="sc-name">Events Calendar</div>
+          <p class="sc-desc">Weekly calendar scheduler with time blocks, category filter chips, and dialog overlay form to add events.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Calendar</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+
+      <!-- Screen 10-11 -->
+      <a class="screen-card" href="screens/10-11-resources-peers.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREENS 10-11</span>
+            <span class="sc-tag">Collaboration</span>
+          </div>
+          <div class="sc-name">Resources & Peer Groups</div>
+          <p class="sc-desc">Side-by-side views of the Resource Allocator booking slots and the Peer Group real-time study lounge with shared notes.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Collab</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+
+      <!-- Screen 12 -->
+      <a class="screen-card" href="screens/12-teacher-dashboard.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREEN 12</span>
+            <span class="sc-tag">Analytics</span>
+          </div>
+          <div class="sc-name">Teacher Dashboard</div>
+          <p class="sc-desc">Overview dashboard for educators, showing average class score cards, students-at-risk lists, and grading queues.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Teacher</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+
+      <!-- Screen 13 -->
+      <a class="screen-card" href="screens/13-admin-panel.html">
+        <div>
+          <div class="sc-head">
+            <span class="sc-num">SCREEN 13</span>
+            <span class="sc-tag">Security</span>
+          </div>
+          <div class="sc-name">Admin Control Panel</div>
+          <p class="sc-desc">Superuser settings: user management tables (with approve/deny triggers), CPU/memory server logs, and security logs.</p>
+        </div>
+        <div class="sc-footer">
+          <span class="sc-tag">Admin</span>
+          <span class="sc-link">View Screen →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
