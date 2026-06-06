@@ -18,17 +18,17 @@ const studentMenuItems = [
 const teacherMenuItems = [
   { label: 'Dashboard',        href: '/dashboard',  icon: '📊' },
   { label: 'AI Chat',          href: '/chat',       icon: '💬' },
-  { label: 'Classes',          href: '/dashboard',  icon: '🏫', tab: 'classes'   },
+  { label: 'Classes',          href: '/dashboard',  icon: '🏫', tab: 'classes'    },
   { label: 'Mark Attendance',  href: '/dashboard',  icon: '📅', tab: 'attendance' },
-  { label: 'Student Roster',   href: '/dashboard',  icon: '👥', tab: 'students'  },
-  { label: 'Upload Materials', href: '/dashboard',  icon: '📤', tab: 'upload'    },
+  { label: 'Student Roster',   href: '/dashboard',  icon: '👥', tab: 'students'   },
+  { label: 'Upload Materials', href: '/dashboard',  icon: '📤', tab: 'upload'     },
   { label: 'Events',           href: '/events',     icon: '🎉' },
   { label: 'Admin',            href: '/admin',      icon: '⚙️' },
 ];
 
 export function Sidebar() {
-  const pathname = usePathname();
-  const router   = useRouter();
+  const pathname  = usePathname();
+  const router    = useRouter();
   const { user, logout } = useAuthStore();
 
   const isTeacher = user?.role === 'teacher';
