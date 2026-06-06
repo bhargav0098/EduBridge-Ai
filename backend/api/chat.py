@@ -2,6 +2,7 @@ import json
 import uuid
 from fastapi import APIRouter, Depends, HTTPException, Query, status, Request
 from fastapi.responses import StreamingResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from typing import Optional, List
 
@@ -16,6 +17,51 @@ from ..utils.limiter import limiter
 import google.generativeai as genai
 
 router = APIRouter()
+security = HTTPBearer(auto_error=False)
+
+def get_chat_user(
+    db: Session = Depends(get_db),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)
+) -> User:
+    if settings.DEBUG:
+        if credentials:
+            try:
+                return verify_token(credentials, db)
+            except Exception:
+                pass
+        
+        # Fallback to dev user
+        current_user = db.query(User).filter(User.email == "dev_user@edubridge.com").first()
+        if not current_user:
+            from ..models.models import UserRole, StudentProfile
+            current_user = User(
+                id="dev_user_id",
+                email="dev_user@edubridge.com",
+                name="Developer User",
+                role=UserRole.STUDENT
+            )
+            db.add(current_user)
+            db.commit()
+            db.refresh(current_user)
+            
+            profile = StudentProfile(
+                user_id=current_user.id,
+                weak_subjects=[],
+                study_time_preference="Morning",
+                class_name="Class 11",
+                elo=1200
+            )
+            db.add(profile)
+            db.commit()
+        return current_user
+    else:
+        if not credentials:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Not authenticated",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        return verify_token(credentials, db)
 
 # Configure Gemini
 try:
@@ -73,7 +119,7 @@ def chat_endpoint(
     chat_input: ChatInput,
     stream: bool = Query(True, description="Whether to stream response via SSE"),
     db: Session = Depends(get_db),
-    current_user: User = Depends(verify_token)
+    current_user: User = Depends(get_chat_user)
 ):
     # 1. Resolve Session ID
     session_id = chat_input.session_id

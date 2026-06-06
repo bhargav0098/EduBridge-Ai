@@ -91,6 +91,7 @@ export default function ChatPage() {
               <h2 className="font-bold text-xs uppercase tracking-wider text-primary-light/60 font-mono">Chat History</h2>
               <button
                 onClick={clearChat}
+                suppressHydrationWarning={true}
                 className="text-xs font-semibold text-red-400 hover:text-red-300 transition-colors bg-red-500/10 px-2 py-1 rounded-lg border border-red-500/20"
               >
                 🗑️ Clear
@@ -220,6 +221,7 @@ export default function ChatPage() {
                     onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                     disabled={isLoading}
                     aria-label="Message input"
+                    suppressHydrationWarning={true}
                   />
 
                   <button
@@ -227,6 +229,7 @@ export default function ChatPage() {
                     className="px-4 bg-surface border border-border hover:bg-white/10 text-primary-light hover:text-white rounded-xl transition-all flex items-center justify-center text-lg"
                     title="Upload image"
                     aria-label="Upload image"
+                    suppressHydrationWarning={true}
                   >
                     📎
                   </button>
@@ -236,6 +239,7 @@ export default function ChatPage() {
                     className={`px-4 bg-surface border border-border hover:bg-white/10 text-primary-light hover:text-white rounded-xl transition-all flex items-center justify-center text-lg ${isRecording ? 'ring-2 ring-red-500 bg-red-500/10' : ''}`}
                     title="Voice input"
                     aria-label="Toggle voice input"
+                    suppressHydrationWarning={true}
                   >
                     {isRecording ? '⏹️' : '🎤'}
                   </button>
@@ -245,6 +249,7 @@ export default function ChatPage() {
                     disabled={!input.trim() && !uploadedImage}
                     className="px-5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl font-bold transition-all shadow-md flex items-center justify-center text-sm disabled:opacity-40 disabled:pointer-events-none"
                     aria-label="Send message"
+                    suppressHydrationWarning={true}
                   >
                     Send
                   </button>

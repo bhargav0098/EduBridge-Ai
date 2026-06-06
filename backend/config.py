@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "yoursecretkeyhere"
     GEMINI_API_KEY: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None
+    DEBUG: bool = True
 
     class Config:
         env_file = ".env"

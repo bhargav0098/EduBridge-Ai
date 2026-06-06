@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/cn';
+import { useAuthStore } from '@/store/authStore';
 
 const menuItems = [
   { label: 'Dashboard', href: '/dashboard', icon: '📊' },
@@ -17,6 +18,7 @@ const menuItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { logout } = useAuthStore();
 
   return (
     <aside className="w-64 sidebar-premium h-screen sticky top-0 overflow-y-auto flex flex-col justify-between">
@@ -59,7 +61,11 @@ export function Sidebar() {
       </div>
 
       <div className="p-4 border-t border-indigo-500/10 bg-surface">
-        <button className="w-full px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition-all text-sm font-medium">
+        <button
+          onClick={logout}
+          suppressHydrationWarning={true}
+          className="w-full px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition-all text-sm font-medium"
+        >
           Logout
         </button>
       </div>
