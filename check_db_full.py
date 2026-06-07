@@ -1,6 +1,10 @@
-from backend.database import SessionLocal
+from backend.database import SessionLocal, Base, engine
 from backend.models.models import User, ActivityLog, AttendanceSession, AttendanceRecord, Doubt, Assignment, AssignmentSubmission, StudentProfile
 from sqlalchemy import inspect
+
+# Ensure tables are created
+Base.metadata.create_all(bind=engine)
+
 
 db = SessionLocal()
 inspector = inspect(db.bind)

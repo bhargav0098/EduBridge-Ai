@@ -62,18 +62,18 @@ export default function StudentChatPage() {
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
-      
+
       recognitionRef.current.onstart = () => {
         setIsRecording(true);
       };
-      
+
       recognitionRef.current.onresult = (event: any) => {
         const transcript = Array.from(event.results)
           .map((result: any) => result[0].transcript)
           .join('');
         setInput((prev) => prev + (prev ? ' ' : '') + transcript);
       };
-      
+
       recognitionRef.current.onerror = (e: any) => {
         console.error('Speech recognition error', e);
         setIsRecording(false);
@@ -206,11 +206,10 @@ export default function StudentChatPage() {
                   <button
                     key={lang}
                     onClick={() => setSelectedLanguage(lang)}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                      selectedLanguage === lang
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${selectedLanguage === lang
                         ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-md'
                         : 'text-indigo-600 dark:text-indigo-400 hover:text-text-primary dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
-                    }`}
+                      }`}
                   >
                     {lang === 'Hindi' ? 'हिन्दी' : lang === 'Santali' ? 'ᱥᱟᱱᱛᱟᱲᱤ' : lang}
                   </button>
@@ -261,11 +260,10 @@ export default function StudentChatPage() {
                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-xs md:max-w-md lg:max-w-xl rounded-2xl p-4 shadow-md ${
-                        msg.role === 'user'
+                      className={`max-w-xs md:max-w-md lg:max-w-xl rounded-2xl p-4 shadow-md ${msg.role === 'user'
                           ? 'bg-gradient-to-br from-indigo-600 to-violet-600 text-white rounded-br-none border border-indigo-500/20'
                           : 'bg-surface border border-border text-text-primary rounded-bl-none backdrop-blur-sm shadow-sm'
-                      }`}
+                        }`}
                     >
                       {msg.image && (
                         <img
@@ -276,9 +274,8 @@ export default function StudentChatPage() {
                       )}
                       <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                       <p
-                        className={`text-[9px] font-mono mt-2 text-right ${
-                          msg.role === 'user' ? 'text-indigo-200/60' : 'text-text-muted/60 dark:text-indigo-300/40'
-                        }`}
+                        className={`text-[9px] font-mono mt-2 text-right ${msg.role === 'user' ? 'text-indigo-200/60' : 'text-text-muted/60 dark:text-indigo-300/40'
+                          }`}
                       >
                         {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
@@ -346,8 +343,8 @@ export default function StudentChatPage() {
                       selectedLanguage === 'Santali'
                         ? "ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ ᱠᱩᱞᱤ ᱢᱮ..."
                         : selectedLanguage === 'Hindi'
-                        ? "हिन्दी में प्रश्न पूछें..."
-                        : "Ask EduBridge AI Tutor..."
+                          ? "हिन्दी में प्रश्न पूछें..."
+                          : "Ask EduBridge AI Tutor..."
                     }
                     className="flex-1 px-4 py-3 bg-surface border border-border focus:border-indigo-500 text-text-primary rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all text-sm placeholder:text-text-muted/50 dark:placeholder:text-indigo-400/40"
                     onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
@@ -368,9 +365,8 @@ export default function StudentChatPage() {
                   {/* Speech input */}
                   <button
                     onClick={handleVoiceInput}
-                    className={`px-4 bg-surface border border-border hover:bg-indigo-5/10 dark:hover:bg-indigo-500/5 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-white rounded-xl transition-all flex items-center justify-center text-lg ${
-                      isRecording ? 'ring-2 ring-red-500 bg-red-500/10 text-red-500 hover:text-red-400' : ''
-                    }`}
+                    className={`px-4 bg-surface border border-border hover:bg-indigo-5/10 dark:hover:bg-indigo-500/5 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-white rounded-xl transition-all flex items-center justify-center text-lg ${isRecording ? 'ring-2 ring-red-500 bg-red-500/10 text-red-500 hover:text-red-400' : ''
+                      }`}
                     title="Voice input"
                     aria-label="Record voice speech query"
                   >

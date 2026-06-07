@@ -1,5 +1,9 @@
-from backend.database import SessionLocal
+from backend.database import SessionLocal, Base, engine
 from backend.models.models import User
+
+# Ensure tables are created
+Base.metadata.create_all(bind=engine)
+
 
 db = SessionLocal()
 users = db.query(User).all()

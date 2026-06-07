@@ -262,8 +262,9 @@ export default function PeerMatchingPage() {
 
                           {/* Bio */}
                           <p className="text-xs text-text-secondary/50 leading-relaxed italic">
-                            "{student.bio}"
+                            &ldquo;{student.bio}&rdquo;
                           </p>
+
                         </div>
                       </div>
                     );
