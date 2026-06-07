@@ -1,10 +1,10 @@
-﻿import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const backendUrl = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
+    const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000';
 
     const response = await fetch(`${backendUrl}/api/auth/register`, {
       method: 'POST',
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       { status: response.status }
     );
   } catch (error: any) {
-    console.error('Register error:', error);
-    return NextResponse.json({ error: 'Internal Server Error: Backend unreachable' }, { status: 502 });
+    console.error('Registration proxy error:', error);
+    return NextResponse.json({ error: `Backend unreachable: ${error.message}` }, { status: 502 });
   }
 }
