@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 from typing import Optional
 import secrets
+import os
 
 
 class Settings(BaseSettings):
@@ -27,7 +28,7 @@ class Settings(BaseSettings):
     DATABASE_URL: Optional[str] = None
     # Generate a fallback secret for dev, but warn loudly in prod
     SECRET_KEY: str = secrets.token_hex(32)
-    GEMINI_API_KEY: Optional[str] = "AIzaSyDMpL_HQlMJhe_St2NXa-KqKbQqkSSwYSo"
+    GEMINI_API_KEY: Optional[str] = os.environ.get("GEMINI_API_KEY", "AIzaSyDMpL_HQlMJhe_St2NXa-KqKbQqkSSwYSo")
     OPENAI_API_KEY: Optional[str] = None
     DEBUG: bool = True
 

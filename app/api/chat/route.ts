@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { store, verifyToken } from '@/lib/store';
 
 async function callGemini(message: string, userRole: string): Promise<string> {
-  const apiKey = 'AIzaSyDMpL_HQlMJhe_St2NXa-KqKbQqkSSwYSo';
+  const apiKey = process.env.GEMINI_API_KEY || 'AIzaSyDMpL_HQlMJhe_St2NXa-KqKbQqkSSwYSo';
 
   const systemInstruction = userRole === 'teacher'
     ? `You are an AI Teacher Assistant. Respond to the teacher.
@@ -122,7 +122,7 @@ export async function POST(request: Request) {
     } catch (geminiError: any) {
       console.error('[Chat Route] Gemini error:', geminiError);
       return NextResponse.json({ 
-        error: 'AI service is temporarily unavailable.',
+        error: geminiError.message || 'AI service is temporarily unavailable.',
         details: geminiError.message
       }, { status: 500 });
     }
