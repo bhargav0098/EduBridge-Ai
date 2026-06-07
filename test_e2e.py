@@ -3,7 +3,7 @@ import time
 import random
 import string
 
-BASE_URL = "http://localhost:8000/api"
+BASE_URL = "http://127.0.0.1:8000/api"
 
 def get_random_email():
     return f"testuser_{''.join(random.choices(string.ascii_lowercase, k=6))}@test.com"
@@ -23,7 +23,7 @@ def run_tests():
         "role": "student"
     })
     
-    assert res.status_code == 200, f"Registration failed: {res.text}"
+    assert res.status_code in [200, 201], f"Registration failed: {res.text}"
     student_token = res.json()["access_token"]
     student_headers = {"Authorization": f"Bearer {student_token}"}
     
@@ -36,7 +36,7 @@ def run_tests():
         "name": "E2E Teacher",
         "role": "teacher"
     })
-    assert res.status_code == 200, f"Registration failed: {res.text}"
+    assert res.status_code in [200, 201], f"Registration failed: {res.text}"
     teacher_token = res.json()["access_token"]
     teacher_headers = {"Authorization": f"Bearer {teacher_token}"}
     

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { store, verifyToken } from '@/lib/store';
 
 async function callGemini(message: string, userRole: string): Promise<string> {

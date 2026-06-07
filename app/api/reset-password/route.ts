@@ -1,13 +1,10 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const backendUrl = process.env.BACKEND_URL;
-    if (!backendUrl) {
-      return NextResponse.json({ error: 'BACKEND_URL is not configured on the server' }, { status: 500 });
-    }
+    const backendUrl = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
 
     const response = await fetch(`${backendUrl}/api/auth/reset-password`, {
       method: 'POST',

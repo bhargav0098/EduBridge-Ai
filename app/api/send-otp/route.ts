@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { store, generateOTP } from '@/lib/store';
 
 export async function POST(request: Request) {
@@ -10,7 +10,7 @@ export async function POST(request: Request) {
 
     const otp = generateOTP();
     store.otps.set(email, { otp, expiresAt: Date.now() + 10 * 60 * 1000 });
-    console.log(`[OTP] ${email} → ${otp}`);
+    console.log(`[OTP] ${email} â†’ ${otp}`);
 
     return NextResponse.json({
       message: 'OTP sent successfully',

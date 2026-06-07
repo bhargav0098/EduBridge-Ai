@@ -1,12 +1,14 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 
-const BACKEND = process.env.BACKEND_URL || 'http://localhost:8000';
+const BACKEND = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
 
 function decodeJwtPayload(token: string) {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
-    const payloadStr = Buffer.from(parts[1], 'base64').toString('utf-8');
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const payloadStr = Buffer.from(base64, 'base64').toString('utf-8');
     return JSON.parse(payloadStr);
   } catch {
     return null;
