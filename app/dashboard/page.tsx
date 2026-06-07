@@ -91,11 +91,16 @@ function DashboardContent() {
       setEnrolledClasses(selected);
       toast.success('Enrolled classes updated successfully!');
       setIsManageClassesOpen(false);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || 'Failed to update enrolled classes.');
+      console.error('Enrollment API error:', err);
+    }
+    
+    try {
       const summary = await attendanceService.getStudentSummary();
       setStudentSummary(summary);
-    } catch (err) {
-      toast.error('Failed to update enrolled classes.');
-      console.error(err);
+    } catch (err: any) {
+      console.error('Failed to fetch updated student summary:', err);
     }
   };
 

@@ -12,12 +12,6 @@ interface User {
   createdAt: string;
 }
 
-interface OTPRecord {
-  otp: string;
-  expiresAt: number;
-  newPassword?: string;
-}
-
 // Attendance record
 interface AttendanceRecord {
   classId: string;
@@ -42,7 +36,6 @@ declare global {
   // eslint-disable-next-line no-var
   var __EDUBRIDGE_STORE__: {
     users: Map<string, User>;
-    otps: Map<string, OTPRecord>;
     attendance: AttendanceRecord[];
     materials: Material[];
     classes: { id: string; name: string; subject: string; schedule: string }[];
@@ -52,7 +45,6 @@ declare global {
 if (!globalThis.__EDUBRIDGE_STORE__) {
   globalThis.__EDUBRIDGE_STORE__ = {
     users: new Map(),
-    otps: new Map(),
     attendance: [],
     materials: [],
     classes: [
@@ -124,6 +116,3 @@ export function verifyToken(token: string): { sub: string; uid: string; exp: num
   }
 }
 
-export function generateOTP(): string {
-  return String(Math.floor(100000 + Math.random() * 900000));
-}

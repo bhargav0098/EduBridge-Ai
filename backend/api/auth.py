@@ -8,10 +8,9 @@ import secrets
 import time
 
 from ..database import get_db
-from ..models.models import User, UserRole, StudentProfile, OTPRequest
-from ..schemas.schemas import UserRegister, UserLogin, TokenSchema, UserSchema, PasswordResetRequest, PasswordResetVerify, AuthResponseSchema
+from ..models.models import User, UserRole, StudentProfile
+from ..schemas.schemas import UserRegister, UserLogin, TokenSchema, UserSchema, AuthResponseSchema
 from ..services.auth_service import AuthService
-from ..services.email_service import EmailService
 import random
 import logging
 from datetime import datetime, timedelta
@@ -174,60 +173,3 @@ def get_me(current_user: User = Depends(verify_token)):
     return current_user
 
 
-@router.post("/reset-password")
-def request_password_reset(data: PasswordResetRequest, db: Session = Depends(get_db)):
-    normalized_email = data.email.strip().lower()
-    user = db.query(User).filter(User.email == normalized_email).first()
-
-    if user:
-        # Invalidate previous OTPs
-        db.query(OTPRequest).filter(
-            OTPRequest.email == normalized_email,
-            OTPRequest.is_used == False,
-        ).update({"is_used": True})
-
-        # Generate cryptographically secure 6-digit OTP
-        otp = str(secrets.randbelow(900000) + 100000)
-        expires_at = datetime.utcnow() + timedelta(minutes=10)
-        otp_record = OTPRequest(email=normalized_email, otp=otp, expires_at=expires_at)
-        db.add(otp_record)
-        db.commit()
-
-        try:
-            EmailService.send_otp_email(normalized_email, otp)
-        except Exception as e:
-            logger.error(f"Email send failed: {e}")
-            # Don't expose email failures to user
-
-    # Always return same message to prevent user enumeration
-    return {"message": "If the email is registered, an OTP will be sent."}
-
-
-@router.post("/reset-password/verify")
-def verify_password_reset(data: PasswordResetVerify, db: Session = Depends(get_db)):
-    normalized_email = data.email.strip().lower()
-
-    if len(data.new_password) < 6:
-        raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
-
-    otp_record = db.query(OTPRequest).filter(
-        OTPRequest.email == normalized_email,
-        OTPRequest.otp == data.otp,
-        OTPRequest.is_used == False,
-    ).first()
-
-    if not otp_record:
-        raise HTTPException(status_code=400, detail="Invalid OTP")
-
-    now = datetime.utcnow()
-    if otp_record.expires_at.replace(tzinfo=None) < now:
-        raise HTTPException(status_code=400, detail="OTP has expired")
-
-    user = db.query(User).filter(User.email == normalized_email).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    user.hashed_password = AuthService.hash_password(data.new_password)
-    otp_record.is_used = True
-    db.commit()
-    return {"message": "Password reset successful"}
