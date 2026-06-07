@@ -19,8 +19,8 @@ export async function POST(request: Request) {
     }
     const errorData = await response.json().catch(() => ({}));
     return NextResponse.json(errorData, { status: response.status });
-  } catch (err: any) {
-    console.error('Quiz submit POST proxy error:', err);
-    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+  } catch (error: any) {
+    console.error('Quiz submit POST proxy error:', error);
+    return NextResponse.json({ error: `Backend unreachable: ${error.message}` }, { status: 502 });
   }
 }

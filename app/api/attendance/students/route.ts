@@ -20,8 +20,8 @@ export async function GET(request: NextRequest) {
     }
     const errorData = await response.json().catch(() => ({}));
     return NextResponse.json(errorData, { status: response.status });
-  } catch (err: any) {
-    console.error('Students GET proxy error:', err);
-    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+  } catch (error: any) {
+    console.error('Students GET proxy error:', error);
+    return NextResponse.json({ error: `Backend unreachable: ${error.message}` }, { status: 502 });
   }
 }

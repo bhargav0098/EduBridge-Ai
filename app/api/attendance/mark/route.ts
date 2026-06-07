@@ -61,6 +61,6 @@ export async function POST(request: Request) {
     return NextResponse.json(errorData, { status: response.status });
   } catch (error: any) {
     console.error('Mark attendance proxy error:', error);
-    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+    return NextResponse.json({ error: `Backend unreachable: ${error.message}` }, { status: 502 });
   }
 }

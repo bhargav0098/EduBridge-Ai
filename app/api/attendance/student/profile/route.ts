@@ -17,9 +17,9 @@ export async function GET(request: Request) {
     }
     const errorData = await response.json().catch(() => ({}));
     return NextResponse.json(errorData, { status: response.status });
-  } catch (err: any) {
-    console.error('Student profile GET proxy error:', err);
-    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+  } catch (error: any) {
+    console.error('Student profile GET proxy error:', error);
+    return NextResponse.json({ error: `Backend unreachable: ${error.message}` }, { status: 502 });
   }
 }
 
@@ -40,8 +40,8 @@ export async function POST(request: Request) {
     }
     const errorData = await response.json().catch(() => ({}));
     return NextResponse.json(errorData, { status: response.status });
-  } catch (err: any) {
-    console.error('Student profile POST proxy error:', err);
-    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+  } catch (error: any) {
+    console.error('Student profile POST proxy error:', error);
+    return NextResponse.json({ error: `Backend unreachable: ${error.message}` }, { status: 502 });
   }
 }
