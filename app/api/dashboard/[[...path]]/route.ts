@@ -30,9 +30,9 @@ export async function GET(request: NextRequest, { params }: Context) {
 
     if (res.ok) return NextResponse.json(await res.json());
     return NextResponse.json(await res.json().catch(() => ({})), { status: res.status });
-  } catch (err) {
-    console.error('Dashboard GET proxy error:', err);
-    return NextResponse.json({ error: `Backend unreachable: ${(err as any).message}` }, { status: 502 });
+  } catch (error: any) {
+    console.error('Dashboard GET proxy error:', error);
+    return NextResponse.json({ error: `Backend unreachable: ${error.message}` }, { status: 502 });
   }
 }
 
@@ -51,8 +51,8 @@ export async function POST(request: NextRequest, { params }: Context) {
     });
     if (res.ok) return NextResponse.json(await res.json());
     return NextResponse.json(await res.json().catch(() => ({})), { status: res.status });
-  } catch (err) {
-    console.error('Dashboard POST proxy error:', err);
-    return NextResponse.json({ error: `Backend unreachable: ${(err as any).message}` }, { status: 502 });
+  } catch (error: any) {
+    console.error('Dashboard POST proxy error:', error);
+    return NextResponse.json({ error: `Backend unreachable: ${error.message}` }, { status: 502 });
   }
 }
