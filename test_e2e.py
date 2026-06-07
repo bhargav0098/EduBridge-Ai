@@ -3,7 +3,7 @@ import time
 import random
 import string
 
-BASE_URL = "http://localhost:8000/api"
+BASE_URL = "http://127.0.0.1:8000/api"
 
 def get_random_email():
     return f"testuser_{''.join(random.choices(string.ascii_lowercase, k=6))}@test.com"
