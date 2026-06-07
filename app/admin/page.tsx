@@ -16,10 +16,6 @@ export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const fetchUsers = async (): Promise<void> => {
     try {
       const res = await fetch('/api/admin/users');
@@ -32,6 +28,11 @@ export default function AdminPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
 
   const handleDelete = async (userId: string): Promise<void> => {
     if (!confirm('Are you sure?')) return;
