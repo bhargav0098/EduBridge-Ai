@@ -25,6 +25,10 @@ class User(Base):
     resource_bookings = relationship("ResourceBooking", back_populates="user")
     student_profile = relationship("StudentProfile", back_populates="user", uselist=False)
     study_groups = relationship("StudyGroupMember", back_populates="user")
+    assignments_created = relationship("Assignment", back_populates="teacher")
+    submissions = relationship("AssignmentSubmission", back_populates="student")
+    activity_logs = relationship("ActivityLog", back_populates="user")
+    achievements = relationship("Achievement", back_populates="user")
 
 # Authentication Models
 class OTPRequest(Base):
@@ -217,10 +221,12 @@ class Question(Base):
     id = Column(Integer, primary_key=True, index=True)
     subject = Column(String, index=True, nullable=False)
     topic = Column(String, index=True)
+    question_text = Column(Text, nullable=False, default="")
     difficulty = Column(Integer, default=1) # 1-5
     type = Column(String, default="MCQ") # MCQ or SHORT
     options = Column(JSON, nullable=True)
     answer = Column(String, nullable=False)
+    explanation = Column(Text, nullable=True)
 
 class StudentPerformance(Base):
     __tablename__ = "student_performance"
@@ -229,3 +235,79 @@ class StudentPerformance(Base):
     question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
     correct = Column(Boolean, nullable=False)
     attempt_time = Column(DateTime(timezone=True), server_default=func.now())
+
+# Assignment and Tasks
+class Assignment(Base):
+    __tablename__ = "assignments"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(Text, nullable=True)
+    due_date = Column(DateTime(timezone=True), nullable=False)
+    class_id = Column(String, index=True, nullable=False)
+    teacher_id = Column(String, ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relationships
+    teacher = relationship("User", back_populates="assignments_created")
+    submissions = relationship("AssignmentSubmission", back_populates="assignment", cascade="all, delete-orphan")
+
+class AssignmentSubmission(Base):
+    __tablename__ = "assignment_submissions"
+    id = Column(Integer, primary_key=True, index=True)
+    assignment_id = Column(Integer, ForeignKey("assignments.id"), nullable=False)
+    student_id = Column(String, ForeignKey("users.id"), nullable=False)
+    status = Column(String, default="assigned")  # "assigned", "submitted", "graded"
+    submission_content = Column(Text, nullable=True)
+    submitted_at = Column(DateTime(timezone=True), nullable=True)
+    grade = Column(String, nullable=True)
+    feedback = Column(Text, nullable=True)
+
+    # Relationships
+    assignment = relationship("Assignment", back_populates="submissions")
+    student = relationship("User", back_populates="submissions")
+
+# Activity Logging
+class ActivityLog(Base):
+    __tablename__ = "activity_logs"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False, index=True)
+    role = Column(String, nullable=False)  # "student" or "teacher"
+    action_type = Column(String, nullable=False)  # "task_completed", "doubt_asked", etc.
+    timestamp = Column(DateTime(timezone=True), server_default=func.now(), index=True)
+    metadata_json = Column(JSON, nullable=True)
+    related_id = Column(String, nullable=True)
+
+    # Relationships
+    user = relationship("User", back_populates="activity_logs")
+
+# Achievements/Badges
+class Achievement(Base):
+    __tablename__ = "achievements"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False, index=True)
+    badge_name = Column(String, nullable=False)
+    description = Column(Text, nullable=True)
+    points = Column(Integer, default=0)
+    earned_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relationships
+    user = relationship("User", back_populates="achievements")
+
+# Doubts/Questions
+class Doubt(Base):
+    __tablename__ = "doubts"
+    id = Column(Integer, primary_key=True, index=True)
+    student_id = Column(String, ForeignKey("users.id"), nullable=False, index=True)
+    teacher_id = Column(String, ForeignKey("users.id"), nullable=True, index=True)
+    assignment_id = Column(Integer, ForeignKey("assignments.id"), nullable=True)
+    content = Column(Text, nullable=False)
+    response = Column(Text, nullable=True)
+    status = Column(String, default="open")  # "open" or "resolved"
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    resolved_at = Column(DateTime(timezone=True), nullable=True)
+
+    # Relationships
+    student = relationship("User", foreign_keys=[student_id])
+    teacher = relationship("User", foreign_keys=[teacher_id])
+    assignment = relationship("Assignment")
+

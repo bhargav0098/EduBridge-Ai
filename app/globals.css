@@ -303,27 +303,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border-radius: 50%;
   border: 1px solid rgba(99, 102, 241, 0.3);
   pointer-events: none;
+  will-change: transform, opacity;
 }
 
+/* Glitch kept for backwards compatibility but no longer applied to gradient text */
 .intro-glitch {
   position: relative;
-}
-.intro-glitch::before,
-.intro-glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-}
-.intro-glitch::before {
-  color: #06b6d4;
-  animation: glitch-1 3s infinite linear alternate-reverse;
-  z-index: -1;
-}
-.intro-glitch::after {
-  color: #c084fc;
-  animation: glitch-1 2s infinite linear alternate;
-  z-index: -1;
 }
 
 .typing-cursor::after {
@@ -518,6 +503,87 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border-color: rgba(255, 255, 255, 0.06) !important;
 }
 
+/* Force high visibility, professional and premium dark glassmorphic styles inside intro/auth screens */
+.intro-bg label {
+  color: rgba(241, 240, 255, 0.95) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.025em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+.intro-bg input[type="text"],
+.intro-bg input[type="email"],
+.intro-bg input[type="password"] {
+  background: rgba(13, 11, 30, 0.65) !important;
+  border: 1px solid rgba(108, 99, 255, 0.35) !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+  padding: 10px 14px !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.intro-bg input[type="text"]::placeholder,
+.intro-bg input[type="email"]::placeholder,
+.intro-bg input[type="password"]::placeholder {
+  color: rgba(241, 240, 255, 0.35) !important;
+}
+.intro-bg input[type="text"]:focus,
+.intro-bg input[type="email"]:focus,
+.intro-bg input[type="password"]:focus {
+  border-color: rgba(108, 99, 255, 0.8) !important;
+  box-shadow: 0 0 16px rgba(108, 99, 255, 0.45), inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+  background: rgba(13, 11, 30, 0.85) !important;
+  outline: none !important;
+}
+.intro-bg select {
+  background: rgba(13, 11, 30, 0.65) !important;
+  border: 1px solid rgba(108, 99, 255, 0.35) !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+  padding: 10px 14px !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.intro-bg select:focus {
+  border-color: rgba(108, 99, 255, 0.8) !important;
+  box-shadow: 0 0 16px rgba(108, 99, 255, 0.45) !important;
+  background: rgba(13, 11, 30, 0.85) !important;
+  outline: none !important;
+}
+.intro-bg select option {
+  background-color: #0d0b1e !important;
+  color: #ffffff !important;
+}
+.intro-bg input[type="checkbox"] {
+  accent-color: #6C63FF !important;
+  border: 1.5px solid rgba(108, 99, 255, 0.5) !important;
+  cursor: pointer;
+}
+.intro-bg span,
+.intro-bg .text-text-secondary\/60 {
+  color: rgba(241, 240, 255, 0.85) !important;
+}
+.intro-bg a {
+  color: #a89dff !important;
+  font-weight: 600 !important;
+  transition: color var(--transition-fast) !important;
+}
+.intro-bg a:hover {
+  color: #c084fc !important;
+  text-shadow: 0 0 8px rgba(192, 132, 252, 0.4);
+}
+.intro-bg button[type="submit"] {
+  background: var(--gradient-brand) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(108, 99, 255, 0.3) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.intro-bg button[type="submit"]:hover {
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.5) !important;
+  transform: translateY(-1px) !important;
+}
+
 .intro-bg::before {
   content: '';
   position: absolute;
@@ -549,6 +615,60 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%236366f1' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   pointer-events: none;
 }
+
+/* ── Cybernetic Core & Telemetry Animations ── */
+@keyframes spin-clockwise {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes spin-counter {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+
+@keyframes cyber-pulse {
+  0%, 100% { transform: scale(1);    opacity: 0.95; filter: drop-shadow(0 0 15px rgba(99,102,241,0.4)); }
+  50%       { transform: scale(1.03); opacity: 1;    filter: drop-shadow(0 0 25px rgba(6,182,212,0.6)); }
+}
+
+/* Glowing text shadows for professional code background */
+.intro-bg .font-mono {
+  text-shadow: 0 0 8px rgba(99, 102, 241, 0.35), 0 0 2px rgba(6, 182, 212, 0.2);
+}
+
+@keyframes matrix-fall {
+  0%   { transform: translateY(-100%) scaleY(1); opacity: 0; }
+  10%  { opacity: var(--stream-opacity, 0.18); }
+  90%  { opacity: var(--stream-opacity, 0.18); }
+  100% { transform: translateY(170vh) scaleY(1.15); opacity: 0; }
+}
+
+/* Floating code chip particles — pure CSS, compositor-only smooth translateY + drift + scale */
+@keyframes float-code-up {
+  0%   { transform: translateY(12vh) translateX(0px) rotate(0deg) scale(0.85); opacity: 0; }
+  10%  { opacity: var(--chip-opacity, 0.25); }
+  50%  { transform: translateY(-40vh) translateX(15px) rotate(2deg) scale(1.02); opacity: calc(var(--chip-opacity, 0.25) * 1.4); }
+  90%  { opacity: var(--chip-opacity, 0.25); }
+  100% { transform: translateY(-95vh) translateX(-10px) rotate(-1.5deg) scale(0.95); opacity: 0; }
+}
+
+.animate-spin-clockwise {
+  animation: spin-clockwise 25s linear infinite;
+  will-change: transform;
+}
+
+.animate-spin-counter {
+  animation: spin-counter 20s linear infinite;
+  will-change: transform;
+}
+
+.animate-cyber-pulse {
+  animation: cyber-pulse 4s ease-in-out infinite;
+  will-change: transform, opacity, filter;
+}
+
+
 
 /* ═══════════════════
    CARD STYLES

@@ -21,10 +21,8 @@
 
 <p align="center">
   <strong>
-    <a href="https://edubridge-ai.railway.app">🌐 Live Demo</a> &nbsp;•&nbsp;
-    <a href="https://youtu.be/example">📹 Video Walkthrough</a> &nbsp;•&nbsp;
+    <a href="https://edubridge-ai.railway.app">🌐 Live Demo</a> &nbsp;•&nbsp; 
     <a href="https://docs.google.com/presentation/example">📄 Slide Deck</a> &nbsp;•&nbsp;
-    <a href="https://devpost.com/software/edubridge-ai">🏆 Devpost Project</a>
   </strong>
 </p>
 
@@ -69,6 +67,16 @@ EduBridge AI is split into modular service blocks focused on accessibility, gami
 *   **Role-Based Access Control**: Gatekeeper security separating `STUDENT`, `TEACHER`, and `ADMIN` interfaces.
 *   **Notes & Resources Booking**: Local digital hub for uploading class notes (with safe path traversal filters) and checking out lab equipment or study halls.
 *   **Events, Peers & Attendance**: Interactive calendar tools, automated attendance checkers, and a peer matcher to facilitate student collaboration.
+*   **Doubt Resolution Hub**: Live portal where students submit doubts and teachers resolve them with interactive discussion stubs.
+*   **Assignments Management**: Direct classroom assignment pipelines allowing teachers to publish details and students to upload solutions.
+*   **Activity Timeline**: Real-time educational feed providing logging of student logins, quiz completions, and class bookings.
+
+### 🎨 5. Cinematic UX & Auth Portal
+*   **OTP Multi-Factor Security**: Randomly generated 6-digit OTP verification system with a 10-minute expiry for secure password resets.
+*   **Interactive Particle Warp Field**: Built with a GPU-composited HTML5 canvas featuring radial accelerator hyperdrive warp lines when launching the app.
+*   **Glowing Floating Code Streams**: Displays interactive matrix-style code rain and floating modern code chips representing AI pipelines (RAG, Elo calculations, OCR Solvers) with subtle neon shadows and organic side-to-side translation drifts.
+*   **Premium Glassmorphic Login/Register Pages**: High-contrast, accessibility-audited auth fields and inputs designed specifically for optimal legibility over the dark background.
+*   **Smooth Cubic-Bezier Transitions**: Seamless layout transitions powered by Framer Motion, utilizing customized easing curves (`[0.76, 0, 0.24, 1]`) to zoom out, blur, and fade out components without layout recalculation overhead.
 
 ---
 
@@ -358,6 +366,16 @@ To allow judges to audit and test-drive our platform endpoints instantly, follow
 | `POST` | `/api/quiz/answer` | Submits answer and adjusts student Elo | Student | - |
 | `POST` | `/api/ocr` | Handwritten math OCR step-by-step solver | Student / Teacher | - |
 | `POST` | `/api/speech` | Whisper transcription and speech-to-chat chain | Student / Teacher | - |
+| `GET` | `/api/dashboard/stats` | Fetches dashboard stats for students or teachers | Student / Teacher | - |
+| `GET` | `/api/dashboard/timeline` | Fetches timeline activities for classroom log | Student / Teacher | - |
+| `GET` | `/api/dashboard/stream` | Subscribes to live Server-Sent Events timeline feed | Student / Teacher | - |
+| `POST` | `/api/assignments` | Creates a new assignment | Teacher / Admin | - |
+| `GET` | `/api/assignments/student` | Fetches active assignments & submissions for a student | Student | - |
+| `POST` | `/api/assignments/submit/{sub_id}` | Submits coursework solutions for an assignment | Student | - |
+| `POST` | `/api/assignments/grade/{sub_id}` | Grades a submitted assignment | Teacher / Admin | - |
+| `POST` | `/api/doubts` | Submits a classroom doubt query | Student | - |
+| `GET` | `/api/doubts` | Fetches doubts for student (own) or teacher (all) | Student / Teacher | - |
+| `POST` | `/api/doubts/resolve/{doubt_id}` | Resolves/answers a student doubt | Teacher / Admin | - |
 
 <details>
 <summary><b>📡 Step-by-Step API Query Playbook (Click to expand)</b></summary>
@@ -428,9 +446,11 @@ To allow judges to audit and test-drive our platform endpoints instantly, follow
 Edubridge-AI/
 ├── app/                          # Next.js App Router Pages
 │   ├── admin/                    # System Admin Dashboard (Rate Throttles)
+│   ├── api/                      # Next.js Proxy & Demo API Routes (OTP, reset-password, me, etc.)
 │   ├── chat/                     # RAG Chat Interface (SSE Engine)
 │   ├── dashboard/                # Role-Gated Student/Teacher Views
 │   ├── events/                   # Calendar & Attendance Trackers
+│   ├── home/                     # Premium Landing/Marketing page
 │   ├── login/                    # Credentials Authentication
 │   ├── notes/                    # Class notes & resources portal
 │   ├── peers/                    # Peer-to-peer match matching UI
@@ -438,15 +458,18 @@ Edubridge-AI/
 │   ├── register/                 # Register routes
 │   └── page.tsx                  # Cinematic landing/intro page
 ├── backend/                      # FastAPI Microservice
-│   ├── api/                      # Controllers (Auth, Chat, Quiz, OCR, Speech)
+│   ├── api/                      # Controllers (Auth, Chat, Quiz, OCR, Speech, Assignments, Doubts, Dashboard)
 │   │   ├── auth.py               # Token issuer endpoints
 │   │   ├── chat.py               # RAG SSE stream controller
 │   │   ├── ocr.py                # Math Equation Solver API
 │   │   ├── quiz.py               # ELO scaling endpoints
-│   │   └── speech.py             # Whisper audio transcription
-│   ├── models/                   # DB schemas (User, Profile, Quiz, Messages)
+│   │   ├── speech.py             # Whisper audio transcription
+│   │   ├── assignments.py        # College Assignment API
+│   │   ├── doubts.py             # Student Doubt Resolution API
+│   │   └── dashboard.py          # Student/Teacher Dashboard Stats API
+│   ├── models/                   # DB schemas (User, Profile, Quiz, Messages, Doubt, Assignment)
 │   ├── schemas/                  # Pydantic request/response structures
-│   ├── services/                 # Core logic (auth encoder, RAG vectorizer)
+│   ├── services/                 # Core logic (auth, RAG, attendance, assignments, doubts, dashboard, email)
 │   ├── tests/                    # Pytest verification suites
 │   └── main.py                   # Service entrypoint
 ├── components/                   # Reusable UI components

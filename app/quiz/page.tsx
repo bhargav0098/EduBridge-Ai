@@ -1,13 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useQuizStore } from '@/store/quizStore';
 import { Sidebar } from '@/components/ui/Sidebar';
 import { Navbar } from '@/components/ui/Navbar';
 import { Button } from '@/components/ui/Button';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { QuizQuestion } from '@/types';
+import api from '@/services/api';
+import { toast, Toaster } from 'react-hot-toast';
 
 // Sample quiz questions
 const sampleQuestions: QuizQuestion[] = [
@@ -51,15 +54,50 @@ const sampleQuestions: QuizQuestion[] = [
 const QUIZ_TIME = 10 * 60; // 10 minutes in seconds
 
 export default function QuizPage() {
-  const { questions, currentQuestion, answers, results, setQuestions, setCurrentQuestion, setAnswer, submitQuiz } =
+  const router = useRouter();
+  const { questions, currentQuestion, answers, results, setQuestions, setCurrentQuestion, setAnswer, submitQuiz, resetQuiz } =
     useQuizStore();
   const [timeLeft, setTimeLeft] = useState(QUIZ_TIME);
   const [quizStarted, setQuizStarted] = useState(false);
 
+  // Custom states
+  const [enrolledClasses, setEnrolledClasses] = useState<string[]>([]);
+  const [selectedSubject, setSelectedSubject] = useState<string>('');
+  const [selectedLevel, setSelectedLevel] = useState<'easy' | 'medium' | 'hard'>('easy');
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+  const [isLoadingQuiz, setIsLoadingQuiz] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [eloUpdate, setEloUpdate] = useState<{ oldElo: number; newElo: number; eloChange: number } | null>(null);
+
   useEffect(() => {
-    if (questions.length === 0) {
-      setQuestions(sampleQuestions);
-    }
+    const fetchProfile = async () => {
+      try {
+        setIsLoadingProfile(true);
+        const res = await api.get('/attendance/student/profile');
+        if (res.data && res.data.class_name) {
+          const classesList = res.data.class_name
+            .split(',')
+            .map((c: string) => c.trim())
+            .filter(Boolean);
+          setEnrolledClasses(classesList);
+          
+          // Pre-select first eligible subject
+          if (classesList.includes('CS-3A')) {
+            setSelectedSubject('data structures');
+          } else if (classesList.includes('CS-3B')) {
+            setSelectedSubject('mathematics');
+          } else if (classesList.includes('CS-4A')) {
+            setSelectedSubject('english literature');
+          }
+        }
+      } catch (err) {
+        console.error('Error loading student profile for quiz:', err);
+      } finally {
+        setIsLoadingProfile(false);
+      }
+    };
+    fetchProfile();
+    resetQuiz();
   }, []);
 
   // Timer countdown
@@ -79,9 +117,35 @@ export default function QuizPage() {
     return () => clearInterval(timer);
   }, [quizStarted, results]);
 
-  const handleStartQuiz = () => {
-    setQuizStarted(true);
-    setTimeLeft(QUIZ_TIME);
+  const handleStartQuiz = async () => {
+    if (!selectedSubject) {
+      toast.error('Please select a subject first.');
+      return;
+    }
+    try {
+      setIsLoadingQuiz(true);
+      const res = await api.get(`/quiz/generate?subject=${encodeURIComponent(selectedSubject)}&level=${selectedLevel}`);
+      if (res.data && res.data.length > 0) {
+        // Map backend questions to front-end format
+        const mapped = res.data.map((q: any) => ({
+          id: q.id,
+          question: q.question_text,
+          options: q.options,
+          correct: q.correct !== undefined ? q.correct : 0,
+          explanation: q.explanation || 'No explanation provided.'
+        }));
+        setQuestions(mapped);
+        setQuizStarted(true);
+        setTimeLeft(QUIZ_TIME);
+      } else {
+        toast.error('No questions returned from backend.');
+      }
+    } catch (err) {
+      toast.error('Failed to load quiz from backend.');
+      console.error(err);
+    } finally {
+      setIsLoadingQuiz(false);
+    }
   };
 
   const handleAnswerSelect = (optionIdx: number) => {
@@ -100,8 +164,31 @@ export default function QuizPage() {
     }
   };
 
-  const handleSubmitQuiz = () => {
-    submitQuiz();
+  const handleSubmitQuiz = async () => {
+    try {
+      setIsSubmitting(true);
+      const submissionAnswers = questions.map((q, idx) => ({
+        question_id: q.id,
+        answer_index: answers[idx]
+      }));
+      const res = await api.post('/quiz/submit', {
+        subject: selectedSubject,
+        answers: submissionAnswers
+      });
+      
+      setEloUpdate({
+        oldElo: res.data.old_elo,
+        newElo: res.data.new_elo,
+        eloChange: res.data.elo_change
+      });
+
+      submitQuiz(); 
+    } catch (err) {
+      toast.error('Failed to submit quiz.');
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -110,9 +197,27 @@ export default function QuizPage() {
     return `${mins}:${String(secs).padStart(2, '0')}`;
   };
 
+  if (isLoadingProfile) {
+    return (
+      <div className="flex h-screen bg-background text-text-primary tech-grid justify-center items-center">
+        <div className="text-center">
+          <div className="animate-spin text-5xl mb-4">🔮</div>
+          <p className="text-xs text-text-secondary/60 dark:text-primary-light/60 font-mono">Loading Arena profile...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!quizStarted) {
+    const availableSubjects = [
+      { id: 'data structures', name: 'Data Structures', classId: 'CS-3A', icon: '🌳', desc: 'Arrays, Stacks, Trees, AVL Trees, DP & Graphs' },
+      { id: 'mathematics', name: 'Mathematics', classId: 'CS-3B', icon: '🧮', desc: 'Algebra, Matrices, Vector Spaces, Calculus, Topology' },
+      { id: 'english literature', name: 'English Literature', classId: 'CS-4A', icon: '📚', desc: 'Shakespeare, Poetry, Narratology, Theory & Criticism' }
+    ].filter(sub => enrolledClasses.includes(sub.classId));
+
     return (
       <div className="flex h-screen bg-background text-text-primary tech-grid">
+        <Toaster position="top-right" />
         <Sidebar />
         <div className="flex-1 flex flex-col overflow-hidden">
           <Navbar />
@@ -120,46 +225,105 @@ export default function QuizPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="max-w-2xl mx-auto"
+              className="max-w-3xl mx-auto"
             >
               <div className="bg-surface border border-border text-text-primary rounded-2xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
-                <h1 className="text-4xl md:text-5xl font-black mb-4 text-text-primary dark:text-white">
-                  📝 Adaptive <span className="gradient-text">Quiz</span>
+                
+                <h1 className="text-4xl md:text-5xl font-black mb-2 text-text-primary dark:text-white">
+                  📝 Adaptive <span className="gradient-text">Quiz Arena</span>
                 </h1>
                 <p className="text-sm text-text-secondary/80 dark:text-text-secondary/60 mb-8 leading-relaxed max-w-xl">
-                  Test your knowledge with our intelligent quiz system. Your answers will be analyzed to provide
-                  personalized learning recommendations and identify strengths or weaknesses.
+                  Select an academic subject according to your class enrollment and challenge yourself. 
+                  The quiz will adapt based on your selected difficulty.
                 </p>
 
-                <div className="bg-surface-2 border border-border rounded-xl p-6 mb-8 backdrop-blur-sm">
-                  <h2 className="text-lg font-bold mb-4 text-text-primary dark:text-white uppercase tracking-wider font-mono text-xs">Quiz Parameters</h2>
-                  <ul className="space-y-3.5 text-sm text-text-secondary dark:text-indigo-100">
-                    <li className="flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">📊</span>
-                      <span>5 Targeted Questions</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">⏱️</span>
-                      <span>10 Minutes Limit</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">⭐</span>
-                      <span>Multiple Choice Format</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">📈</span>
-                      <span>Instant Dynamic Scoring & Explanations</span>
-                    </li>
-                  </ul>
-                </div>
+                {availableSubjects.length === 0 ? (
+                  <div className="bg-amber-500/10 border border-amber-500/35 p-6 rounded-2xl text-center">
+                    <span className="text-4xl">⚠️</span>
+                    <h3 className="font-extrabold text-white mt-3 text-lg">Not Enrolled in Any Classes</h3>
+                    <p className="text-sm text-gray-400 mt-2 max-w-md mx-auto">
+                      You must enroll in at least one class (CS-3A, CS-3B, or CS-4A) to access quiz challenges.
+                    </p>
+                    <button 
+                      onClick={() => router.push('/dashboard')}
+                      className="mt-4 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all"
+                    >
+                      Enroll Now on Dashboard
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {/* Subject Selection Grid */}
+                    <div className="mb-6">
+                      <h2 className="text-xs font-bold mb-3 text-primary-light/60 uppercase tracking-wider font-mono">Select Subject</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {availableSubjects.map((sub) => {
+                          const isSelected = selectedSubject === sub.id;
+                          return (
+                            <div
+                              key={sub.id}
+                              onClick={() => setSelectedSubject(sub.id)}
+                              className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between h-36 ${
+                                isSelected
+                                  ? 'bg-indigo-500/10 border-indigo-500/50 shadow-md shadow-indigo-500/5'
+                                  : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'
+                              }`}
+                            >
+                              <div className="flex justify-between items-start">
+                                <span className="text-2xl">{sub.icon}</span>
+                                <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-white/10 text-gray-300">
+                                  {sub.classId}
+                                </span>
+                              </div>
+                              <div>
+                                <h3 className="font-bold text-sm text-white">{sub.name}</h3>
+                                <p className="text-[10px] text-gray-400 mt-1 line-clamp-2 leading-relaxed">{sub.desc}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
 
-                <button
-                  onClick={handleStartQuiz}
-                  className="btn-primary w-full text-base py-3"
-                >
-                  Start Quiz
-                </button>
+                    {/* Difficulty selection */}
+                    <div className="mb-8">
+                      <h2 className="text-xs font-bold mb-3 text-primary-light/60 uppercase tracking-wider font-mono">Choose Difficulty</h2>
+                      <div className="flex gap-3">
+                        {[
+                          { id: 'easy', name: '🟢 Easy', desc: 'Level 1-2 questions' },
+                          { id: 'medium', name: '🟡 Medium', desc: 'Level 3 questions' },
+                          { id: 'hard', name: '🔴 Hard', desc: 'Level 4-5 questions' }
+                        ].map((lvl) => {
+                          const isSelected = selectedLevel === lvl.id;
+                          return (
+                            <button
+                              key={lvl.id}
+                              type="button"
+                              onClick={() => setSelectedLevel(lvl.id as any)}
+                              className={`flex-1 p-3.5 rounded-xl border text-left transition-all ${
+                                isSelected
+                                  ? 'bg-purple-500/10 border-purple-500/50 shadow-md shadow-purple-500/5'
+                                  : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'
+                              }`}
+                            >
+                              <div className="font-bold text-xs text-white">{lvl.name}</div>
+                              <div className="text-[9px] text-gray-400 mt-0.5 font-mono">{lvl.desc}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={handleStartQuiz}
+                      disabled={isLoadingQuiz}
+                      className="px-6 py-3 w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl text-sm font-extrabold uppercase tracking-wider transition-all shadow-lg shadow-indigo-500/20 active:scale-98 disabled:opacity-50"
+                    >
+                      {isLoadingQuiz ? 'Generating Quiz Questions...' : 'Start 20-Question Quiz 🚀'}
+                    </button>
+                  </>
+                )}
               </div>
             </motion.div>
           </main>
@@ -176,13 +340,10 @@ export default function QuizPage() {
       { name: 'Wrong', value: totalCount - correctCount, fill: '#ef4444' },
     ];
 
-    const subjectScores = [
-      { name: 'Q1', score: answers[0] === questions[0]?.correct ? 100 : 0 },
-      { name: 'Q2', score: answers[1] === questions[1]?.correct ? 100 : 0 },
-      { name: 'Q3', score: answers[2] === questions[2]?.correct ? 100 : 0 },
-      { name: 'Q4', score: answers[3] === questions[3]?.correct ? 100 : 0 },
-      { name: 'Q5', score: answers[4] === questions[4]?.correct ? 100 : 0 },
-    ];
+    const subjectScores = questions.map((q, idx) => ({
+      name: `Q${idx + 1}`,
+      score: answers[idx] === q.correct ? 100 : 0
+    }));
 
     return (
       <div className="flex h-screen bg-background text-text-primary tech-grid">
@@ -194,7 +355,7 @@ export default function QuizPage() {
               <h1 className="text-4xl font-black text-text-primary dark:text-white">Quiz Results 🎉</h1>
 
               {/* Score Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -209,7 +370,7 @@ export default function QuizPage() {
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.2 }}
+                  transition={{ delay: 0.15 }}
                   className="bg-gradient-to-br from-indigo-500/10 to-indigo-600/5 border border-indigo-500/20 rounded-2xl p-6 shadow-lg relative overflow-hidden"
                 >
                   <p className="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400/80">Accuracy Rate</p>
@@ -220,7 +381,22 @@ export default function QuizPage() {
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.3 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-2xl p-6 shadow-lg relative overflow-hidden"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-wider text-amber-500 dark:text-amber-400/80">ELO Arena Rating</p>
+                  <p className="text-5xl font-black text-text-primary dark:text-white mt-2">
+                    {eloUpdate ? eloUpdate.newElo : '1200'}
+                  </p>
+                  <p className="text-xs text-text-secondary/60 dark:text-primary-light/40 mt-1">
+                    {eloUpdate && eloUpdate.eloChange >= 0 ? `+${eloUpdate.eloChange}` : eloUpdate ? eloUpdate.eloChange : '0'} ELO change
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.25 }}
                   className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20 rounded-2xl p-6 shadow-lg relative overflow-hidden"
                 >
                   <p className="text-xs font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400/80">Evaluation Grade</p>
@@ -332,13 +508,18 @@ export default function QuizPage() {
               {/* Action Buttons */}
               <div className="flex gap-4 justify-center">
                 <button
-                  onClick={() => window.location.href = '/dashboard'}
+                  onClick={() => router.push('/dashboard')}
                   className="btn-ghost"
                 >
                   Dashboard
                 </button>
                 <button
-                  onClick={() => window.location.reload()}
+                  onClick={() => {
+                    resetQuiz();
+                    setQuizStarted(false);
+                    setTimeLeft(QUIZ_TIME);
+                    setEloUpdate(null);
+                  }}
                   className="btn-primary"
                 >
                   Retake Quiz
@@ -442,10 +623,10 @@ export default function QuizPage() {
                 {currentQuestion === questions.length - 1 ? (
                   <button
                     onClick={handleSubmitQuiz}
-                    disabled={!isAnswered}
+                    disabled={!isAnswered || isSubmitting}
                     className="btn-primary !py-2.5 disabled:opacity-40 disabled:pointer-events-none"
                   >
-                    Submit Quiz
+                    {isSubmitting ? 'Submitting...' : 'Submit Quiz'}
                   </button>
                 ) : (
                   <button

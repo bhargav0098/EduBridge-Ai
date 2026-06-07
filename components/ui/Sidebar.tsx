@@ -8,7 +8,7 @@ import { Suspense } from 'react';
 
 const studentMenuItems = [
   { label: 'Dashboard',        href: '/dashboard',  icon: '📊' },
-  { label: 'AI Chat',          href: '/chat',       icon: '💬' },
+  { label: 'AI Chat',          href: '/chat/student', icon: '💬' },
   { label: 'Quiz',             href: '/quiz',       icon: '📝' },
   { label: 'Notes',            href: '/notes',      icon: '📚' },
   { label: 'Events',           href: '/events',     icon: '📅' },
@@ -18,7 +18,7 @@ const studentMenuItems = [
 
 const teacherMenuItems = [
   { label: 'Dashboard',        href: '/dashboard',  icon: '📊' },
-  { label: 'AI Chat',          href: '/chat',       icon: '💬' },
+  { label: 'AI Chat',          href: '/chat/teacher', icon: '💬' },
   { label: 'Classes',          href: '/dashboard',  icon: '🏫', tab: 'classes'    },
   { label: 'Mark Attendance',  href: '/dashboard',  icon: '📅', tab: 'attendance' },
   { label: 'Student Roster',   href: '/dashboard',  icon: '👥', tab: 'students'   },

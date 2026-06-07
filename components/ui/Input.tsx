@@ -9,7 +9,16 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className, ...props }, ref) => {
+  ({ label, error, className, value, defaultValue, ...props }, ref) => {
+    // Ensure controlled/uncontrolled consistency:
+    // If value is passed, always provide it (never undefined). 
+    // If defaultValue is used instead, don't provide value at all.
+    const controlledProps = value !== undefined
+      ? { value: value ?? '' }
+      : defaultValue !== undefined
+      ? { defaultValue }
+      : {};
+
     return (
       <div className="w-full">
         {label && (
@@ -24,8 +33,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             error && 'border-red-500 dark:border-red-500',
             className
           )}
-          {...(props.value !== undefined ? { value: props.value } : {})}
           {...props}
+          {...controlledProps}
         />
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
       </div>

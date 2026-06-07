@@ -1,58 +1,55 @@
 import smtplib
-import os
 import logging
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from ..config import settings
 
 logger = logging.getLogger(__name__)
+
 
 class EmailService:
     @staticmethod
     def send_otp_email(to_email: str, otp: str):
-        smtp_server = os.environ.get("SMTP_SERVER")
-        smtp_port = os.environ.get("SMTP_PORT", 587)
-        smtp_username = os.environ.get("SMTP_USERNAME")
-        smtp_password = os.environ.get("SMTP_PASSWORD")
-
         subject = "EduBridge Password Reset Verification Code"
-        body = f"""
-        Hello,
+        body = f"""Hello,
 
-        You requested a password reset. Here is your 6-digit verification code:
-        
-        {otp}
-        
-        This code will expire in 10 minutes. If you did not request this, please ignore this email.
+You requested a password reset. Here is your 6-digit verification code:
 
-        Best regards,
-        EduBridge Team
-        """
+    {otp}
 
-        if not smtp_server or not smtp_username or not smtp_password:
-            # Fallback to console logger if SMTP is not configured
-            logger.warning("SMTP credentials not configured. Printing OTP to console.")
-            print(f"--- MOCK EMAIL ---")
+This code will expire in 10 minutes. If you did not request this, please ignore this email.
+
+Best regards,
+EduBridge Team
+"""
+
+        if not settings.SMTP_SERVER or not settings.SMTP_USERNAME or not settings.SMTP_PASSWORD:
+            # Fallback: log OTP to console (dev mode only)
+            logger.warning("SMTP credentials not configured — printing OTP to console (dev mode).")
+            print("--- MOCK EMAIL ---")
             print(f"To: {to_email}")
             print(f"Subject: {subject}")
-            print(body)
-            print(f"------------------")
+            print(f"OTP: {otp}")
+            print("------------------")
             return
 
         try:
             msg = MIMEMultipart()
-            msg['From'] = smtp_username
-            msg['To'] = to_email
-            msg['Subject'] = subject
+            msg["From"] = settings.SMTP_USERNAME
+            msg["To"] = to_email
+            msg["Subject"] = subject
+            msg.attach(MIMEText(body, "plain"))
 
-            msg.attach(MIMEText(body, 'plain'))
-
-            server = smtplib.SMTP(smtp_server, int(smtp_port))
+            server = smtplib.SMTP(settings.SMTP_SERVER, int(settings.SMTP_PORT))
+            server.ehlo()
             server.starttls()
-            server.login(smtp_username, smtp_password)
-            text = msg.as_string()
-            server.sendmail(smtp_username, to_email, text)
+            server.login(settings.SMTP_USERNAME, settings.SMTP_PASSWORD)
+            server.sendmail(settings.SMTP_USERNAME, to_email, msg.as_string())
             server.quit()
-            logger.info(f"OTP email sent to {to_email}")
+            logger.info(f"OTP email sent successfully to {to_email}")
+        except smtplib.SMTPException as e:
+            logger.error(f"SMTP error sending OTP to {to_email}: {e}")
+            raise RuntimeError(f"Failed to send OTP email: {e}") from e
         except Exception as e:
-            logger.error(f"Failed to send email to {to_email}: {str(e)}")
-            raise e
+            logger.error(f"Unexpected error sending OTP to {to_email}: {e}")
+            raise

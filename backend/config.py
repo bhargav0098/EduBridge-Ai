@@ -1,5 +1,7 @@
 from pydantic_settings import BaseSettings
 from typing import Optional
+import secrets
+
 
 class Settings(BaseSettings):
     # Project metadata
@@ -23,26 +25,39 @@ class Settings(BaseSettings):
 
     # Custom environment variables
     DATABASE_URL: Optional[str] = None
-    SECRET_KEY: str = "yoursecretkeyhere"
+    # Generate a fallback secret for dev, but warn loudly in prod
+    SECRET_KEY: str = secrets.token_hex(32)
     GEMINI_API_KEY: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None
     DEBUG: bool = True
 
+    # SMTP for email (OTP reset)
+    SMTP_SERVER: Optional[str] = None
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: Optional[str] = None
+    SMTP_PASSWORD: Optional[str] = None
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
+        extra = "ignore"
 
     def assemble_db_url(self) -> str:
-        """Construct async SQLAlchemy URL.
-        Returns
-        -------
-        str
-            Async PostgreSQL URL for SQLAlchemy (asyncpg driver).
-        """
+        """Construct sync SQLAlchemy URL."""
         return (
-            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+            f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
 
+
 # Export a singleton settings instance used throughout the project
 settings = Settings()
+
+# Warn if using default secret key in production
+if not settings.DEBUG and settings.SECRET_KEY == "yoursecretkeyhere":
+    import warnings
+    warnings.warn(
+        "SECURITY WARNING: SECRET_KEY is not set. "
+        "Set a strong SECRET_KEY in your environment variables.",
+        stacklevel=2,
+    )

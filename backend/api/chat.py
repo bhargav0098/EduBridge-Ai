@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from typing import Optional, List
 
 from ..database import get_db
-from ..models.models import ChatSession, ChatMessage, User
+from ..models.models import ChatSession, ChatMessage, User, UserRole
 from ..schemas.schemas import ChatInput, ChatResponse
 from ..services.rag_service import RAGService
 from .auth import verify_token
@@ -149,11 +149,19 @@ def chat_endpoint(
     db.commit()
 
     # 3. Build prompts
-    system_instruction = (
-        f"You are an NCERT tutor. Respond in {chat_input.language}. "
-        f"Use only the provided NCERT context. Do not hallucinate or use external knowledge. "
-        f"Context:\n{context_text}"
-    )
+    if current_user.role == UserRole.TEACHER:
+        system_instruction = (
+            f"You are an AI Teacher Assistant. Respond in {chat_input.language}. "
+            f"Help the teacher create lesson plans, draft test questions, format class materials, and outline pedagogical suggestions. "
+            f"Use the provided context when applicable, but you may use general pedagogical and academic knowledge to provide high-quality instructional advice. "
+            f"Context:\n{context_text}"
+        )
+    else:
+        system_instruction = (
+            f"You are an NCERT tutor. Respond in {chat_input.language}. "
+            f"Use only the provided NCERT context. Do not hallucinate or use external knowledge. "
+            f"Context:\n{context_text}"
+        )
     prompt = chat_input.message
 
     if stream:

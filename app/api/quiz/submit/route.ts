@@ -1,0 +1,26 @@
+import { NextResponse } from 'next/server';
+
+const BACKEND = process.env.BACKEND_URL || 'http://localhost:8000';
+
+export async function POST(request: Request) {
+  const authHeader = request.headers.get('Authorization') || '';
+  try {
+    const body = await request.json();
+    const response = await fetch(`${BACKEND}/api/quiz/submit-quiz`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(authHeader ? { Authorization: authHeader } : {}),
+      },
+      body: JSON.stringify(body),
+    });
+    if (response.ok) {
+      return NextResponse.json(await response.json());
+    }
+    const errorData = await response.json().catch(() => ({}));
+    return NextResponse.json(errorData, { status: response.status });
+  } catch (err: any) {
+    console.error('Quiz submit POST proxy error:', err);
+    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+  }
+}

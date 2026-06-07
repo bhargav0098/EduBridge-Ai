@@ -47,12 +47,57 @@ function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabParam = searchParams ? searchParams.get('tab') : null;
-  
+
+  // Auth guard — redirect unauthenticated users to login
+  useEffect(() => {
+    if (!user) {
+      const t = setTimeout(() => {
+        if (!useAuthStore.getState().user) {
+          router.replace('/login');
+        }
+      }, 300);
+      return () => clearTimeout(t);
+    }
+  }, [user, router]);
+
   // Role is locked to the signed-in user's role — no manual toggle
   const currentRole: 'student' | 'teacher' = user?.role === 'teacher' ? 'teacher' : 'student';
   const [teacherTab, setTeacherTab] = useState<'home' | 'classes' | 'attendance' | 'students' | 'upload'>('home');
   const [studentTab, setStudentTab] = useState<'overview' | 'attendance'>('overview');
   const [studentSummary, setStudentSummary] = useState<StudentAttendanceSummary | null>(null);
+
+  const [enrolledClasses, setEnrolledClasses] = useState<string[]>([]);
+  const [isManageClassesOpen, setIsManageClassesOpen] = useState<boolean>(false);
+
+  const fetchStudentProfile = async () => {
+    try {
+      const res = await api.get('/attendance/student/profile');
+      if (res.data && res.data.class_name) {
+        const classesList = res.data.class_name
+          .split(',')
+          .map((c: string) => c.trim())
+          .filter(Boolean);
+        setEnrolledClasses(classesList);
+      }
+    } catch (err) {
+      console.error('Error fetching student profile:', err);
+    }
+  };
+
+  const handleSaveClasses = async (selected: string[]) => {
+    try {
+      const classNameStr = selected.join(',');
+      await api.post('/attendance/student/profile', { class_name: classNameStr });
+      setEnrolledClasses(selected);
+      toast.success('Enrolled classes updated successfully!');
+      setIsManageClassesOpen(false);
+      const summary = await attendanceService.getStudentSummary();
+      setStudentSummary(summary);
+    } catch (err) {
+      toast.error('Failed to update enrolled classes.');
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     if (currentRole === 'teacher') {
@@ -107,31 +152,239 @@ function DashboardContent() {
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmittingAttendance, setIsSubmittingAttendance] = useState(false);
 
-  // Student stats
-  const [stats] = useState({
-    attendance: '92%',
-    quizScore: '88/100',
-    learningStreak: '7 days',
-    nextEvent: 'June 5, 2pm',
+  // Student & Teacher stats
+  const [stats, setStats] = useState({
+    attendance: '0%',
+    quizScore: '0/100',
+    learningStreak: '0 days',
+    achievementCount: 0,
   });
 
-  const upcomingEvents = [
+  const [achievements, setAchievements] = useState<any[]>([]);
+  const [assignments, setAssignments] = useState<any[]>([]);
+  const [submissions, setSubmissions] = useState<any[]>([]); // for teacher grading
+  const [doubts, setDoubts] = useState<any[]>([]);
+  const [timeline, setTimeline] = useState<any[]>([]);
+
+  // Form states
+  const [newDoubtContent, setNewDoubtContent] = useState('');
+  const [newAssignmentTitle, setNewAssignmentTitle] = useState('');
+  const [newAssignmentDesc, setNewAssignmentDesc] = useState('');
+  const [newAssignmentDueDate, setNewAssignmentDueDate] = useState('');
+  const [newAssignmentClass, setNewAssignmentClass] = useState('c1');
+  const [isCreatingAssignment, setIsCreatingAssignment] = useState(false);
+
+  const [resolvingDoubtId, setResolvingDoubtId] = useState<number | null>(null);
+  const [doubtResponseText, setDoubtResponseText] = useState('');
+  const [isResolvingDoubt, setIsResolvingDoubt] = useState(false);
+
+  const [gradingSubmissionId, setGradingSubmissionId] = useState<number | null>(null);
+  const [gradeText, setGradeText] = useState('');
+  const [feedbackText, setFeedbackText] = useState('');
+  const [isGradingSubmission, setIsGradingSubmission] = useState(false);
+
+  const [submittingAssignmentId, setSubmittingAssignmentId] = useState<number | null>(null);
+  const [submissionContentText, setSubmissionContentText] = useState('');
+  const [isSubmittingAssignment, setIsSubmittingAssignment] = useState(false);
+
+  const [upcomingEvents, setUpcomingEvents] = useState([
     { id: 1, title: 'Physics Quiz', time: 'Today at 2:00 PM', status: 'upcoming' },
     { id: 2, title: 'Chemistry Lab', time: 'Tomorrow at 10:00 AM', status: 'upcoming' },
     { id: 3, title: 'English Essay', time: 'June 6 at 4:00 PM', status: 'upcoming' },
-  ];
+  ]);
 
-  // currentRole is derived directly from user.role — no sync needed
+  const fetchStats = async () => {
+    try {
+      const res = await api.get('/dashboard/stats');
+      if (currentRole === 'student') {
+        setStats({
+          attendance: `${res.data.attendance_percentage}%`,
+          quizScore: `${res.data.quiz_accuracy}/100`,
+          learningStreak: `${res.data.streak} days`,
+          achievementCount: res.data.achievement_count,
+        });
+        setAchievements(res.data.achievements || []);
+      } else {
+        setStats({
+          attendance: `${res.data.total_students} Students`,
+          quizScore: `${res.data.total_assignments_created} Tasks`,
+          learningStreak: `${res.data.pending_grading} Ungraded`,
+          achievementCount: res.data.open_doubts,
+        });
+      }
+    } catch (err) {
+      console.error('Error fetching dashboard stats:', err);
+    }
+  };
+
+  const fetchTimeline = async () => {
+    try {
+      const res = await api.get('/dashboard/timeline');
+      setTimeline(res.data || []);
+    } catch (err) {
+      console.error('Error fetching timeline:', err);
+    }
+  };
+
+  const fetchAssignments = async () => {
+    try {
+      if (currentRole === 'student') {
+        const res = await api.get('/assignments/student');
+        setAssignments(res.data || []);
+      } else {
+        const res = await api.get('/assignments/submissions');
+        setSubmissions(res.data || []);
+      }
+    } catch (err) {
+      console.error('Error fetching assignments:', err);
+    }
+  };
+
+  const fetchDoubts = async () => {
+    try {
+      const res = await api.get('/doubts/');
+      setDoubts(res.data || []);
+    } catch (err) {
+      console.error('Error fetching doubts:', err);
+    }
+  };
+
+  // Submit Assignment (student)
+  const handleSubmitAssignmentContent = async (submissionId: number) => {
+    if (!submissionContentText.trim()) {
+      toast.error('Submission content cannot be empty.');
+      return;
+    }
+    setIsSubmittingAssignment(true);
+    try {
+      await api.post(`/assignments/submit/${submissionId}`, {
+        submission_content: submissionContentText,
+      });
+      toast.success('Assignment submitted successfully!');
+      setSubmittingAssignmentId(null);
+      setSubmissionContentText('');
+      fetchAssignments();
+      fetchTimeline();
+      fetchStats();
+    } catch (err: any) {
+      toast.error(err.response?.data?.detail || 'Failed to submit assignment.');
+    } finally {
+      setIsSubmittingAssignment(false);
+    }
+  };
+
+  // Grade Submission (teacher)
+  const handleGradeSubmissionSubmit = async (submissionId: number) => {
+    if (!gradeText.trim()) {
+      toast.error('Grade is required.');
+      return;
+    }
+    setIsGradingSubmission(true);
+    try {
+      await api.post(`/assignments/grade/${submissionId}`, {
+        grade: gradeText,
+        feedback: feedbackText,
+      });
+      toast.success('Submission graded successfully!');
+      setGradingSubmissionId(null);
+      setGradeText('');
+      setFeedbackText('');
+      fetchAssignments();
+      fetchTimeline();
+      fetchStats();
+    } catch (err: any) {
+      toast.error(err.response?.data?.detail || 'Failed to grade submission.');
+    } finally {
+      setIsGradingSubmission(false);
+    }
+  };
+
+  // Ask Doubt (student)
+  const handleAskDoubt = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newDoubtContent.trim()) {
+      toast.error('Doubt content cannot be empty.');
+      return;
+    }
+    try {
+      await api.post('/doubts/', {
+        content: newDoubtContent,
+      });
+      toast.success('Doubt submitted successfully!');
+      setNewDoubtContent('');
+      fetchDoubts();
+      fetchTimeline();
+      fetchStats();
+    } catch (err: any) {
+      toast.error(err.response?.data?.detail || 'Failed to submit doubt.');
+    }
+  };
+
+  // Resolve Doubt (teacher)
+  const handleResolveDoubtSubmit = async (doubtId: number) => {
+    if (!doubtResponseText.trim()) {
+      toast.error('Response cannot be empty.');
+      return;
+    }
+    setIsResolvingDoubt(true);
+    try {
+      await api.post(`/doubts/resolve/${doubtId}`, {
+        response: doubtResponseText,
+      });
+      toast.success('Doubt resolved successfully!');
+      setResolvingDoubtId(null);
+      setDoubtResponseText('');
+      fetchDoubts();
+      fetchTimeline();
+      fetchStats();
+    } catch (err: any) {
+      toast.error(err.response?.data?.detail || 'Failed to resolve doubt.');
+    } finally {
+      setIsResolvingDoubt(false);
+    }
+  };
+
+  // Create Assignment (teacher)
+  const handleCreateAssignment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newAssignmentTitle.trim() || !newAssignmentDueDate) {
+      toast.error('Title and Due Date are required.');
+      return;
+    }
+    setIsCreatingAssignment(true);
+    try {
+      await api.post('/assignments/', {
+        title: newAssignmentTitle,
+        description: newAssignmentDesc,
+        due_date: new Date(newAssignmentDueDate).toISOString(),
+        class_id: newAssignmentClass,
+      });
+      toast.success('Assignment created successfully!');
+      setNewAssignmentTitle('');
+      setNewAssignmentDesc('');
+      setNewAssignmentDueDate('');
+      fetchAssignments();
+      fetchTimeline();
+      fetchStats();
+    } catch (err: any) {
+      toast.error(err.response?.data?.detail || 'Failed to create assignment.');
+    } finally {
+      setIsCreatingAssignment(false);
+    }
+  };
 
   // Load dashboard data
   useEffect(() => {
-    if (currentRole === 'teacher') {
-      const loadData = async () => {
+    const loadData = async () => {
+      if (!user) return;
+      
+      if (currentRole === 'teacher') {
         const classList = await attendanceService.getClasses();
         setClasses(classList);
         if (classList.length > 0) {
           setMarkingClassId(classList[0].id);
           setUploadClassId(classList[0].id);
+          setNewAssignmentClass(classList[0].id);
         }
         const studentList = await attendanceService.getStudents();
         setStudents(studentList);
@@ -142,16 +395,73 @@ function DashboardContent() {
           initialRecords[s.id] = s.status;
         });
         setAttendanceRecords(initialRecords);
-      };
-      loadData();
-    } else if (currentRole === 'student') {
-      const loadStudentData = async () => {
+      } else if (currentRole === 'student') {
         const summary = await attendanceService.getStudentSummary();
         setStudentSummary(summary);
-      };
-      loadStudentData();
+        await fetchStudentProfile();
+      }
+
+      await Promise.all([
+        fetchStats(),
+        fetchTimeline(),
+        fetchAssignments(),
+        fetchDoubts()
+      ]);
+    };
+
+    loadData();
+
+    // SSE connection
+    let eventSource: EventSource | null = null;
+    try {
+      const raw = localStorage.getItem('auth-storage');
+      const token = raw ? JSON.parse(raw)?.state?.token : null;
+      if (token) {
+        eventSource = new EventSource(`/api/dashboard/stream?token=${token}`);
+        
+        eventSource.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            console.log('SSE Event received:', data);
+            
+            if (data.event === 'assignment_created' || data.event === 'assignment_submitted' || data.event === 'assignment_graded') {
+              fetchAssignments();
+              fetchStats();
+              fetchTimeline();
+              toast.success(`Activity Update: ${data.title || 'Assignment updated'}!`);
+            } else if (data.event === 'doubt_created' || data.event === 'doubt_resolved') {
+              fetchDoubts();
+              fetchStats();
+              fetchTimeline();
+              toast.success(`Doubt Update: ${data.event === 'doubt_created' ? 'New doubt asked' : 'Doubt resolved'}!`);
+            } else if (data.event === 'attendance_marked') {
+              fetchStats();
+              fetchTimeline();
+              toast.success('Attendance updated!');
+            } else if (data.event === 'quiz_completed') {
+              fetchStats();
+              fetchTimeline();
+              toast.success(`${data.student_name} finished a quiz in ${data.subject}!`);
+            }
+          } catch (e) {
+            console.error('Failed to parse SSE data', e);
+          }
+        };
+
+        eventSource.onerror = (err) => {
+          console.warn('SSE connection closed or error:', err);
+        };
+      }
+    } catch (err) {
+      console.error('Error establishing SSE connection:', err);
     }
-  }, [currentRole]);
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+  }, [currentRole, user]);
 
   // Handle Attendance toggle
   const toggleAttendance = (studentId: string) => {
@@ -260,6 +570,30 @@ function DashboardContent() {
     },
   };
 
+  // Convert timeline activities to chart data points
+  const chartData = timeline
+    .filter(log => log.role === 'student' && log.user_id === user?.id)
+    .slice()
+    .reverse()
+    .map((log, index) => {
+      let score = 50;
+      if (log.action_type === 'quiz_attempt') {
+        score = log.metadata_json?.correct ? 95 : 45;
+      } else if (log.action_type === 'assignment_submitted') {
+        score = 85;
+      } else if (log.action_type === 'attendance_marked') {
+        score = log.metadata_json?.status === 'present' ? 98 : 35;
+      } else if (log.action_type === 'doubt_asked') {
+        score = 65;
+      }
+      return {
+        name: `Act ${index + 1}`,
+        score: score,
+        action: log.action_type
+      };
+    });
+  const finalChartData = chartData.length > 0 ? chartData.slice(-7) : progressData;
+
   // Filtered student list
   const filteredStudents = students.filter((s: StudentAttendance) => {
     const matchesSearch = s.name.toLowerCase().includes(studentSearch.toLowerCase()) || 
@@ -335,9 +669,29 @@ function DashboardContent() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.18 }}>
               {studentTab === 'overview' ? (
                 <>
-                  <div className="mb-8">
-                    <h1 className="text-3xl md:text-4xl font-bold text-white">Welcome Back, {user?.name || 'Student'}! 👋</h1>
-                    <p className="text-gray-600 dark:text-text-muted mt-2">Here's your learning progress today</p>
+                  <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h1 className="text-3xl md:text-4xl font-bold text-white">Welcome Back, {user?.name || 'Student'}! 👋</h1>
+                      <div className="flex flex-wrap items-center gap-2 mt-2">
+                        <p className="text-gray-600 dark:text-text-muted font-bold text-sm">Here's your learning progress today</p>
+                        {enrolledClasses.length > 0 && (
+                          <div className="flex gap-1.5 flex-wrap items-center">
+                            <span className="text-gray-400 font-mono text-xs">• Enrolled in:</span>
+                            {enrolledClasses.map(c => (
+                              <span key={c} className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                                {c}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setIsManageClassesOpen(true)}
+                      className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all shadow-lg hover:shadow-indigo-500/20 active:scale-95 flex items-center gap-2 border border-white/10"
+                    >
+                      <span>🏫</span> Manage Classes
+                    </button>
                   </div>
 
                   {/* Stats Cards */}
@@ -357,7 +711,7 @@ function DashboardContent() {
                       <Card title="Learning Streak" value={stats.learningStreak} icon="🔥" />
                     </motion.div>
                     <motion.div variants={itemVariants}>
-                      <Card title="Next Event" value={stats.nextEvent} icon="📅" />
+                      <Card title="Achievements" value={`${stats.achievementCount} Badges`} icon="🏆" />
                     </motion.div>
                   </motion.div>
 
@@ -365,7 +719,7 @@ function DashboardContent() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                     {/* Progress Chart */}
                     <motion.div
-                      className="bg-surface border border-border rounded-2xl shadow-lg p-6 backdrop-blur-sm relative overflow-hidden"
+                       className="bg-surface border border-border rounded-2xl shadow-lg p-6 backdrop-blur-sm relative overflow-hidden"
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.08, duration: 0.22 }}
@@ -374,7 +728,7 @@ function DashboardContent() {
                       <h2 className="text-xs font-bold mb-6 text-primary-light/60 uppercase tracking-wider font-mono">Weekly Progress</h2>
                       <div className="h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={progressData}>
+                          <LineChart data={finalChartData}>
                             <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" vertical={false} />
                             <XAxis dataKey="name" stroke="var(--border)" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
                             <YAxis stroke="var(--border)" tick={{ fill: 'var(--text-muted)', fontSize: 10 }} tickLine={false} axisLine={false} />
@@ -499,6 +853,208 @@ function DashboardContent() {
                       </div>
                     </motion.div>
                   </div>
+
+                  {/* Coursework & Assignments Section */}
+                  <motion.div
+                    className="bg-surface border border-border rounded-2xl shadow-lg p-6 mt-6 backdrop-blur-sm relative overflow-hidden"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.22, duration: 0.22 }}
+                  >
+                    <h2 className="text-xs font-bold mb-5 text-primary-light/60 uppercase tracking-wider font-mono">Assigned Tasks & Coursework</h2>
+                    <div className="space-y-4">
+                      {assignments.length === 0 ? (
+                        <p className="text-sm text-text-muted">No assignments assigned yet.</p>
+                      ) : (
+                        assignments.map((sub: any) => (
+                          <div key={sub.id} className="p-4 bg-surface-2 border border-border rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h3 className="font-bold text-white text-sm">{sub.assignment?.title || 'Assignment'}</h3>
+                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono uppercase ${
+                                  sub.status === 'graded' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                                  sub.status === 'submitted' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
+                                  'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                                }`}>
+                                  {sub.status}
+                                </span>
+                              </div>
+                              <p className="text-xs text-text-muted mt-1">{sub.assignment?.description}</p>
+                              <p className="text-[10px] text-primary-light/60 mt-1 font-mono">Due: {new Date(sub.assignment?.due_date).toLocaleString()}</p>
+                              {sub.grade && (
+                                <div className="mt-2 text-xs">
+                                  <span className="font-bold text-white">Grade:</span> <span className="text-green-400 font-mono font-bold bg-green-500/10 px-1.5 py-0.5 rounded">{sub.grade}</span>
+                                  {sub.feedback && <p className="text-text-muted mt-1 italic">"{sub.feedback}"</p>}
+                                </div>
+                              )}
+                            </div>
+
+                            {sub.status === 'assigned' && (
+                              <div className="flex-shrink-0">
+                                {submittingAssignmentId === sub.id ? (
+                                  <div className="space-y-2">
+                                    <textarea
+                                      rows={3}
+                                      placeholder="Type your submission content here..."
+                                      value={submissionContentText}
+                                      onChange={(e) => setSubmissionContentText(e.target.value)}
+                                      className="w-full md:w-80 bg-surface border border-border rounded-lg p-2 text-xs text-white outline-none focus:border-purple-500"
+                                    />
+                                    <div className="flex gap-2 justify-end">
+                                      <button
+                                        onClick={() => setSubmittingAssignmentId(null)}
+                                        className="px-3 py-1 bg-surface-2 border border-border rounded text-[10px] text-white hover:bg-gray-700"
+                                      >
+                                        Cancel
+                                      </button>
+                                      <button
+                                        onClick={() => handleSubmitAssignmentContent(sub.id)}
+                                        disabled={isSubmittingAssignment}
+                                        className="px-3 py-1 bg-indigo-600 rounded text-[10px] text-white font-bold hover:bg-indigo-700 disabled:bg-gray-500"
+                                      >
+                                        {isSubmittingAssignment ? 'Submitting...' : 'Submit'}
+                                      </button>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={() => {
+                                      setSubmittingAssignmentId(sub.id);
+                                      setSubmissionContentText('');
+                                    }}
+                                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-all shadow-md"
+                                  >
+                                    Submit Solution
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </motion.div>
+
+                  {/* Doubts and Questions */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                    <motion.div
+                      className="lg:col-span-1 bg-surface border border-border rounded-2xl shadow-lg p-6 backdrop-blur-sm relative overflow-hidden"
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.24, duration: 0.22 }}
+                    >
+                      <h2 className="text-xs font-bold mb-4 text-primary-light/60 uppercase tracking-wider font-mono">Ask a Doubt</h2>
+                      <form onSubmit={handleAskDoubt} className="space-y-4">
+                        <textarea
+                          rows={4}
+                          placeholder="What academic topic or question are you struggling with? Ask here..."
+                          value={newDoubtContent}
+                          onChange={(e) => setNewDoubtContent(e.target.value)}
+                          className="w-full bg-surface-2 border border-border rounded-xl p-3 text-sm text-white outline-none focus:border-indigo-500"
+                        />
+                        <button
+                          type="submit"
+                          className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md transition-colors"
+                        >
+                          Submit Question
+                        </button>
+                      </form>
+                    </motion.div>
+
+                    <motion.div
+                      className="lg:col-span-2 bg-surface border border-border rounded-2xl shadow-lg p-6 backdrop-blur-sm relative overflow-hidden"
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.26, duration: 0.22 }}
+                    >
+                      <h2 className="text-xs font-bold mb-4 text-primary-light/60 uppercase tracking-wider font-mono">Your Doubts History</h2>
+                      <div className="space-y-4 max-h-[300px] overflow-auto pr-2">
+                        {doubts.length === 0 ? (
+                          <p className="text-xs text-text-muted">No doubts asked yet.</p>
+                        ) : (
+                          doubts.map((doubt: any) => (
+                            <div key={doubt.id} className="p-3.5 bg-surface-2 border border-border rounded-xl">
+                              <div className="flex justify-between items-start">
+                                <p className="text-sm font-semibold text-white">Q: {doubt.content}</p>
+                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-mono uppercase ${
+                                  doubt.status === 'resolved' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                                }`}>
+                                  {doubt.status}
+                                </span>
+                              </div>
+                              <p className="text-[10px] text-text-muted mt-1 font-mono">Asked on: {new Date(doubt.created_at).toLocaleString()}</p>
+                              {doubt.response && (
+                                <div className="mt-3 p-3 bg-surface border-l-2 border-green-500 rounded-r-lg">
+                                  <p className="text-xs font-bold text-green-400">Teacher's Answer:</p>
+                                  <p className="text-xs text-white mt-1">{doubt.response}</p>
+                                </div>
+                              )}
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* Connection Agent Timeline Feed */}
+                  <motion.div
+                    className="bg-surface border border-border rounded-2xl shadow-lg p-6 mt-6 backdrop-blur-sm relative overflow-hidden"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.28, duration: 0.22 }}
+                  >
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-[40px] pointer-events-none" />
+                    <h2 className="text-xs font-bold mb-5 text-primary-light/60 uppercase tracking-wider font-mono">Shared Classroom Activity Timeline</h2>
+                    <div className="space-y-4 max-h-[300px] overflow-auto pr-2">
+                      {timeline.length === 0 ? (
+                        <p className="text-sm text-text-muted">No classroom activity logged yet.</p>
+                      ) : (
+                        timeline.map((log: any) => {
+                          let icon = '🔄';
+                          let text = '';
+                          if (log.action_type === 'assignment_created') {
+                            icon = '📝';
+                            text = `${log.user_name} created assignment: '${log.metadata_json?.assignment_title}'`;
+                          } else if (log.action_type === 'assignment_assigned') {
+                            icon = '📅';
+                            text = `New assignment assigned: '${log.metadata_json?.assignment_title}'`;
+                          } else if (log.action_type === 'assignment_submitted') {
+                            icon = '📤';
+                            text = `${log.user_name} submitted assignment: '${log.metadata_json?.assignment_title}'`;
+                          } else if (log.action_type === 'assignment_graded') {
+                            icon = '💯';
+                            text = `Assignment graded: '${log.metadata_json?.assignment_title}' with score '${log.metadata_json?.grade}'`;
+                          } else if (log.action_type === 'doubt_asked') {
+                            icon = '❓';
+                            text = `${log.user_name} asked a doubt: "${log.metadata_json?.content_preview}"`;
+                          } else if (log.action_type === 'doubt_resolved') {
+                            icon = '✅';
+                            text = `Doubt resolved by teacher: "${log.metadata_json?.question || 'Student doubt'}"`;
+                          } else if (log.action_type === 'attendance_marked') {
+                            icon = '📋';
+                            if (log.role === 'teacher') {
+                              text = `Teacher logged attendance for Class ${log.metadata_json?.class_id} (${log.metadata_json?.students_count} students)`;
+                            } else {
+                              text = `${log.user_name} was marked ${log.metadata_json?.status} in Class ${log.metadata_json?.class_id}`;
+                            }
+                          } else if (log.action_type === 'quiz_attempt') {
+                            icon = log.metadata_json?.correct ? '🔥' : '✏️';
+                            text = `${log.user_name} attempted a ${log.metadata_json?.subject} quiz question on ${log.metadata_json?.topic} (${log.metadata_json?.correct ? 'Correct' : 'Incorrect'})`;
+                          }
+                          
+                          return (
+                            <div key={log.id} className="flex items-start gap-3 text-xs bg-surface-2/40 border border-border/30 p-2.5 rounded-xl animate-fadeIn">
+                              <span className="text-lg">{icon}</span>
+                              <div className="flex-1">
+                                <p className="text-white font-semibold">{text}</p>
+                                <p className="text-[10px] text-text-muted mt-0.5 font-mono">{new Date(log.timestamp).toLocaleString()}</p>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </motion.div>
                 </>
               ) : (
                 <div className="space-y-6 animate-fadeIn">
@@ -593,6 +1149,99 @@ function DashboardContent() {
                   </div>
                 </div>
               )}
+              <AnimatePresence>
+                {isManageClassesOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center z-50 p-4"
+                  >
+                    <motion.div 
+                      initial={{ scale: 0.95, y: 15 }}
+                      animate={{ scale: 1, y: 0 }}
+                      exit={{ scale: 0.95, y: 15 }}
+                      className="w-full max-w-md bg-gradient-to-b from-[#1e293b]/90 to-[#0f172a]/95 border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden text-white"
+                    >
+                      {/* Decorative radial gradients */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-[40px] pointer-events-none" />
+                      <div className="absolute bottom-0 left-0 w-32 h-32 bg-pink-500/10 rounded-full blur-[40px] pointer-events-none" />
+
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h3 className="text-lg font-extrabold bg-gradient-to-r from-indigo-200 to-white bg-clip-text text-transparent">Manage Class Enrollments</h3>
+                          <p className="text-xs text-gray-400 mt-1">Select the classes you want to attend</p>
+                        </div>
+                        <button 
+                          onClick={() => setIsManageClassesOpen(false)}
+                          className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                        >
+                          ✕
+                        </button>
+                      </div>
+
+                      {/* Class Checkbox List */}
+                      <div className="space-y-3 mb-6">
+                        {[
+                          { id: 'CS-3A', name: 'CS-3A', subject: 'Data Structures', desc: 'Mon/Thu/Fri 9:00 AM' },
+                          { id: 'CS-3B', name: 'CS-3B', subject: 'Mathematics', desc: 'Tue/Thu 1:00 PM' },
+                          { id: 'CS-4A', name: 'CS-4A', subject: 'English Literature', desc: 'Tue/Fri 1:00 PM' },
+                        ].map((cls) => {
+                          const isChecked = enrolledClasses.includes(cls.id);
+                          return (
+                            <label 
+                              key={cls.id}
+                              className={`flex items-start gap-4 p-4 rounded-2xl border transition-all cursor-pointer select-none ${
+                                isChecked 
+                                  ? 'bg-indigo-500/10 border-indigo-500/40 hover:bg-indigo-500/15' 
+                                  : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'
+                              }`}
+                            >
+                              <input 
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={() => {
+                                  if (isChecked) {
+                                    setEnrolledClasses(enrolledClasses.filter(c => c !== cls.id));
+                                  } else {
+                                    setEnrolledClasses([...enrolledClasses, cls.id]);
+                                  }
+                                }}
+                                className="mt-1 w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-gray-600"
+                              />
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-bold text-sm text-white">{cls.name}</span>
+                                  <span className="text-[10px] font-mono text-indigo-400">{cls.subject}</span>
+                                </div>
+                                <p className="text-xs text-gray-400 mt-0.5">{cls.desc}</p>
+                              </div>
+                            </label>
+                          );
+                        })}
+                      </div>
+
+                      <div className="flex gap-3 justify-end">
+                        <button 
+                          onClick={() => {
+                            fetchStudentProfile();
+                            setIsManageClassesOpen(false);
+                          }}
+                          className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-semibold text-gray-300 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button 
+                          onClick={() => handleSaveClasses(enrolledClasses)}
+                          className="px-5 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white rounded-xl text-xs font-extrabold transition-all shadow-md shadow-indigo-500/15"
+                        >
+                          Save Changes
+                        </button>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           )}
 
@@ -611,8 +1260,16 @@ function DashboardContent() {
                   {/* Summary Widgets */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <Card title="Today's Classes" value={String(classes.length)} icon="🏫" />
-                    <Card title="Total Students Managed" value="122" icon="👥" />
-                    <Card title="Average Attendance Rate" value="77.3%" icon="📈" />
+                    <Card 
+                      title="Total Students Managed" 
+                      value={classes.length > 0 ? String(classes.reduce((sum, c) => sum + c.studentCount, 0)) : "0"} 
+                      icon="👥" 
+                    />
+                    <Card 
+                      title="Average Attendance Rate" 
+                      value={classes.length > 0 ? (classes.reduce((sum, c) => sum + c.attendanceRate, 0) / classes.length).toFixed(1) + "%" : "100.0%"} 
+                      icon="📈" 
+                    />
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -678,6 +1335,259 @@ function DashboardContent() {
                           <div className="text-xs text-gray-500">Search profiles & statistics</div>
                         </div>
                       </button>
+                    </div>
+                  </div>
+
+                  {/* Coursework & Assignment Creation Form */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                    <div className="lg:col-span-1 bg-surface border border-border rounded-2xl shadow-md p-6 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-[40px] pointer-events-none" />
+                      <h2 className="text-xs font-bold mb-4 text-primary-light/60 uppercase tracking-wider font-mono">Create New Coursework Assignment</h2>
+                      <form onSubmit={handleCreateAssignment} className="space-y-4">
+                        <div>
+                          <label className="block text-[10px] text-text-secondary uppercase font-mono mb-1">Title</label>
+                          <input
+                            type="text"
+                            placeholder="e.g., Physics Lab 1"
+                            value={newAssignmentTitle}
+                            onChange={(e) => setNewAssignmentTitle(e.target.value)}
+                            className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-purple-500"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] text-text-secondary uppercase font-mono mb-1">Description</label>
+                          <textarea
+                            rows={3}
+                            placeholder="Syllabus, references, or description..."
+                            value={newAssignmentDesc}
+                            onChange={(e) => setNewAssignmentDesc(e.target.value)}
+                            className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-purple-500"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-[10px] text-text-secondary uppercase font-mono mb-1">Class ID</label>
+                            <select
+                              value={newAssignmentClass}
+                              onChange={(e) => setNewAssignmentClass(e.target.value)}
+                              className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-purple-500 font-mono"
+                            >
+                              {classes.map((c: any) => (
+                                <option key={c.id} value={c.id}>{c.name}</option>
+                              ))}
+                              {classes.length === 0 && <option value="c1">CS-3A</option>}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-[10px] text-text-secondary uppercase font-mono mb-1">Due Date</label>
+                            <input
+                              type="datetime-local"
+                              value={newAssignmentDueDate}
+                              onChange={(e) => setNewAssignmentDueDate(e.target.value)}
+                              className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-purple-500 font-mono"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <button
+                          type="submit"
+                          disabled={isCreatingAssignment}
+                          className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold shadow-md transition-colors disabled:bg-gray-500"
+                        >
+                          {isCreatingAssignment ? 'Creating...' : 'Assign to Class'}
+                        </button>
+                      </form>
+                    </div>
+
+                    {/* Active Student Doubts Resolution Feed */}
+                    <div className="lg:col-span-2 bg-surface border border-border rounded-2xl shadow-md p-6 relative overflow-hidden">
+                      <h2 className="text-xs font-bold mb-4 text-primary-light/60 uppercase tracking-wider font-mono">Student Doubts Inbox</h2>
+                      <div className="space-y-4 max-h-[320px] overflow-auto pr-2">
+                        {doubts.filter(d => d.status === 'open').length === 0 ? (
+                          <p className="text-xs text-text-muted">No pending doubts in your inbox. Great job!</p>
+                        ) : (
+                          doubts.filter(d => d.status === 'open').map((doubt: any) => (
+                            <div key={doubt.id} className="p-3.5 bg-surface-2 border border-border rounded-xl">
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <p className="text-xs font-bold text-primary-light">{doubt.student?.name || 'Student'} asked:</p>
+                                  <p className="text-sm text-white font-semibold mt-1">"{doubt.content}"</p>
+                                </div>
+                                <span className="text-[9px] text-text-muted font-mono">{new Date(doubt.created_at).toLocaleString()}</span>
+                              </div>
+                              
+                              {resolvingDoubtId === doubt.id ? (
+                                <div className="mt-3 space-y-2">
+                                  <textarea
+                                    rows={3}
+                                    placeholder="Type your response to the student..."
+                                    value={doubtResponseText}
+                                    onChange={(e) => setDoubtResponseText(e.target.value)}
+                                    className="w-full bg-surface border border-border rounded-lg p-2.5 text-xs text-white outline-none focus:border-purple-500"
+                                  />
+                                  <div className="flex gap-2 justify-end">
+                                    <button
+                                      onClick={() => setResolvingDoubtId(null)}
+                                      className="px-3 py-1 bg-surface-2 border border-border rounded text-[10px] text-white hover:bg-gray-700"
+                                    >
+                                      Cancel
+                                    </button>
+                                    <button
+                                      onClick={() => handleResolveDoubtSubmit(doubt.id)}
+                                      disabled={isResolvingDoubt}
+                                      className="px-3 py-1 bg-purple-600 rounded text-[10px] text-white font-bold hover:bg-purple-700 disabled:bg-gray-500"
+                                    >
+                                      {isResolvingDoubt ? 'Resolving...' : 'Send Response'}
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="mt-3 flex justify-end">
+                                  <button
+                                    onClick={() => {
+                                      setResolvingDoubtId(doubt.id);
+                                      setDoubtResponseText('');
+                                    }}
+                                    className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition-all shadow-md"
+                                  >
+                                    Answer Doubt
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Coursework Submissions Grading Queue */}
+                  <div className="bg-surface border border-border rounded-2xl shadow-md p-6 mt-6 relative overflow-hidden">
+                    <h2 className="text-xs font-bold mb-4 text-primary-light/60 uppercase tracking-wider font-mono">Coursework Submission & Grading Queue</h2>
+                    <div className="space-y-4 max-h-[300px] overflow-auto pr-2">
+                      {submissions.filter(s => s.status === 'submitted').length === 0 ? (
+                        <p className="text-xs text-text-muted">No pending submissions to grade.</p>
+                      ) : (
+                        submissions.filter(s => s.status === 'submitted').map((sub: any) => (
+                          <div key={sub.id} className="p-4 bg-surface-2 border border-border rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                              <p className="text-xs font-bold text-primary-light">
+                                {sub.student?.name} &bull; <span className="font-mono text-[10px] text-text-muted">Class: {sub.assignment?.class_id}</span>
+                              </p>
+                              <h3 className="font-bold text-white text-sm mt-1">{sub.assignment?.title}</h3>
+                              <p className="text-xs text-white bg-surface p-2.5 rounded border border-border mt-2 whitespace-pre-wrap">
+                                {sub.submission_content}
+                              </p>
+                              <p className="text-[9px] text-text-muted font-mono mt-1">Submitted on: {new Date(sub.submitted_at).toLocaleString()}</p>
+                            </div>
+
+                            <div className="flex-shrink-0">
+                              {gradingSubmissionId === sub.id ? (
+                                <div className="space-y-2">
+                                  <div className="flex gap-2">
+                                    <input
+                                      type="text"
+                                      placeholder="Grade (e.g., A+, 95)"
+                                      value={gradeText}
+                                      onChange={(e) => setGradeText(e.target.value)}
+                                      className="bg-surface border border-border rounded-lg p-1.5 text-xs text-white outline-none w-32 focus:border-purple-500"
+                                    />
+                                    <input
+                                      type="text"
+                                      placeholder="Feedback comments..."
+                                      value={feedbackText}
+                                      onChange={(e) => setFeedbackText(e.target.value)}
+                                      className="bg-surface border border-border rounded-lg p-1.5 text-xs text-white outline-none w-48 focus:border-purple-500"
+                                    />
+                                  </div>
+                                  <div className="flex gap-2 justify-end">
+                                    <button
+                                      onClick={() => setGradingSubmissionId(null)}
+                                      className="px-3 py-1 bg-surface-2 border border-border rounded text-[10px] text-white hover:bg-gray-700"
+                                    >
+                                      Cancel
+                                    </button>
+                                    <button
+                                      onClick={() => handleGradeSubmissionSubmit(sub.id)}
+                                      disabled={isGradingSubmission}
+                                      className="px-3 py-1 bg-purple-600 rounded text-[10px] text-white font-bold hover:bg-purple-700 disabled:bg-gray-500"
+                                    >
+                                      {isGradingSubmission ? 'Grading...' : 'Submit Grade'}
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => {
+                                    setGradingSubmissionId(sub.id);
+                                    setGradeText('');
+                                    setFeedbackText('');
+                                  }}
+                                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold transition-all shadow-md"
+                                >
+                                  Grade Submission
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Connection Agent Timeline Feed (Teacher view) */}
+                  <div className="bg-surface border border-border rounded-2xl shadow-md p-6 mt-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-[40px] pointer-events-none" />
+                    <h2 className="text-xs font-bold mb-5 text-primary-light/60 uppercase tracking-wider font-mono">Shared Classroom Activity Timeline</h2>
+                    <div className="space-y-4 max-h-[300px] overflow-auto pr-2 font-mono">
+                      {timeline.length === 0 ? (
+                        <p className="text-sm text-text-muted">No classroom activity logged yet.</p>
+                      ) : (
+                        timeline.map((log: any) => {
+                          let icon = '🔄';
+                          let text = '';
+                          if (log.action_type === 'assignment_created') {
+                            icon = '📝';
+                            text = `${log.user_name} created assignment: '${log.metadata_json?.assignment_title}'`;
+                          } else if (log.action_type === 'assignment_assigned') {
+                            icon = '📅';
+                            text = `New assignment assigned: '${log.metadata_json?.assignment_title}'`;
+                          } else if (log.action_type === 'assignment_submitted') {
+                            icon = '📤';
+                            text = `${log.user_name} submitted assignment: '${log.metadata_json?.assignment_title}'`;
+                          } else if (log.action_type === 'assignment_graded') {
+                            icon = '💯';
+                            text = `Assignment graded: '${log.metadata_json?.assignment_title}' with score '${log.metadata_json?.grade}'`;
+                          } else if (log.action_type === 'doubt_asked') {
+                            icon = '❓';
+                            text = `${log.user_name} asked a doubt: "${log.metadata_json?.content_preview}"`;
+                          } else if (log.action_type === 'doubt_resolved') {
+                            icon = '✅';
+                            text = `Doubt resolved by teacher: "${log.metadata_json?.question || 'Student doubt'}"`;
+                          } else if (log.action_type === 'attendance_marked') {
+                            icon = '📋';
+                            if (log.role === 'teacher') {
+                              text = `Teacher logged attendance for Class ${log.metadata_json?.class_id} (${log.metadata_json?.students_count} students)`;
+                            } else {
+                              text = `${log.user_name} was marked ${log.metadata_json?.status} in Class ${log.metadata_json?.class_id}`;
+                            }
+                          } else if (log.action_type === 'quiz_attempt') {
+                            icon = log.metadata_json?.correct ? '🔥' : '✏️';
+                            text = `${log.user_name} attempted a ${log.metadata_json?.subject} quiz question on ${log.metadata_json?.topic} (${log.metadata_json?.correct ? 'Correct' : 'Incorrect'})`;
+                          }
+                          
+                          return (
+                            <div key={log.id} className="flex items-start gap-3 text-xs bg-surface-2/40 border border-border/30 p-2.5 rounded-xl animate-fadeIn">
+                              <span className="text-lg">{icon}</span>
+                              <div className="flex-1 font-sans">
+                                <p className="text-white font-semibold">{text}</p>
+                                <p className="text-[10px] text-text-muted mt-0.5 font-mono">{new Date(log.timestamp).toLocaleString()}</p>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
                     </div>
                   </div>
                 </motion.div>

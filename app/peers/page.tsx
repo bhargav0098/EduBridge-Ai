@@ -74,7 +74,9 @@ export default function PeerMatchingPage() {
     toast.success('Creating study group...');
     // Store selected matched students to pass to group page
     const selectedStudents = MATCHED_STUDENTS.filter(s => selectedPeers.includes(s.id));
-    localStorage.setItem('temp_group_members', JSON.stringify(selectedStudents));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('temp_group_members', JSON.stringify(selectedStudents));
+    }
     
     setTimeout(() => {
       router.push('/peers/group');

@@ -198,7 +198,7 @@ export default function NotesPage() {
     }
   };
 
-  const handleUploadSubmit = (e: React.FormEvent) => {
+  const handleUploadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle.trim()) {
       toast.error('Please enter a note title.');
@@ -214,7 +214,7 @@ export default function NotesPage() {
     const type: 'PDF' | 'TXT' = fileExt === 'TXT' ? 'TXT' : 'PDF';
 
     const newNote: Note = {
-      id: String(notes.length + 1),
+      id: String(Date.now()),
       title: newTitle,
       subject: newSubject,
       uploader: {
@@ -228,6 +228,22 @@ export default function NotesPage() {
       uploadedAt: new Date().toISOString().split('T')[0],
       description: newDescription || 'No description provided.'
     };
+
+    // Persist to backend
+    try {
+      await fetch('/api/classes/material', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: newTitle,
+          subject: newSubject,
+          fileType: type,
+          content: newDescription || '',
+        }),
+      });
+    } catch {
+      // still add to local state even if API fails
+    }
 
     setNotes([newNote, ...notes]);
     toast.success('Notes uploaded successfully!');

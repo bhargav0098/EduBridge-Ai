@@ -30,8 +30,11 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files — keep examples, ignore real secrets
+.env
+.env.local
+.env.*.local
+backend/.env
 
 # vercel
 .vercel
@@ -45,18 +48,27 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.Python
+backend/__pycache__/
+backend/**/__pycache__/
 .venv/
 venv/
+env/
 .pytest_cache/
-.coverage
-htmlcov/
-.mypy_cache/
 
-# Databases & SQLite files
+# IDEs
+.vscode/
+.idea/
+
+# Database
 *.db
 *.sqlite
-*.sqlite3
 
-# Uploads & temporary runtime files
-/temp/
-/uploads/
+# Uploads
+uploads/
+
+# Temp files
+temp/
+
+# faiss index (generated, not source)
+# faiss_index/  # keep commented — project includes pre-built index

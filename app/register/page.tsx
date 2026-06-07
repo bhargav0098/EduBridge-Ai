@@ -16,6 +16,7 @@ export default function RegisterPage() {
       role: '',
       password: '',
       confirmPassword: '',
+      remember: false,
     }
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -34,13 +35,18 @@ export default function RegisterPage() {
           password: data.password,
           name: data.name,
           role: data.role,
+          remember: !!data.remember,
         }),
       });
 
       if (response.ok) {
         const resData = await response.json();
         const { useAuthStore } = await import('@/store/authStore');
-        useAuthStore.setState({ user: resData.user, token: resData.access_token || resData.token || null });
+        useAuthStore.setState({ 
+          user: resData.user, 
+          token: resData.access_token || resData.token || null,
+          remember: !!data.remember,
+        });
         router.push('/dashboard');
       } else {
         const errData = await response.json().catch(() => ({}));
@@ -141,6 +147,11 @@ export default function RegisterPage() {
               })}
               error={errors.confirmPassword?.message as string}
             />
+
+            <label className="flex items-center gap-2 text-sm text-text-secondary/60">
+              <input type="checkbox" {...register('remember')} className="w-4 h-4 rounded" />
+              <span>Remember me</span>
+            </label>
 
             <Button type="submit" isLoading={isLoading} className="w-full">
               Create Account
