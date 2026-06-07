@@ -12,7 +12,7 @@ export async function POST(request: Request) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
-          signal: AbortSignal.timeout(3000),
+          signal: AbortSignal.timeout(20000),
         });
         if (response.ok) return NextResponse.json(await response.json());
       } catch { /* backend unreachable */ }
