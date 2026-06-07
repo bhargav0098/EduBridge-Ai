@@ -2,7 +2,7 @@ import requests
 import json
 import uuid
 
-BASE_URL = "http://127.0.0.1:8000/api/auth"
+BASE_URL = "http://localhost:8000/api/auth"
 
 def test_auth_flow():
     # Scenario A: Register new student

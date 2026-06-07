@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BACKEND = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
+const BACKEND = process.env.BACKEND_URL || 'http://localhost:8000';
 
 type Context = { params: Promise<{ path?: string[] }> };
 
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest, { params }: Context) {
     return NextResponse.json(await res.json().catch(() => ({})), { status: res.status });
   } catch (err) {
     console.error('Assignments GET proxy error:', err);
-    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+    return NextResponse.json({ error: `Backend unreachable: ${(err as any).message}` }, { status: 502 });
   }
 }
 
@@ -40,6 +40,6 @@ export async function POST(request: NextRequest, { params }: Context) {
     return NextResponse.json(await res.json().catch(() => ({})), { status: res.status });
   } catch (err) {
     console.error('Assignments POST proxy error:', err);
-    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+    return NextResponse.json({ error: `Backend unreachable: ${(err as any).message}` }, { status: 502 });
   }
 }
