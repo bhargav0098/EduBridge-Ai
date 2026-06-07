@@ -75,6 +75,11 @@ def get_gemini_response_stream(prompt: str, system_instruction: str):
     """
     Call Gemini API and yield chunks.
     """
+    if settings.GEMINI_API_KEY == 'AIzaSyDMpL_HQlMJhe_St2NXa-KqKbQqkSSwYSo':
+        print("[Backend Chat] Mocking response for leaked key.")
+        yield f"(Mock AI Response due to invalid API key): Hello! I received your prompt starting with: '{prompt[:30]}...'"
+        return
+
     try:
         model = genai.GenerativeModel(
             model_name="gemini-3.5-flash",

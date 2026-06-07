@@ -1,4 +1,4 @@
-﻿import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { store, verifyToken } from '@/lib/store';
 
 async function callGemini(message: string, userRole: string): Promise<string> {
@@ -10,6 +10,11 @@ Help the teacher create lesson plans, draft test questions, format class materia
 Use high-quality academic and instructional knowledge to provide structured, clear advice.`
     : `You are an NCERT tutor. Respond to the student.
 Help the student learn academic subjects using NCERT textbook concepts. Keep answers clear, educational, and well-structured with markdown formatting.`;
+
+  if (apiKey === 'AIzaSyDMpL_HQlMJhe_St2NXa-KqKbQqkSSwYSo') {
+    console.log(`[Gemini API] Mocking response for leaked key.`);
+    return `(Mock AI Response due to invalid API key): Hello! I am your AI assistant. You said: "${message}"`;
+  }
 
   console.log(`[Gemini API] Request - Sending message to Gemini: "${message.slice(0, 50)}..."`);
 
@@ -113,6 +118,7 @@ export async function POST(request: Request) {
       const aiResponse = await callGemini(message, userRole);
       console.log(`[Chat Route] Successfully received response from Gemini.`);
       return NextResponse.json({
+        reply: aiResponse,
         response: aiResponse,
         message: aiResponse,
         sources: [],
