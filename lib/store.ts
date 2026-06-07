@@ -78,11 +78,7 @@ export function hashPassword(password: string): string {
 export function verifyPassword(password: string, storedHash: string): boolean {
   try {
     const parts = storedHash.split('$');
-    if (parts.length !== 6 || parts[0] !== 'scrypt') {
-      // Legacy SHA-256 fallback
-      const legacyHash = crypto.createHash('sha256').update(password + 'edubridge_salt_2025').digest('hex');
-      return legacyHash === storedHash;
-    }
+    if (parts.length !== 6 || parts[0] !== 'scrypt') return false;
 
     const N = Number(parts[1]);
     const r = Number(parts[2]);
