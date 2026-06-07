@@ -51,7 +51,8 @@ def verify_token(
     email = payload.get("sub")
     if not email:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload")
-    user = db.query(User).filter(User.email == email).first()
+    from sqlalchemy import func
+    user = db.query(User).filter(func.lower(User.email) == email.strip().lower()).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
     return user
@@ -79,7 +80,8 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
     normalized_email = user_data.email.strip().lower()
     logger.info(f"REGISTER ATTEMPT: {normalized_email}")
 
-    existing_user = db.query(User).filter(User.email == normalized_email).first()
+    from sqlalchemy import func
+    existing_user = db.query(User).filter(func.lower(User.email) == normalized_email).first()
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
 
@@ -135,7 +137,8 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
     normalized_email = credentials.email.strip().lower()
     logger.info(f"LOGIN ATTEMPT: {normalized_email}")
 
-    user = db.query(User).filter(User.email == normalized_email).first()
+    from sqlalchemy import func
+    user = db.query(User).filter(func.lower(User.email) == normalized_email).first()
 
     # Use constant-time comparison to avoid user-enumeration timing attacks
     # Always run verify even on missing user (with a dummy hash)

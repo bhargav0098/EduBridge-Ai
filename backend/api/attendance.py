@@ -25,23 +25,6 @@ def get_student_summary_route(db: Session = Depends(get_db), current_user: User 
 async def mark_attendance(data: AttendanceSessionCreate, db: Session = Depends(get_db)):
     return await AttendanceService.mark_attendance(db, data)
 
-@router.get("/student/{id}", response_model=List[AttendanceRecordSchema])
-def get_student_attendance(id: str, db: Session = Depends(get_db)):
-    return AttendanceService.get_student_attendance(db, id)
-
-@router.get("/student/{id}/summary", response_model=AttendanceSummary)
-def get_student_summary(id: str, db: Session = Depends(get_db)):
-    return AttendanceService.get_student_summary(db, id)
-
-@router.get("/class/{class_id}", response_model=List[AttendanceSessionSchema])
-def get_class_attendance(class_id: str, db: Session = Depends(get_db)):
-    return AttendanceService.get_class_attendance(db, class_id)
-
-@router.get("/alerts")
-def get_alerts(db: Session = Depends(get_db)):
-    return AttendanceService.check_low_attendance(db)
-
-
 @router.get("/student/profile")
 def get_student_profile(db: Session = Depends(get_db), current_user: User = Depends(verify_token)):
     from ..models.models import StudentProfile
@@ -58,6 +41,23 @@ def get_student_profile(db: Session = Depends(get_db), current_user: User = Depe
         db.commit()
         db.refresh(profile)
     return {"class_name": profile.class_name}
+
+@router.get("/student/{id}", response_model=List[AttendanceRecordSchema])
+def get_student_attendance(id: str, db: Session = Depends(get_db)):
+    return AttendanceService.get_student_attendance(db, id)
+
+@router.get("/student/{id}/summary", response_model=AttendanceSummary)
+def get_student_summary(id: str, db: Session = Depends(get_db)):
+    return AttendanceService.get_student_summary(db, id)
+
+@router.get("/class/{class_id}", response_model=List[AttendanceSessionSchema])
+def get_class_attendance(class_id: str, db: Session = Depends(get_db)):
+    return AttendanceService.get_class_attendance(db, class_id)
+
+@router.get("/alerts")
+def get_alerts(db: Session = Depends(get_db)):
+    return AttendanceService.check_low_attendance(db)
+
 
 
 @router.post("/student/profile")
