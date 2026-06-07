@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduBridge AI — Login & Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--p:#6C63FF;--pl:#a89dff;--pd:#4f47cc;--pg:rgba(108,99,255,.25);
+--a:#F59E0B;--s:#1DB954;--e:#EF4444;
+--bg:#080814;--bg2:#0d0b1e;--sf:#111026;--sf2:#181632;--sf3:#1e1a3e;
+--br:rgba(108,99,255,.15);--brs:rgba(108,99,255,.4);
+--t1:#f1f0ff;--t2:#a89dff;--tm:#94a3b8;
+--fh:'Sora',sans-serif;--fb:'Inter',sans-serif;
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);min-height:100vh;display:flex;flex-direction:column}
+.wf-bar{background:rgba(108,99,255,.1);border-bottom:1px dashed rgba(108,99,255,.4);padding:8px 24px;font-family:monospace;font-size:.75rem;color:var(--pl);display:flex;justify-content:space-between;flex-shrink:0}
+.screens{display:grid;grid-template-columns:1fr 1fr;flex:1;gap:0}
+.screen{display:flex;align-items:center;justify-content:center;padding:48px 32px;position:relative;min-height:100vh}
+.screen:first-child{border-right:2px dashed rgba(108,99,255,.2)}
+.screen-label{position:absolute;top:16px;left:50%;transform:translateX(-50%);font-family:monospace;font-size:.7rem;color:var(--pl);background:rgba(108,99,255,.1);border:1px dashed var(--br);border-radius:999px;padding:4px 12px;white-space:nowrap}
+
+/* BG DECORATION */
+.bg-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+
+/* AUTH CARD */
+.auth-card{background:var(--sf);border:1px solid var(--br);border-radius:20px;padding:40px;width:100%;max-width:420px;position:relative;z-index:1;box-shadow:0 8px 48px rgba(0,0,0,.6)}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;justify-content:center}
+.auth-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--p),var(--pd));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.auth-logo-text{font-family:var(--fh);font-size:1.125rem;font-weight:700}
+.auth-title{font-family:var(--fh);font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:4px}
+.auth-sub{font-size:.875rem;color:var(--tm);text-align:center;margin-bottom:28px}
+
+/* FORM */
+.form-group{margin-bottom:16px}
+label{display:block;font-size:.8125rem;font-weight:500;color:var(--t2);margin-bottom:6px;font-family:monospace}
+.input{width:100%;background:var(--sf2);border:1.5px solid var(--br);border-radius:9px;padding:11px 14px;color:var(--t1);font-family:var(--fb);font-size:.9375rem;outline:none;transition:.2s}
+.input:focus{border-color:var(--p);box-shadow:0 0 0 3px var(--pg)}
+.input::placeholder{color:var(--tm)}
+.input-error{border-color:var(--e)!important}
+.input-success{border-color:var(--s)!important}
+.field-hint{font-size:.75rem;color:var(--tm);margin-top:4px}
+.field-error{font-size:.75rem;color:var(--e);margin-top:4px}
+.field-success{font-size:.75rem;color:var(--s);margin-top:4px}
+
+/* PASSWORD STRENGTH */
+.pwd-strength{display:flex;gap:4px;margin-top:8px}
+.pwd-bar{height:3px;flex:1;border-radius:2px;background:var(--sf3);transition:.3s}
+.pwd-bar.weak{background:var(--e)}
+.pwd-bar.medium{background:var(--a)}
+.pwd-bar.strong{background:var(--s)}
+.pwd-label{font-size:.7rem;color:var(--tm);margin-top:4px;text-align:right}
+
+/* ROLE TOGGLE */
+.role-toggle{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px}
+.role-btn{background:var(--sf2);border:1.5px solid var(--br);border-radius:8px;padding:10px 8px;text-align:center;cursor:pointer;transition:.2s;font-size:.8125rem;font-weight:500}
+.role-btn.active{background:rgba(108,99,255,.15);border-color:var(--p);color:var(--pl)}
+.role-icon{display:block;font-size:18px;margin-bottom:4px}
+
+/* OAUTH */
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--tm);font-size:.8125rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--br)}
+.oauth-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--sf2);border:1.5px solid var(--br);border-radius:9px;padding:10px;cursor:pointer;font-size:.9rem;color:var(--t1);font-family:var(--fb);transition:.2s;margin-bottom:10px}
+.oauth-btn:hover{border-color:var(--brs);background:var(--sf3)}
+
+/* BUTTON */
+.btn-auth{width:100%;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;border:none;border-radius:9px;padding:13px;font-size:.9375rem;font-weight:600;font-family:var(--fh);cursor:pointer;transition:.2s;box-shadow:0 4px 20px var(--pg);margin-bottom:16px}
+.btn-auth:hover{filter:brightness(1.1)}
+
+.auth-switch{text-align:center;font-size:.8125rem;color:var(--tm)}
+.auth-switch a{color:var(--pl);cursor:pointer;font-weight:500}
+
+/* CHECKBOX */
+.checkbox-row{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.checkbox-box{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--br);background:var(--sf2);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.checkbox-box.checked{background:var(--p);border-color:var(--p)}
+.checkbox-label{font-size:.8125rem;color:var(--tm)}
+
+/* FORGOT */
+.forgot-link{float:right;font-size:.8rem;color:var(--pl);cursor:pointer;margin-top:-2px}
+
+/* ANNOTATIONS */
+.ann{position:absolute;font-family:monospace;font-size:.65rem;color:var(--a);background:rgba(245,158,11,.1);border:1px dashed rgba(245,158,11,.4);border-radius:4px;padding:2px 6px;white-space:nowrap;z-index:10}
+</style>
+</head>
+<body>
+
+<div class="wf-bar">
+  <span>📐 WIREFRAME · Screen 02 — Login / Screen 03 — Register</span>
+  <span>EduBridge AI · Auth Flows</span>
+</div>
+
+<div class="screens">
+  <!-- LOGIN -->
+  <div class="screen" style="background:radial-gradient(ellipse at 30% 20%,rgba(108,99,255,.08),transparent 60%)">
+    <span class="screen-label">02 · LOGIN</span>
+    <div class="bg-orb" style="width:300px;height:300px;background:rgba(108,99,255,.06);top:-60px;left:-60px"></div>
+
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-logo-icon">🎓</div>
+        <span class="auth-logo-text">EduBridge AI</span>
+      </div>
+      <div class="auth-title">Welcome back</div>
+      <div class="auth-sub">Sign in to continue your learning journey</div>
+
+      <div class="oauth-btn">
+        <span>G</span> Continue with Google
+      </div>
+
+      <div class="divider">or with email</div>
+
+      <div class="form-group">
+        <label>EMAIL ADDRESS</label>
+        <input class="input" type="email" placeholder="you@example.com" value="student@edubridge.ai">
+        <div class="field-hint">Enter your registered email</div>
+      </div>
+
+      <div class="form-group">
+        <label>PASSWORD <span class="forgot-link">Forgot password?</span></label>
+        <input class="input" type="password" placeholder="••••••••" value="••••••••">
+      </div>
+
+      <div class="checkbox-row">
+        <div class="checkbox-box checked">✓</div>
+        <span class="checkbox-label">Keep me signed in for 30 days</span>
+      </div>
+
+      <button class="btn-auth">Sign In →</button>
+
+      <div class="auth-switch">Don't have an account? <a>Sign up free</a></div>
+
+      <!-- Annotations -->
+      <div class="ann" style="bottom:-28px;left:0">input:focus → border var(--p) + glow</div>
+    </div>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="screen" style="background:radial-gradient(ellipse at 70% 20%,rgba(245,158,11,.06),transparent 60%)">
+    <span class="screen-label">03 · REGISTER</span>
+    <div class="bg-orb" style="width:280px;height:280px;background:rgba(245,158,11,.04);top:-40px;right:-60px"></div>
+
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-logo-icon">🎓</div>
+        <span class="auth-logo-text">EduBridge AI</span>
+      </div>
+      <div class="auth-title">Create account</div>
+      <div class="auth-sub">Join 10,000+ students learning smarter</div>
+
+      <!-- Role Selector -->
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-family:monospace;font-size:.8rem;color:var(--t2);margin-bottom:8px">SELECT YOUR ROLE</label>
+        <div class="role-toggle">
+          <div class="role-btn active"><span class="role-icon">🎓</span>Student</div>
+          <div class="role-btn"><span class="role-icon">📖</span>Teacher</div>
+          <div class="role-btn"><span class="role-icon">🛡️</span>Admin</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group" style="margin-bottom:0">
+          <label>FIRST NAME</label>
+          <input class="input" type="text" placeholder="Arya" value="Arya">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label>LAST NAME</label>
+          <input class="input input-success" type="text" placeholder="Sharma" value="Sharma">
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top:12px">
+        <label>EMAIL ADDRESS</label>
+        <input class="input input-error" type="email" placeholder="you@example.com" value="arya@badformat">
+        <div class="field-error">⚠ Enter a valid email address</div>
+      </div>
+
+      <div class="form-group">
+        <label>PASSWORD</label>
+        <input class="input" type="password" placeholder="Min. 8 characters" value="••••••••••">
+        <div class="pwd-strength">
+          <div class="pwd-bar strong"></div>
+          <div class="pwd-bar strong"></div>
+          <div class="pwd-bar strong"></div>
+          <div class="pwd-bar"></div>
+        </div>
+        <div class="pwd-label">Strength: Strong</div>
+      </div>
+
+      <div class="checkbox-row">
+        <div class="checkbox-box checked">✓</div>
+        <span class="checkbox-label">I agree to the <a style="color:var(--pl);cursor:pointer">Terms of Service</a> and <a style="color:var(--pl);cursor:pointer">Privacy Policy</a></span>
+      </div>
+
+      <button class="btn-auth">Create Account →</button>
+
+      <div class="auth-switch">Already have an account? <a>Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPONENT NOTES -->
+<div style="background:var(--sf);border-top:1px solid var(--br);padding:20px 32px;display:flex;gap:32px;flex-wrap:wrap;font-family:monospace;font-size:.75rem;color:var(--tm)">
+  <span><span style="color:var(--p)">■</span> input:default — border rgba(108,99,255,.15)</span>
+  <span><span style="color:var(--p)">■</span> input:focus — border var(--p) + 3px glow</span>
+  <span><span style="color:var(--e)">■</span> input:error — border var(--e)</span>
+  <span><span style="color:var(--s)">■</span> input:success — border var(--s)</span>
+  <span><span style="color:var(--a)">■</span> btn-primary — gradient p→pd + shadow</span>
+  <span><span style="color:var(--tm)">■</span> Role toggle — 3 states: Student/Teacher/Admin</span>
+</div>
+
+</body>
+</html>

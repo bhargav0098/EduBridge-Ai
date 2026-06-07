@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduBridge AI — Landing Page</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--p:#6C63FF;--pl:#a89dff;--pd:#4f47cc;--pg:rgba(108,99,255,.25);
+--a:#F59E0B;--s:#1DB954;--e:#EF4444;
+--bg:#080814;--bg2:#0d0b1e;--sf:#111026;--sf2:#181632;--sf3:#1e1a3e;
+--br:rgba(108,99,255,.15);--brs:rgba(108,99,255,.35);
+--t1:#f1f0ff;--t2:#a89dff;--tm:#94a3b8;
+--fh:'Sora',sans-serif;--fb:'Inter',sans-serif;
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(8,8,20,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--br);height:64px;display:flex;align-items:center}
+.nav-inner{max-width:1280px;width:100%;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--fh);font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:8px;color:var(--t1)}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--p),var(--pd));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-links{display:flex;align-items:center;gap:8px}
+.btn{font-family:var(--fb);font-size:.875rem;font-weight:500;padding:8px 18px;border-radius:8px;cursor:pointer;border:none;transition:.2s}
+.btn-ghost{background:transparent;color:var(--tm);border:1px solid var(--br)}
+.btn-ghost:hover{border-color:var(--p);color:var(--t1)}
+.btn-primary{background:var(--p);color:#fff;box-shadow:0 0 20px var(--pg)}
+.btn-primary:hover{background:var(--pd)}
+.btn-outline{background:transparent;color:var(--p);border:1.5px solid var(--p)}
+
+/* HERO */
+.hero{max-width:1280px;margin:0 auto;padding:96px 32px 64px;text-align:center;position:relative}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(108,99,255,.12);border:1px solid var(--br);border-radius:999px;padding:6px 14px;font-size:.75rem;color:var(--pl);font-family:'JetBrains Mono',monospace;margin-bottom:28px}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--s);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+h1{font-family:var(--fh);font-size:clamp(2.5rem,6vw,4rem);font-weight:800;line-height:1.1;margin-bottom:20px}
+.grad{background:linear-gradient(135deg,var(--p),var(--pl),var(--a));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:1.125rem;color:var(--tm);max-width:580px;margin:0 auto 36px;line-height:1.7}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:56px}
+.btn-lg{padding:13px 28px;font-size:1rem;border-radius:10px}
+
+/* HERO MOCKUP */
+.hero-mockup{background:var(--sf);border:1px solid var(--br);border-radius:20px;padding:24px;max-width:900px;margin:0 auto;box-shadow:0 8px 48px rgba(0,0,0,.6),0 0 60px rgba(108,99,255,.12)}
+.mockup-bar{display:flex;gap:6px;margin-bottom:20px}
+.dot{width:10px;height:10px;border-radius:50%}
+.mockup-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.mockup-card{background:var(--sf2);border:1px solid var(--br);border-radius:10px;padding:16px}
+.mc-icon{width:32px;height:32px;border-radius:8px;margin-bottom:10px}
+.mc-title{height:8px;background:var(--sf3);border-radius:4px;width:70%;margin-bottom:8px}
+.mc-sub{height:6px;background:var(--sf3);border-radius:3px;width:50%}
+.mc-num{font-family:var(--fh);font-size:1.5rem;font-weight:700;margin-bottom:4px}
+.mc-label{font-size:.75rem;color:var(--tm)}
+.mc-bar{height:4px;background:var(--sf3);border-radius:2px;margin-top:12px;overflow:hidden}
+.mc-fill{height:100%;border-radius:2px}
+
+/* FEATURES */
+.features{padding:80px 32px;max-width:1280px;margin:0 auto}
+.section-label{font-family:monospace;font-size:.75rem;color:var(--pl);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.section-title{font-family:var(--fh);font-size:2.25rem;font-weight:700;margin-bottom:48px;text-align:center}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.feat-card{background:var(--sf);border:1px solid var(--br);border-radius:14px;padding:24px;transition:.2s}
+.feat-card:hover{border-color:var(--brs);box-shadow:0 0 24px var(--pg)}
+.feat-icon-wrap{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:20px}
+.feat-name{font-family:var(--fh);font-size:1.0625rem;font-weight:600;margin-bottom:8px}
+.feat-desc{font-size:.875rem;color:var(--tm);line-height:1.6}
+
+/* STATS */
+.stats{background:var(--sf);border-top:1px solid var(--br);border-bottom:1px solid var(--br);padding:56px 32px}
+.stats-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center}
+.stat-num{font-family:var(--fh);font-size:2.5rem;font-weight:800;margin-bottom:6px}
+.stat-label{font-size:.875rem;color:var(--tm)}
+
+/* CTA */
+.cta{padding:80px 32px;text-align:center}
+.cta-box{background:linear-gradient(135deg,rgba(108,99,255,.15),rgba(245,158,11,.08));border:1px solid var(--br);border-radius:24px;padding:64px 32px;max-width:760px;margin:0 auto;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 40% 40%,rgba(108,99,255,.08),transparent 60%);pointer-events:none}
+.cta-title{font-family:var(--fh);font-size:2rem;font-weight:700;margin-bottom:16px}
+.cta-sub{color:var(--tm);margin-bottom:28px;font-size:1rem}
+
+/* FOOTER */
+footer{border-top:1px solid var(--br);padding:32px;text-align:center;color:var(--tm);font-size:.8125rem}
+.footer-logo{font-family:var(--fh);font-size:1.125rem;font-weight:700;color:var(--t1);margin-bottom:8px}
+
+/* ANNOTATION */
+.annot{position:absolute;background:rgba(245,158,11,.12);border:1px dashed var(--a);border-radius:6px;padding:2px 8px;font-size:.65rem;font-family:monospace;color:var(--a);white-space:nowrap;pointer-events:none}
+</style>
+</head>
+<body>
+
+<!-- WIREFRAME LABEL -->
+<div style="background:rgba(108,99,255,.1);border-bottom:1px dashed rgba(108,99,255,.4);padding:8px 24px;font-family:monospace;font-size:.75rem;color:var(--pl);display:flex;justify-content:space-between">
+  <span>📐 WIREFRAME · Screen 01 — Landing Page</span>
+  <span>EduBridge AI · Design System v1.0</span>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-icon">🎓</div>
+      EduBridge AI
+    </div>
+    <div class="nav-links">
+      <button class="btn btn-ghost">Features</button>
+      <button class="btn btn-ghost">Pricing</button>
+      <button class="btn btn-ghost">About</button>
+      <button class="btn btn-outline">Sign In</button>
+      <button class="btn btn-primary">Get Started</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="badge">
+    <span class="badge-dot"></span>
+    AI-POWERED LEARNING PLATFORM · NOW IN BETA
+  </div>
+  <h1>Learn Smarter with<br><span class="grad">AI-Powered Tutoring</span></h1>
+  <p class="hero-sub">Personalized study paths, instant doubt solving, adaptive quizzes — everything a student needs, powered by cutting-edge AI.</p>
+  <div class="hero-cta">
+    <button class="btn btn-primary btn-lg">🚀 Start Learning Free</button>
+    <button class="btn btn-outline btn-lg">▶ Watch Demo</button>
+  </div>
+
+  <!-- Hero Dashboard Mockup -->
+  <div class="hero-mockup">
+    <div class="mockup-bar">
+      <div class="dot" style="background:#EF4444"></div>
+      <div class="dot" style="background:#F59E0B"></div>
+      <div class="dot" style="background:#1DB954"></div>
+    </div>
+    <div class="mockup-grid">
+      <div class="mockup-card">
+        <div class="mc-icon" style="background:rgba(108,99,255,.2)">📊</div>
+        <div class="mc-num" style="color:var(--p)">87%</div>
+        <div class="mc-label">Quiz Accuracy</div>
+        <div class="mc-bar"><div class="mc-fill" style="width:87%;background:var(--p)"></div></div>
+      </div>
+      <div class="mockup-card">
+        <div class="mc-icon" style="background:rgba(29,185,84,.15)">🔥</div>
+        <div class="mc-num" style="color:var(--s)">14</div>
+        <div class="mc-label">Day Streak</div>
+        <div class="mc-bar"><div class="mc-fill" style="width:60%;background:var(--s)"></div></div>
+      </div>
+      <div class="mockup-card">
+        <div class="mc-icon" style="background:rgba(245,158,11,.15)">⭐</div>
+        <div class="mc-num" style="color:var(--a)">2,450</div>
+        <div class="mc-label">XP Points</div>
+        <div class="mc-bar"><div class="mc-fill" style="width:72%;background:var(--a)"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="features">
+  <div style="text-align:center">
+    <div class="section-label">// FEATURES</div>
+    <div class="section-title">Everything You Need to Excel</div>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-icon-wrap" style="background:rgba(108,99,255,.15)">💬</div>
+      <div class="feat-name">AI Chat Tutor</div>
+      <div class="feat-desc">Ask any question, get clear explanations with step-by-step reasoning 24/7.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon-wrap" style="background:rgba(29,185,84,.12)">📝</div>
+      <div class="feat-name">Adaptive Quizzes</div>
+      <div class="feat-desc">AI-generated quizzes that adjust difficulty based on your performance.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon-wrap" style="background:rgba(245,158,11,.12)">📅</div>
+      <div class="feat-name">Attendance Tracker</div>
+      <div class="feat-desc">Real-time attendance monitoring for students and teachers.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon-wrap" style="background:rgba(239,68,68,.12)">👥</div>
+      <div class="feat-name">Peer Groups</div>
+      <div class="feat-desc">Collaborate with classmates in AI-facilitated study rooms.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon-wrap" style="background:rgba(59,130,246,.12)">📒</div>
+      <div class="feat-name">Smart Notes</div>
+      <div class="feat-desc">AI-enhanced note taking with auto-summaries and highlights.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon-wrap" style="background:rgba(168,85,247,.12)">📦</div>
+      <div class="feat-name">Resource Allocator</div>
+      <div class="feat-desc">Smart allocation of study materials, labs, and classroom resources.</div>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stats-inner">
+    <div><div class="stat-num" style="color:var(--p)">10k+</div><div class="stat-label">Students Enrolled</div></div>
+    <div><div class="stat-num" style="color:var(--s)">50k+</div><div class="stat-label">Questions Solved</div></div>
+    <div><div class="stat-num" style="color:var(--a)">98%</div><div class="stat-label">Satisfaction Rate</div></div>
+    <div><div class="stat-num" style="color:var(--pl)">24/7</div><div class="stat-label">AI Availability</div></div>
+  </div>
+</div>
+
+<div class="cta">
+  <div class="cta-box">
+    <div class="cta-title">Ready to Transform Your Learning?</div>
+    <div class="cta-sub">Join thousands of students already learning smarter with EduBridge AI.</div>
+    <button class="btn btn-primary btn-lg">Sign Up Free — No Credit Card</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">🎓 EduBridge AI</div>
+  <div>© 2025 EduBridge AI · Transforming Education with Intelligence</div>
+  <div style="margin-top:12px;display:flex;gap:20px;justify-content:center">
+    <span style="cursor:pointer;color:var(--t2)">Privacy</span>
+    <span style="cursor:pointer;color:var(--t2)">Terms</span>
+    <span style="cursor:pointer;color:var(--t2)">Contact</span>
+    <span style="cursor:pointer;color:var(--t2)">GitHub</span>
+  </div>
+</footer>
+
+</body>
+</html>
