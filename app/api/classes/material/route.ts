@@ -1,22 +1,47 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
+import crypto from 'crypto';
+import { store } from '@/lib/store';
 
-const BACKEND = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
-
-export async function POST(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization') || '';
+export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const response = await fetch(`${BACKEND}/api/classes/material`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(authHeader ? { Authorization: authHeader } : {}),
+    const { classId, title, fileData, subject, fileType } = body;
+
+    if (!title) {
+      return NextResponse.json({ error: 'Title is required' }, { status: 400 });
+    }
+
+    const cls = store.classes.find((c) => c.id === classId);
+    const id = crypto.randomUUID();
+    const material = {
+      id,
+      classId: classId || 'general',
+      title,
+      subject: subject || cls?.subject || 'General',
+      content: fileData || '',
+      fileType: fileType || 'TXT',
+      uploadedBy: 'Teacher',
+      uploadedAt: new Date().toISOString(),
+    };
+    store.materials.push(material);
+
+    return NextResponse.json({
+      success: true,
+      message: 'Material uploaded successfully',
+      material: {
+        id: material.id,
+        title: material.title,
+        subject: material.subject,
+        fileType: material.fileType,
+        uploadedAt: material.uploadedAt,
       },
-      body: JSON.stringify(body),
     });
-    if (response.ok) return NextResponse.json(await response.json());
-    return NextResponse.json(await response.json().catch(() => ({})), { status: response.status });
-  } catch (err) {
-    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+  } catch (error) {
+    console.error('Upload material error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
+}
+
+export async function GET() {
+  return NextResponse.json(store.materials);
 }

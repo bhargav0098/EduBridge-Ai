@@ -1,22 +1,22 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
+import { store, generateOTP } from '@/lib/store';
 
-const BACKEND = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
-
-export async function POST(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization') || '';
+export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const response = await fetch(`${BACKEND}/api/auth/send-otp`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(authHeader ? { Authorization: authHeader } : {}),
-      },
-      body: JSON.stringify(body),
+    const email = (body.email || '').trim().toLowerCase();
+
+    if (!email) return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+
+    const otp = generateOTP();
+    store.otps.set(email, { otp, expiresAt: Date.now() + 10 * 60 * 1000 });
+    console.log(`[OTP] ${email} â†’ ${otp}`);
+
+    return NextResponse.json({
+      message: 'OTP sent successfully',
+      ...(process.env.NODE_ENV !== 'production' ? { demo_otp: otp } : {}),
     });
-    if (response.ok) return NextResponse.json(await response.json());
-    return NextResponse.json(await response.json().catch(() => ({})), { status: response.status });
-  } catch (err) {
-    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

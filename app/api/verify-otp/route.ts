@@ -1,22 +1,25 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
+import { store } from '@/lib/store';
 
-const BACKEND = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
-
-export async function POST(request: NextRequest) {
-  const authHeader = request.headers.get('Authorization') || '';
+export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const response = await fetch(`${BACKEND}/api/auth/verify-otp`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(authHeader ? { Authorization: authHeader } : {}),
-      },
-      body: JSON.stringify(body),
-    });
-    if (response.ok) return NextResponse.json(await response.json());
-    return NextResponse.json(await response.json().catch(() => ({})), { status: response.status });
-  } catch (err) {
-    return NextResponse.json({ error: 'Backend unreachable' }, { status: 502 });
+    const email = (body.email || '').trim().toLowerCase();
+    const otp = (body.otp || '').trim();
+
+    if (!email || !otp) return NextResponse.json({ error: 'Email and OTP required' }, { status: 400 });
+
+    const record = store.otps.get(email);
+    if (!record) return NextResponse.json({ error: 'No OTP found. Request a new one.' }, { status: 400 });
+    if (Date.now() > record.expiresAt) {
+      store.otps.delete(email);
+      return NextResponse.json({ error: 'OTP expired. Request a new one.' }, { status: 400 });
+    }
+    if (record.otp !== otp) return NextResponse.json({ error: 'Invalid OTP' }, { status: 400 });
+
+    store.otps.delete(email);
+    return NextResponse.json({ message: 'OTP verified successfully', verified: true });
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
