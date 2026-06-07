@@ -1,7 +1,17 @@
 import { NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/store';
 
 const BACKEND = process.env.BACKEND_URL || 'http://localhost:8000';
+
+function decodeJwtPayload(token: string) {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const payloadStr = Buffer.from(parts[1], 'base64').toString('utf-8');
+    return JSON.parse(payloadStr);
+  } catch {
+    return null;
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -11,12 +21,12 @@ export async function POST(request: Request) {
     }
 
     const token = authHeader.substring(7);
-    const decoded = verifyToken(token);
-    if (!decoded || !decoded.uid) {
-      return NextResponse.json({ error: 'Unauthorized: Invalid token' }, { status: 401 });
+    const decoded = decodeJwtPayload(token);
+    if (!decoded || (!decoded.uid && !decoded.sub)) {
+      return NextResponse.json({ error: 'Unauthorized: Invalid token payload' }, { status: 401 });
     }
 
-    const teacherId = decoded.uid;
+    const teacherId = decoded.uid || decoded.sub;
 
     const body = await request.json();
     const { classId, attendance } = body;

@@ -9,6 +9,14 @@ class UserRole(str, enum.Enum):
     TEACHER = "teacher"
     ADMIN = "admin"
 
+class CourseClass(Base):
+    __tablename__ = "classes"
+    id = Column(String, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    subject = Column(String, nullable=False)
+    schedule = Column(String, nullable=True)
+
+
 class User(Base):
     __tablename__ = "users"
     id = Column(String, primary_key=True, index=True)

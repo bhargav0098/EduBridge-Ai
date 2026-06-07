@@ -90,12 +90,22 @@ async def on_startup():
 
     # Seed mock students for dynamic classes list
     from .database import SessionLocal
-    from .models.models import User, UserRole, StudentProfile
+    from .models.models import User, UserRole, StudentProfile, CourseClass
     from .services.auth_service import AuthService
     import uuid
 
     db = SessionLocal()
     try:
+        # Seed classes if empty
+        if not db.query(CourseClass).first():
+            seed_classes = [
+                CourseClass(id="c1", name="CS-3A", subject="Data Structures", schedule="Mon/Thu/Fri 9:00 AM"),
+                CourseClass(id="c2", name="CS-3B", subject="Mathematics", schedule="Tue/Thu 1:00 PM"),
+                CourseClass(id="c3", name="CS-4A", subject="English Literature", schedule="Tue/Fri 1:00 PM"),
+            ]
+            db.bulk_save_objects(seed_classes)
+            db.commit()
+
         # Update Dipshika to CS-3A if class_name is Class 11
         dipshika_profile = db.query(StudentProfile).join(User).filter(User.email == "bhattacharyadipshika2@gmail.com").first()
         if dipshika_profile and dipshika_profile.class_name == "Class 11":

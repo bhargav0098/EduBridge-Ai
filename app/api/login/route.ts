@@ -1,54 +1,33 @@
 import { NextResponse } from 'next/server';
-import { store, verifyPassword, makeToken } from '@/lib/store';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    // Try real Python backend first
     const backendUrl = process.env.BACKEND_URL;
-    if (backendUrl) {
-      try {
-        const response = await fetch(`${backendUrl}/api/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-          signal: AbortSignal.timeout(20000),
-        });
-        if (response.ok) {
-          const data = await response.json();
-          return NextResponse.json(data);
-        }
-        const errorData = await response.json().catch(() => ({}));
-        return NextResponse.json(
-          { error: errorData.detail || errorData.error || 'Invalid credentials' },
-          { status: 401 }
-        );
-      } catch { /* backend unreachable */ }
+    if (!backendUrl) {
+      return NextResponse.json({ error: 'BACKEND_URL is not configured on the server' }, { status: 500 });
     }
 
-    // Demo mode — shared globalThis store
-    const email = (body.email || '').trim().toLowerCase();
-    const password = body.password || '';
-
-    if (!email || !password) {
-      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
-    }
-
-    const user = store.users.get(email);
-    if (!user || !verifyPassword(password, user.hashedPassword)) {
-      return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
-    }
-
-    const token = makeToken(email, user.id);
-    return NextResponse.json({
-      access_token: token,
-      refresh_token: token,
-      token_type: 'bearer',
-      user: { id: user.id, name: user.name, email: user.email, role: user.role, created_at: user.createdAt },
+    const response = await fetch(`${backendUrl}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(20000),
     });
-  } catch (error) {
+
+    if (response.ok) {
+      const data = await response.json();
+      return NextResponse.json(data);
+    }
+    
+    const errorData = await response.json().catch(() => ({}));
+    return NextResponse.json(
+      { error: errorData.detail || errorData.error || 'Invalid credentials' },
+      { status: response.status }
+    );
+  } catch (error: any) {
     console.error('Login error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error: Backend unreachable' }, { status: 502 });
   }
 }

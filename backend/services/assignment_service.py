@@ -26,10 +26,15 @@ class AssignmentService:
         db.flush()
 
         # 3. Get students in the specified class name
-        students = db.query(User).join(StudentProfile).filter(
-            StudentProfile.class_name.like(f"%{data.class_id}%"),
-            User.role == UserRole.STUDENT
-        ).all()
+        from ..models.models import CourseClass
+        course = db.query(CourseClass).filter(CourseClass.id == data.class_id).first()
+        if course:
+            students = db.query(User).join(StudentProfile).filter(
+                StudentProfile.class_name.like(f"%{course.name}%"),
+                User.role == UserRole.STUDENT
+            ).all()
+        else:
+            students = []
 
         # 4. Create Submissions and Activity logs for students
         for student in students:

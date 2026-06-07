@@ -97,20 +97,17 @@ class AttendanceService:
 
     @staticmethod
     def get_classes_list(db: Session):
-        class_mapping = {
-            "CS-3A": {"id": "c1", "subject": "Data Structures", "schedule": "Mon/Thu/Fri 9:00 AM"},
-            "CS-3B": {"id": "c2", "subject": "Mathematics", "schedule": "Tue/Thu 1:00 PM"},
-            "CS-4A": {"id": "c3", "subject": "English Literature", "schedule": "Tue/Fri 1:00 PM"},
-        }
+        from ..models.models import CourseClass
+        classes = db.query(CourseClass).all()
         
         results = []
-        for class_name, details in class_mapping.items():
+        for cls in classes:
             student_count = db.query(User).join(StudentProfile).filter(
-                StudentProfile.class_name == class_name,
+                StudentProfile.class_name.like(f"%{cls.name}%"),
                 User.role == "student"
             ).count()
 
-            sessions = db.query(AttendanceSession).filter(AttendanceSession.class_id == details["id"]).all()
+            sessions = db.query(AttendanceSession).filter(AttendanceSession.class_id == cls.id).all()
             session_ids = [s.id for s in sessions]
             
             attendance_rate = 100.0
@@ -124,28 +121,25 @@ class AttendanceService:
                     attendance_rate = (present_records / total_records) * 100
 
             results.append({
-                "id": details["id"],
-                "name": class_name,
-                "subject": details["subject"],
+                "id": cls.id,
+                "name": cls.name,
+                "subject": cls.subject,
                 "studentCount": student_count,
-                "schedule": details["schedule"],
+                "schedule": cls.schedule,
                 "attendanceRate": round(attendance_rate, 1)
             })
         return results
 
     @staticmethod
     def get_students_list(db: Session, class_id: str = None):
-        class_mapping = {
-            "c1": "CS-3A",
-            "c2": "CS-3B",
-            "c3": "CS-4A",
-        }
+        from ..models.models import CourseClass
         
         query = db.query(User).join(StudentProfile).filter(User.role == "student")
         
         if class_id:
-            class_name = class_mapping.get(class_id, class_id)
-            query = query.filter(StudentProfile.class_name == class_name)
+            course = db.query(CourseClass).filter(CourseClass.id == class_id).first()
+            if course:
+                query = query.filter(StudentProfile.class_name.like(f"%{course.name}%"))
             
         students = query.all()
         results = []
@@ -157,9 +151,8 @@ class AttendanceService:
             sessions = session_query.all()
             session_ids = [s.id for s in sessions]
             
-            fallback_rate = 60 + (hash(student.id) % 35)
-            attendance_rate = fallback_rate
-            status = "Present"
+            attendance_rate = 0.0
+            status = "Absent"
             history = []
             
             if session_ids:
@@ -184,8 +177,6 @@ class AttendanceService:
                 
                 if last_record:
                     status = "Present" if last_record.status == "present" else "Absent"
-                else:
-                    status = "Present" if (hash(student.id) % 3 > 0) else "Absent"
 
                 records = db.query(AttendanceRecord).filter(
                     AttendanceRecord.student_id == student.id,
@@ -197,17 +188,15 @@ class AttendanceService:
                         "date": r.session.date.strftime("%Y-%m-%d"),
                         "status": "Present" if r.status == "present" else "Absent"
                     })
-            else:
-                status = "Present" if (hash(student.id) % 3 > 0) else "Absent"
             
             quiz_attempts = db.query(StudentPerformance).filter(StudentPerformance.student_id == student.id).all()
             if quiz_attempts:
                 correct = sum(1 for q in quiz_attempts if q.correct)
                 quiz_performance = round((correct / len(quiz_attempts)) * 100)
             else:
-                quiz_performance = 50 + (hash(student.id) % 45)
+                quiz_performance = 0
 
-            notes_count = hash(student.id) % 15
+            notes_count = 0
             
             results.append({
                 "id": student.id,
@@ -227,7 +216,7 @@ class AttendanceService:
         sessions = db.query(AttendanceSession).all()
         session_ids = [s.id for s in sessions]
         
-        overall_rate = 78.0
+        overall_rate = 0.0
         history = []
         history_map = {}
         
@@ -250,25 +239,20 @@ class AttendanceService:
             d = base_date - timedelta(days=i)
             date_str = d.strftime("%Y-%m-%d")
             
-            if d.weekday() == 6:
-                history.append({"date": date_str, "status": "Holiday"})
-            else:
-                if date_str in history_map:
-                    history.append({"date": date_str, "status": history_map[date_str]})
-                else:
-                    is_absent = (i % 5 == 0) or (i % 7 == 0)
-                    history.append({"date": date_str, "status": "Absent" if is_absent else "Present"})
+            if date_str in history_map:
+                history.append({"date": date_str, "status": history_map[date_str]})
                     
-        class_mapping = {
-            "c1": {"subject": "Data Structures", "name": "CS-3A"},
-            "c2": {"subject": "Mathematics", "name": "CS-3B"},
-            "c3": {"subject": "English Literature", "name": "CS-4A"},
-        }
+        from ..models.models import CourseClass
+        classes = db.query(CourseClass).all()
         
         subject_wise = []
-        for cid, details in class_mapping.items():
-            cls_sessions = db.query(AttendanceSession).filter(AttendanceSession.class_id == cid).all()
+        for cls in classes:
+            cls_sessions = db.query(AttendanceSession).filter(AttendanceSession.class_id == cls.id).all()
             cls_session_ids = [s.id for s in cls_sessions]
+            
+            total = 0
+            present = 0
+            rate = 0.0
             
             if cls_session_ids:
                 total = db.query(AttendanceRecord).filter(
@@ -280,43 +264,17 @@ class AttendanceService:
                     AttendanceRecord.session_id.in_(cls_session_ids),
                     AttendanceRecord.status == "present"
                 ).count()
-            else:
-                total = 0
-                present = 0
                 
             if total > 0:
                 rate = round((present / total) * 100, 1)
-            else:
-                rates_fallback = {"c1": 68.0, "c2": 80.0, "c3": 88.0}
-                rate = rates_fallback[cid]
-                total = 25
-                present = int(25 * (rate / 100))
                 
             subject_wise.append({
-                "subject": details["subject"],
+                "subject": cls.subject,
                 "attendanceRate": rate,
                 "totalClasses": total,
                 "presentClasses": present,
                 "absentClasses": total - present
             })
-            
-        physics_present = int(25 * 0.68)
-        chemistry_present = int(25 * 0.80)
-        
-        subject_wise.append({
-            "subject": "Physics",
-            "attendanceRate": 68.0,
-            "totalClasses": 25,
-            "presentClasses": physics_present,
-            "absentClasses": 25 - physics_present
-        })
-        subject_wise.append({
-            "subject": "Chemistry",
-            "attendanceRate": 80.0,
-            "totalClasses": 25,
-            "presentClasses": chemistry_present,
-            "absentClasses": 25 - chemistry_present
-        })
             
         return {
             "overallRate": overall_rate,
