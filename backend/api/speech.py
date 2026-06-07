@@ -16,7 +16,7 @@ router = APIRouter()
 
 try:
     openai_client = None
-    if settings.OPENAI_API_KEY and settings.OPENAI_API_KEY != "mock_openai_key_for_now":
+    if settings.OPENAI_API_KEY:
         openai_client = OpenAI(api_key=settings.OPENAI_API_KEY)
 except Exception as e:
     print(f"Failed to initialize OpenAI client: {e}")
@@ -54,17 +54,10 @@ async def speech_to_text(
                     )
                     transcript = transcription.text
             except Exception as e:
-                print(f"OpenAI Whisper error: {e}. Falling back to mock transcription.")
-                transcript = "This is a mock transcription of physics questions about Newton's second law of motion."
+                print(f"OpenAI Whisper error: {e}")
+                raise HTTPException(status_code=500, detail=f"Transcription failed: {e}")
         else:
-            # Mock transcription fallback
-            # Simulate Santali stub if Santali is requested
-            if language == "Santali" or "santali" in file.filename.lower():
-                transcript = "Santali mock transcription: Nehel hukum reak' dosar niyam leme."
-                detected_language = "sat"
-            else:
-                transcript = "Explain Newton's second law of motion with F = ma."
-                detected_language = "en"
+            raise HTTPException(status_code=500, detail="OpenAI API key not configured for transcription.")
 
         # 3. Detect language if not provided
         if not language and transcript and detected_language != "sat":

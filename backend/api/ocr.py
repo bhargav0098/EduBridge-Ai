@@ -17,7 +17,7 @@ router = APIRouter()
 
 # Configure Gemini
 try:
-    if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "mock_gemini_key_for_now":
+    if settings.GEMINI_API_KEY:
         genai.configure(api_key=settings.GEMINI_API_KEY)
 except Exception as e:
     print(f"Failed to configure Gemini: {e}")
@@ -53,55 +53,20 @@ def solve_math_step_by_step(equation: str) -> dict:
         "Do not include markdown wrappers (like ```json) in your response, just return the raw JSON object."
     )
 
-    use_real = False
     try:
-        if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "mock_gemini_key_for_now":
-            use_real = True
-    except Exception:
-        pass
-
-    if use_real:
-        try:
-            model = genai.GenerativeModel("gemini-1.5-flash")
-            response = model.generate_content(prompt)
-            clean_text = response.text.strip()
-            # Remove potential markdown block
-            if clean_text.startswith("```"):
-                clean_text = re.sub(r"^```(?:json)?\n", "", clean_text)
-                clean_text = re.sub(r"\n```$", "", clean_text)
-            return json.loads(clean_text)
-        except Exception as e:
-            print(f"Error solving with Gemini: {e}. Falling back to mock solver.")
-
-    # Fallback/Mock Math Solver
-    if "integral" in equation.lower() or "\\int" in equation:
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        response = model.generate_content(prompt)
+        clean_text = response.text.strip()
+        # Remove potential markdown block
+        if clean_text.startswith("```"):
+            clean_text = re.sub(r"^```(?:json)?\n", "", clean_text)
+            clean_text = re.sub(r"\n```$", "", clean_text)
+        return json.loads(clean_text)
+    except Exception as e:
+        print(f"Error solving with Gemini: {e}")
         return {
-            "solution": "x^3 / 3 + C",
-            "steps": [
-                "Identify the integrand as x^2.",
-                "Apply the power rule for integration: integral of x^n is x^(n+1)/(n+1).",
-                "Here n = 2, so the antiderivative is x^(2+1)/(2+1) = x^3 / 3.",
-                "Add the constant of integration C."
-            ]
-        }
-    elif "Newton" in equation or "force" in equation.lower() or "f =" in equation.lower():
-        return {
-            "solution": "F = 50 N",
-            "steps": [
-                "State the given values: mass m = 10 kg, acceleration a = 5 m/s^2.",
-                "Recall Newton's Second Law: F = m * a.",
-                "Substitute the values: F = 10 kg * 5 m/s^2.",
-                "Calculate the product: F = 50 N."
-            ]
-        }
-    else:
-        return {
-            "solution": "x = 5",
-            "steps": [
-                "Write down the equation: 2x + 3 = 13.",
-                "Subtract 3 from both sides: 2x = 10.",
-                "Divide both sides by 2: x = 5."
-            ]
+            "solution": "Error calculating solution.",
+            "steps": [f"AI service error: {e}"]
         }
 
 
@@ -142,24 +107,14 @@ async def ocr_solve(
             "Provide a step-by-step explanation for the question above using only the context."
         )
 
-        use_real = False
-        try:
-            if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "mock_gemini_key_for_now":
-                use_real = True
-        except Exception:
-            pass
-
         solution = ""
-        if use_real:
-            try:
-                model = genai.GenerativeModel("gemini-1.5-flash")
-                res = model.generate_content(prompt)
-                solution = res.text
-            except Exception:
-                pass
-
-        if not solution:
-            solution = f"According to the NCERT textbook, {extracted_text} is defined by the laws of motion or kinetics."
+        try:
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            res = model.generate_content(prompt)
+            solution = res.text
+        except Exception as e:
+            print(f"Gemini API error in RAG tutor: {e}")
+            solution = f"Error generating explanation: {e}"
 
         steps = [s.strip() for s in solution.split("\n") if s.strip()]
 

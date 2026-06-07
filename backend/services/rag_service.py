@@ -8,7 +8,7 @@ from langchain_community.vectorstores import FAISS
 class SimpleEmbeddings:
     def __init__(self, use_hf: bool = True):
         from ..config import settings
-        if not settings.GEMINI_API_KEY or settings.GEMINI_API_KEY in ("mock_gemini_key_for_now", "") or os.environ.get("OFFLINE_EMBEDDINGS") == "true":
+        if not settings.GEMINI_API_KEY or os.environ.get("OFFLINE_EMBEDDINGS") == "true":
             use_hf = False
             
         self.use_hf = use_hf

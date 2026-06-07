@@ -65,7 +65,7 @@ def get_chat_user(
 
 # Configure Gemini
 try:
-    if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "mock_gemini_key_for_now":
+    if settings.GEMINI_API_KEY:
         genai.configure(api_key=settings.GEMINI_API_KEY)
 except Exception as e:
     print(f"Failed to configure Gemini client: {e}")
@@ -73,43 +73,24 @@ except Exception as e:
 
 def get_gemini_response_stream(prompt: str, system_instruction: str):
     """
-    Call Gemini API and yield chunks. Falls back to mock generator if API key is not configured or fails.
+    Call Gemini API and yield chunks.
     """
-    use_real = False
     try:
-        if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "mock_gemini_key_for_now":
-            use_real = True
-    except Exception:
-        pass
-
-    if use_real:
-        try:
-            model = genai.GenerativeModel(
-                model_name="gemini-1.5-flash",
-                system_instruction=system_instruction
-            )
-            response = model.generate_content(prompt, stream=True)
-            for chunk in response:
-                if chunk.text:
-                    yield chunk.text
-            return
-        except Exception as e:
-            print(f"Gemini API streaming error: {e}. Falling back to mock tutor.")
-
-    # Fallback / Mock Tutor Response based on prompt/system_instruction
-    mock_tutor_response = f"I am your NCERT tutor. Based on the textbook context, here is what we know: "
-    if "Newton" in prompt or "Newton" in system_instruction:
-        mock_tutor_response += "Newton's laws describe motion. First Law is Inertia, Second Law is F=ma, and Third Law is action-reaction."
-    elif "Kinetics" in prompt or "Kinetics" in system_instruction:
-        mock_tutor_response += "Chemical Kinetics studies reaction rates, mechanisms, and factors like concentration/temperature."
-    elif "Calculus" in prompt or "Calculus" in system_instruction or "Derivative" in prompt:
-        mock_tutor_response += "In calculus, the derivative measures instantaneous rate of change. The derivative of x^n is n * x^(n-1)."
-    else:
-        mock_tutor_response += "Let's review the NCERT textbook details provided. Please make sure to read the chapter carefully."
-
-    # Yield word by word to simulate streaming
-    for word in mock_tutor_response.split(" "):
-        yield word + " "
+        model = genai.GenerativeModel(
+            model_name="gemini-1.5-flash",
+            system_instruction=system_instruction
+        )
+        print(f"[Backend Chat] Sending Gemini request. Prompt preview: '{prompt[:50]}...'")
+        response = model.generate_content(prompt, stream=True)
+        for chunk in response:
+            if chunk.text:
+                yield chunk.text
+        print("[Backend Chat] Gemini streaming response completed successfully.")
+        return
+    except Exception as e:
+        error_msg = f"[Backend Chat] Gemini API streaming error: {e}"
+        print(error_msg)
+        yield f"AI service error: {e}"
 
 
 @router.post("")

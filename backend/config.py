@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     DATABASE_URL: Optional[str] = None
     # Generate a fallback secret for dev, but warn loudly in prod
     SECRET_KEY: str = secrets.token_hex(32)
-    GEMINI_API_KEY: Optional[str] = None
+    GEMINI_API_KEY: Optional[str] = "AIzaSyDMpL_HQlMJhe_St2NXa-KqKbQqkSSwYSo"
     OPENAI_API_KEY: Optional[str] = None
     DEBUG: bool = True
 

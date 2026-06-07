@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import { store, verifyToken } from '@/lib/store';
 
 async function callGemini(message: string, userRole: string): Promise<string> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GEMINI_API_KEY not configured');
+  const apiKey = 'AIzaSyDMpL_HQlMJhe_St2NXa-KqKbQqkSSwYSo';
 
   const systemInstruction = userRole === 'teacher'
     ? `You are an AI Teacher Assistant. Respond to the teacher.
@@ -11,6 +10,8 @@ Help the teacher create lesson plans, draft test questions, format class materia
 Use high-quality academic and instructional knowledge to provide structured, clear advice.`
     : `You are an NCERT tutor. Respond to the student.
 Help the student learn academic subjects using NCERT textbook concepts. Keep answers clear, educational, and well-structured with markdown formatting.`;
+
+  console.log(`[Gemini API] Request - Sending message to Gemini: "${message.slice(0, 50)}..."`);
 
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
@@ -39,51 +40,29 @@ Help the student learn academic subjects using NCERT textbook concepts. Keep ans
     }
   );
 
+  console.log(`[Gemini API] Response Status: ${response.status}`);
+
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
+    console.error('[Gemini API] Error details:', err);
     throw new Error(err?.error?.message || `Gemini API error: ${response.status}`);
   }
 
   const data = await response.json();
   const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('Empty response from Gemini');
+  if (!text) {
+    console.error('[Gemini API] Empty response from Gemini', data);
+    throw new Error('Empty response from Gemini');
+  }
   return text;
-}
-
-// Educational fallback when Gemini is unavailable
-function fallbackResponse(message: string, userRole: string): string {
-  const msg = message.toLowerCase().trim();
-  
-  if (userRole === 'teacher') {
-    if (/^(hi|hello|hey)\b/.test(msg)) {
-      return "Hello! 👋 I'm your AI Teacher Assistant. Ask me to generate quiz questions, draft lesson plans, syllabus structures, or pedagogical recommendations.";
-    }
-    if (/lesson plan|plan/.test(msg)) {
-      return "**Lesson Plan Template** 📚\n\n**Topic:** [insert topic]\n**Duration:** 45 minutes\n\n- **0-10m:** Intro & recap starter questions\n- **10-30m:** Core concepts explanation & hands-on activity\n- **30-40m:** Group exercise or quiz verification\n- **40-45m:** Wrap-up & homework briefing";
-    }
-    return `**AI Teacher Assistant**: I received your query: "${message.slice(0, 80)}".\n\n🔧 **Note**: LLM API is offline. Try asking about lesson planning or test drafting templates.`;
-  }
-
-  // Student fallback
-  if (/^(hi|hello|hey)\b/.test(msg)) {
-    return "Hello! 👋 I'm EduBridge AI. Ask me anything about your studies — math, science, coding, history, and more!";
-  }
-  if (/newton|laws of motion|f\s*=\s*ma/.test(msg)) {
-    return "**Newton's Laws of Motion** 🍎\n\n**1st Law (Inertia):** Objects stay at rest or in motion unless a force acts.\n**2nd Law:** F = ma (Force = mass × acceleration)\n**3rd Law:** Every action has an equal and opposite reaction.\n\nExample: 5kg box pushed with 20N → a = 20/5 = **4 m/s²**";
-  }
-  if (/quadratic/.test(msg)) {
-    return "**Quadratic Formula** 📐\n\nx = (−b ± √(b²−4ac)) / 2a\n\nFor ax² + bx + c = 0\n\nExample: x² − 5x + 6 = 0 → x = 3 or x = 2";
-  }
-  if (/python|javascript|coding|programming/.test(msg)) {
-    return "**Programming Help** 💻\n\nI can help with Python, JavaScript, Java, C++, algorithms, and debugging!\n\nWhat specific topic or problem would you like help with?";
-  }
-  return `**Your question:** "${message.slice(0, 80)}"\n\n🔧 **Note:** AI service is temporarily unavailable. Please set your GEMINI_API_KEY in environment variables for full AI functionality.\n\nMeanwhile, try asking about:\n- Math (algebra, calculus, geometry)\n- Science (physics, chemistry, biology)\n- Programming concepts\n- Study strategies`;
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { message, session_id, language } = body;
+
+    console.log(`[Chat Route] Incoming message: "${message.slice(0, 100)}"`);
 
     if (!message?.trim()) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
@@ -106,6 +85,7 @@ export async function POST(request: Request) {
     const backendUrl = process.env.BACKEND_URL;
     if (backendUrl) {
       try {
+        console.log(`[Chat Route] Attempting to route through backend: ${backendUrl}`);
         const response = await fetch(`${backendUrl}/api/chat`, {
           method: 'POST',
           headers: {
@@ -116,14 +96,22 @@ export async function POST(request: Request) {
           signal: AbortSignal.timeout(10000),
         });
         if (response.ok) {
-          return NextResponse.json(await response.json());
+          const result = await response.json();
+          console.log(`[Chat Route] Backend returned successfully.`);
+          return NextResponse.json(result);
+        } else {
+          console.warn(`[Chat Route] Backend returned status: ${response.status}`);
         }
-      } catch { /* backend unreachable */ }
+      } catch (err) {
+        console.warn(`[Chat Route] Backend unreachable or timed out:`, err);
+      }
     }
 
     // Try Gemini directly
     try {
+      console.log(`[Chat Route] Calling Gemini directly`);
       const aiResponse = await callGemini(message, userRole);
+      console.log(`[Chat Route] Successfully received response from Gemini.`);
       return NextResponse.json({
         response: aiResponse,
         message: aiResponse,
@@ -131,20 +119,15 @@ export async function POST(request: Request) {
         session_id: session_id || `session-${Date.now()}`,
         powered_by: 'gemini',
       });
-    } catch (geminiError) {
-      console.warn('Gemini error:', geminiError);
-      // Educational fallback
-      const fallback = fallbackResponse(message, userRole);
-      return NextResponse.json({
-        response: fallback,
-        message: fallback,
-        sources: [],
-        session_id: session_id || `session-${Date.now()}`,
-        powered_by: 'fallback',
-      });
+    } catch (geminiError: any) {
+      console.error('[Chat Route] Gemini error:', geminiError);
+      return NextResponse.json({ 
+        error: 'AI service is temporarily unavailable.',
+        details: geminiError.message
+      }, { status: 500 });
     }
   } catch (error) {
-    console.error('Chat route error:', error);
+    console.error('[Chat Route] Chat route error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
