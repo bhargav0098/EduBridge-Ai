@@ -58,6 +58,39 @@ def run_tests():
         return
     print(f"[4] SUCCESS: Quiz Arena Unlocked! Found class_name: {data.get('class_name')}")
 
+    print("[5] Logout (Clear token)...")
+    student_headers = {}
+    print("[5] SUCCESS")
+    
+    print("[6] Login Again...")
+    res = requests.post(f"{BASE_URL}/login", json={
+        "email": student_email,
+        "password": password
+    })
+    if res.status_code != 200:
+        print(f"FAILED: {res.text}")
+        return
+    student_token = res.json()["access_token"]
+    student_headers = {"Authorization": f"Bearer {student_token}"}
+    print("[6] SUCCESS: Logged in again successfully")
+    
+    print("[7] Refresh Browser (Verify Session)...")
+    res = requests.get(f"{BASE_URL}/me", headers=student_headers)
+    if res.status_code != 200:
+        print(f"FAILED: {res.text}")
+        return
+    print("[7] SUCCESS: Fetched /me successfully after re-login")
+
+    print("[8] AI Chat (Ask what is Python?)...")
+    res = requests.post(f"{BASE_URL}/chat", json={
+        "message": "What is Python?",
+        "language": "English"
+    }, headers=student_headers)
+    if res.status_code != 200:
+        print(f"FAILED: {res.text}")
+        return
+    print(f"[8] SUCCESS: Gemini responded with: {res.json()['reply'][:50]}...")
+
 
     print("\n=========================================")
     print("MANDATORY TEST: TEACHER WORKFLOW")
