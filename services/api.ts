@@ -23,7 +23,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
     try {
-      const raw = localStorage.getItem('auth-storage');
+      const raw = localStorage.getItem('auth-storage') || sessionStorage.getItem('auth-storage');
       if (raw) {
         const token = JSON.parse(raw)?.state?.token;
         if (token) {
