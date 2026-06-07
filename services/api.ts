@@ -9,7 +9,7 @@ const API_BASE_URL =
     ? '/api' // browser: use Next.js API routes
     : process.env.BACKEND_URL
     ? `${process.env.BACKEND_URL}/api`
-    : 'http://localhost:8000/api'; // server-side fallback
+    : 'http://127.0.0.1:8000/api'; // server-side fallback
 
 const api = axios.create({
   baseURL: API_BASE_URL,
