@@ -77,7 +77,7 @@ def get_gemini_response_stream(prompt: str, system_instruction: str):
     """
     try:
         model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
+            model_name="gemini-3.5-flash",
             system_instruction=system_instruction
         )
         print(f"[Backend Chat] Sending Gemini request. Prompt preview: '{prompt[:50]}...'")

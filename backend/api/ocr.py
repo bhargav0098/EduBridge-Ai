@@ -54,7 +54,7 @@ def solve_math_step_by_step(equation: str) -> dict:
     )
 
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-3.5-flash")
         response = model.generate_content(prompt)
         clean_text = response.text.strip()
         # Remove potential markdown block
@@ -109,7 +109,7 @@ async def ocr_solve(
 
         solution = ""
         try:
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-3.5-flash")
             res = model.generate_content(prompt)
             solution = res.text
         except Exception as e:

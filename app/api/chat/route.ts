@@ -14,7 +14,7 @@ Help the student learn academic subjects using NCERT textbook concepts. Keep ans
   console.log(`[Gemini API] Request - Sending message to Gemini: "${message.slice(0, 50)}..."`);
 
   const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
