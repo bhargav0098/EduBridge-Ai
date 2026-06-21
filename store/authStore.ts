@@ -12,6 +12,7 @@ interface AuthStore {
   register: (email: string, password: string, name: string, role: 'student' | 'teacher', remember?: boolean) => Promise<void>;
   logout: () => void;
   clearError: () => void;
+  updateUser: (updatedUser: Partial<User>) => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -24,6 +25,16 @@ export const useAuthStore = create<AuthStore>()(
       error: null,
 
       clearError: () => set({ error: null }),
+
+      updateUser: (updatedUser: Partial<User>) => set((state) => {
+        if (!state.user) return {};
+        return {
+          user: {
+            ...state.user,
+            ...updatedUser
+          }
+        };
+      }),
 
       login: async (email: string, password: string, remember = false) => {
         set({ isLoading: true, error: null });

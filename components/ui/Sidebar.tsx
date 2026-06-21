@@ -16,6 +16,7 @@ const studentMenuItems = [
   { label: 'Events',           href: '/events',     icon: '📅' },
   { label: 'Resources',        href: '/resources',  icon: '🏢' },
   { label: 'Peer Matching',    href: '/peers',      icon: '👥' },
+  { label: 'Profile Settings', href: '/profile',    icon: '👤' },
 ];
 
 const teacherMenuItems = [
@@ -28,6 +29,7 @@ const teacherMenuItems = [
   { label: 'Knowledge Wiki',   href: '/wiki',       icon: '🌐' },
   { label: 'Badges & Credentials', href: '/badges', icon: '🏅' },
   { label: 'Events',           href: '/events',     icon: '🎉' },
+  { label: 'Profile Settings', href: '/profile',    icon: '👤' },
   { label: 'Admin',            href: '/admin',      icon: '⚙️' },
 ];
 

@@ -19,11 +19,11 @@ const api = axios.create({
   timeout: 10000,
 });
 
-// Attach Bearer token from localStorage on every request (client only)
+// Attach Bearer token from localStorage/sessionStorage on every request (client only)
 api.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
     try {
-      const raw = localStorage.getItem('auth-storage');
+      const raw = localStorage.getItem('auth-storage') || sessionStorage.getItem('auth-storage');
       if (raw) {
         const token = JSON.parse(raw)?.state?.token;
         if (token) {

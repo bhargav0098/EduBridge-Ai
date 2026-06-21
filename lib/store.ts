@@ -10,6 +10,14 @@ interface User {
   role: string;
   hashedPassword: string;
   createdAt: string;
+  className?: string;
+  gender?: string;
+  phone?: string;
+  bio?: string;
+  studyTimePreference?: string;
+  weakSubjects?: string;
+  subject?: string;
+  experience?: string;
 }
 
 interface OTPRecord {
@@ -37,6 +45,50 @@ interface Material {
   uploadedAt: string;
 }
 
+interface Assignment {
+  id: number;
+  title: string;
+  description: string;
+  due_date: string;
+  class_id: string;
+  teacher_id: string;
+}
+
+interface AssignmentSubmission {
+  id: number;
+  assignment_id: number;
+  student_id: string;
+  status: 'assigned' | 'submitted' | 'graded';
+  submission_content?: string;
+  submitted_at?: string;
+  grade?: string;
+  feedback?: string;
+  assignment?: Assignment;
+}
+
+interface Doubt {
+  id: number;
+  student_id: string;
+  content: string;
+  status: 'open' | 'resolved';
+  response?: string;
+  created_at: string;
+  student?: {
+    name: string;
+    email: string;
+  };
+}
+
+interface ActivityLog {
+  id: number;
+  user_id: string;
+  user_name: string;
+  role: 'student' | 'teacher';
+  action_type: 'assignment_created' | 'assignment_assigned' | 'assignment_submitted' | 'assignment_graded' | 'doubt_asked' | 'doubt_resolved' | 'attendance_marked' | 'quiz_attempt';
+  metadata_json: any;
+  timestamp: string;
+}
+
 // Use globalThis so the same object is reused across hot-reloads in dev
 declare global {
   // eslint-disable-next-line no-var
@@ -46,6 +98,10 @@ declare global {
     attendance: AttendanceRecord[];
     materials: Material[];
     classes: { id: string; name: string; subject: string; schedule: string }[];
+    assignments: Assignment[];
+    submissions: AssignmentSubmission[];
+    doubts: Doubt[];
+    timeline: ActivityLog[];
   } | undefined;
 }
 
@@ -60,10 +116,170 @@ if (!globalThis.__EDUBRIDGE_STORE__) {
       { id: 'c2', name: 'CS-3B', subject: 'Mathematics', schedule: 'Tue/Thu 1:00 PM' },
       { id: 'c3', name: 'CS-4A', subject: 'English Literature', schedule: 'Tue/Fri 1:00 PM' },
     ],
+    assignments: [
+      {
+        id: 1,
+        title: 'Data Structures Stack Implementations',
+        description: 'Implement a Stack using arrays and linked lists in Python.',
+        due_date: new Date(Date.now() + 86400000 * 2).toISOString(),
+        class_id: 'c1',
+        teacher_id: 'teacher@edu.ai'
+      },
+      {
+        id: 2,
+        title: 'Linear Algebra Calculus Quiz Preparation',
+        description: 'Complete the worksheets on matrix multiplication and determinants.',
+        due_date: new Date(Date.now() + 86400000 * 4).toISOString(),
+        class_id: 'c2',
+        teacher_id: 'teacher@edu.ai'
+      }
+    ],
+    submissions: [
+      {
+        id: 1,
+        assignment_id: 1,
+        student_id: 'student@edu.ai',
+        status: 'assigned',
+      },
+      {
+        id: 2,
+        assignment_id: 2,
+        student_id: 'student@edu.ai',
+        status: 'graded',
+        submission_content: 'Please find my matrix answers attached.',
+        grade: 'A',
+        feedback: 'Excellent work!',
+        submitted_at: new Date(Date.now() - 86400000).toISOString()
+      }
+    ],
+    doubts: [
+      {
+        id: 1,
+        student_id: 'student@edu.ai',
+        content: 'Why does a binary search tree search take O(n) in the worst case?',
+        status: 'resolved',
+        response: 'In the worst case, a BST can be skewed/unbalanced, turning it into a linked list where search takes linear time O(n).',
+        created_at: new Date(Date.now() - 3600000 * 4).toISOString(),
+        student: { name: 'Demo Student', email: 'student@edu.ai' }
+      },
+      {
+        id: 2,
+        student_id: 'student@edu.ai',
+        content: 'What is the limit definition of a derivative?',
+        status: 'open',
+        created_at: new Date(Date.now() - 3600000 * 2).toISOString(),
+        student: { name: 'Demo Student', email: 'student@edu.ai' }
+      }
+    ],
+    timeline: [
+      {
+        id: 1,
+        user_id: 'student@edu.ai',
+        user_name: 'Demo Student',
+        role: 'student',
+        action_type: 'quiz_attempt',
+        metadata_json: { subject: 'Data Structures', topic: 'Stacks', correct: true },
+        timestamp: new Date(Date.now() - 3600000 * 3).toISOString()
+      },
+      {
+        id: 2,
+        user_id: 'teacher@edu.ai',
+        user_name: 'Demo Teacher',
+        role: 'teacher',
+        action_type: 'assignment_created',
+        metadata_json: { assignment_title: 'Data Structures Stack Implementations', class_id: 'c1' },
+        timestamp: new Date(Date.now() - 3600000 * 5).toISOString()
+      }
+    ],
   };
 }
 
 export const store = globalThis.__EDUBRIDGE_STORE__!;
+
+// Make sure new keys are initialized if using a cached store from a previous session in memory
+if (!store.assignments) {
+  store.assignments = [
+    {
+      id: 1,
+      title: 'Data Structures Stack Implementations',
+      description: 'Implement a Stack using arrays and linked lists in Python.',
+      due_date: new Date(Date.now() + 86400000 * 2).toISOString(),
+      class_id: 'c1',
+      teacher_id: 'teacher@edu.ai'
+    },
+    {
+      id: 2,
+      title: 'Linear Algebra Calculus Quiz Preparation',
+      description: 'Complete the worksheets on matrix multiplication and determinants.',
+      due_date: new Date(Date.now() + 86400000 * 4).toISOString(),
+      class_id: 'c2',
+      teacher_id: 'teacher@edu.ai'
+    }
+  ];
+}
+if (!store.submissions) {
+  store.submissions = [
+    {
+      id: 1,
+      assignment_id: 1,
+      student_id: 'student@edu.ai',
+      status: 'assigned',
+    },
+    {
+      id: 2,
+      assignment_id: 2,
+      student_id: 'student@edu.ai',
+      status: 'graded',
+      submission_content: 'Please find my matrix answers attached.',
+      grade: 'A',
+      feedback: 'Excellent work!',
+      submitted_at: new Date(Date.now() - 86400000).toISOString()
+    }
+  ];
+}
+if (!store.doubts) {
+  store.doubts = [
+    {
+      id: 1,
+      student_id: 'student@edu.ai',
+      content: 'Why does a binary search tree search take O(n) in the worst case?',
+      status: 'resolved',
+      response: 'In the worst case, a BST can be skewed/unbalanced, turning it into a linked list where search takes linear time O(n).',
+      created_at: new Date(Date.now() - 3600000 * 4).toISOString(),
+      student: { name: 'Demo Student', email: 'student@edu.ai' }
+    },
+    {
+      id: 2,
+      student_id: 'student@edu.ai',
+      content: 'What is the limit definition of a derivative?',
+      status: 'open',
+      created_at: new Date(Date.now() - 3600000 * 2).toISOString(),
+      student: { name: 'Demo Student', email: 'student@edu.ai' }
+    }
+  ];
+}
+if (!store.timeline) {
+  store.timeline = [
+    {
+      id: 1,
+      user_id: 'student@edu.ai',
+      user_name: 'Demo Student',
+      role: 'student',
+      action_type: 'quiz_attempt',
+      metadata_json: { subject: 'Data Structures', topic: 'Stacks', correct: true },
+      timestamp: new Date(Date.now() - 3600000 * 3).toISOString()
+    },
+    {
+      id: 2,
+      user_id: 'teacher@edu.ai',
+      user_name: 'Demo Teacher',
+      role: 'teacher',
+      action_type: 'assignment_created',
+      metadata_json: { assignment_title: 'Data Structures Stack Implementations', class_id: 'c1' },
+      timestamp: new Date(Date.now() - 3600000 * 5).toISOString()
+    }
+  ];
+}
 
 export function hashPassword(password: string): string {
   const salt = crypto.randomBytes(16).toString('hex');

@@ -4,6 +4,14 @@ export interface User {
   name: string;
   role: 'student' | 'teacher' | 'admin';
   profileImage?: string;
+  gender?: string;
+  phone?: string;
+  bio?: string;
+  className?: string;
+  studyTimePreference?: string;
+  weakSubjects?: string;
+  subject?: string;
+  experience?: string;
 }
 
 export interface Message {

@@ -3,6 +3,7 @@
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
+import Link from 'next/link';
 
 export function Navbar() {
   const { theme, setTheme } = useTheme();
@@ -48,7 +49,7 @@ export function Navbar() {
 
           {/* User info */}
           {user && (
-            <div className="flex items-center gap-2">
+            <Link href="/profile" className="flex items-center gap-2 hover:opacity-85 transition-opacity">
               <div className="text-right hidden sm:block">
                 <p className="text-xs font-semibold text-white leading-tight">{user.name}</p>
                 <p className={`text-[10px] font-medium ${isTeacher ? 'text-purple-400' : 'text-indigo-400'}`}>
@@ -60,7 +61,7 @@ export function Navbar() {
               }`}>
                 {initials}
               </div>
-            </div>
+            </Link>
           )}
 
           {!user && (
