@@ -5,5 +5,11 @@
   "installCommand": "npm install",
   "env": {
     "NEXT_PUBLIC_APP_NAME": "EduBridge AI"
+  },
+  "experimentalServices": {
+    "web": {
+      "routePrefix": "/",
+      "framework": "nextjs"
+    }
   }
 }

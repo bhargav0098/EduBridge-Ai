@@ -99,6 +99,28 @@ def get_feed(
     return NoteService.get_feed_notes(db, current_user.id)
 
 
+@router.get("/wiki/search", response_model=List[NoteSchema])
+def search_wiki(
+    search: Optional[str] = None,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_note_user),
+):
+    return NoteService.get_notes(db, search=search, sort_by_upvotes=True)
+
+
+@router.post("/{id}/upvote")
+def upvote_note(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_note_user),
+):
+    from ..models.models import Note
+    note = db.query(Note).filter(Note.id == id).first()
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
+    return NoteService.upvote_note(db, id, current_user.id)
+
+
 @router.post("/{id}/share")
 def share_note(
     id: int,

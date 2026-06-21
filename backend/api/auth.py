@@ -228,3 +228,38 @@ def verify_password_reset(data: PasswordResetVerify, db: Session = Depends(get_d
     otp_record.is_used = True
     db.commit()
     return {"message": "Password reset successful"}
+
+
+@router.get("/users")
+def get_all_users(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(RoleChecker([UserRole.ADMIN]))
+):
+    users = db.query(User).all()
+    return [
+        {
+            "id": u.id,
+            "name": u.name,
+            "email": u.email,
+            "role": u.role.value,
+            "createdAt": u.created_at.isoformat() if u.created_at else None
+        } for u in users
+    ]
+
+
+@router.delete("/users/{user_id}")
+def delete_user(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(RoleChecker([UserRole.ADMIN]))
+):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Delete associated student profile if it exists
+    db.query(StudentProfile).filter(StudentProfile.user_id == user_id).delete()
+    db.delete(user)
+    db.commit()
+    return {"success": True, "message": "User deleted successfully"}
+

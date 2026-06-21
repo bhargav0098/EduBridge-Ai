@@ -64,11 +64,14 @@ def get_chat_user(
         return verify_token(credentials, db)
 
 # Configure Gemini
+import logging
+logger = logging.getLogger(__name__)
+
 try:
     if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "mock_gemini_key_for_now":
         genai.configure(api_key=settings.GEMINI_API_KEY)
 except Exception as e:
-    print(f"Failed to configure Gemini client: {e}")
+    logger.error(f"Failed to configure Gemini client: {e}", exc_info=True)
 
 
 def get_gemini_response_stream(prompt: str, system_instruction: str):
@@ -94,10 +97,10 @@ def get_gemini_response_stream(prompt: str, system_instruction: str):
                     yield chunk.text
             return
         except Exception as e:
-            print(f"Gemini API streaming error: {e}. Falling back to mock tutor.")
+            logger.error(f"Gemini API streaming error: {e}. Falling back to mock tutor.", exc_info=True)
 
     # Fallback / Mock Tutor Response based on prompt/system_instruction
-    mock_tutor_response = f"I am your NCERT tutor. Based on the textbook context, here is what we know: "
+    mock_tutor_response = f"I am having trouble connecting to the AI model right now. Based on the offline textbook content, here is what we know: "
     if "Newton" in prompt or "Newton" in system_instruction:
         mock_tutor_response += "Newton's laws describe motion. First Law is Inertia, Second Law is F=ma, and Third Law is action-reaction."
     elif "Kinetics" in prompt or "Kinetics" in system_instruction:
@@ -105,7 +108,7 @@ def get_gemini_response_stream(prompt: str, system_instruction: str):
     elif "Calculus" in prompt or "Calculus" in system_instruction or "Derivative" in prompt:
         mock_tutor_response += "In calculus, the derivative measures instantaneous rate of change. The derivative of x^n is n * x^(n-1)."
     else:
-        mock_tutor_response += "Let's review the NCERT textbook details provided. Please make sure to read the chapter carefully."
+        mock_tutor_response += "Let's review the NCERT textbook details. Please try rephrasing your question or check back in a moment."
 
     # Yield word by word to simulate streaming
     for word in mock_tutor_response.split(" "):
@@ -121,6 +124,14 @@ def chat_endpoint(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_chat_user)
 ):
+    # Check if empty message
+    if not chat_input.message or not chat_input.message.strip():
+        logger.warning(f"Empty message query received from user: {current_user.id}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Message content cannot be empty. Please type a message to start chatting."
+        )
+
     # 1. Resolve Session ID
     session_id = chat_input.session_id
     if not session_id:

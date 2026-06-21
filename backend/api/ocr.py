@@ -16,11 +16,14 @@ import google.generativeai as genai
 router = APIRouter()
 
 # Configure Gemini
+import logging
+logger = logging.getLogger(__name__)
+
 try:
     if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "mock_gemini_key_for_now":
         genai.configure(api_key=settings.GEMINI_API_KEY)
 except Exception as e:
-    print(f"Failed to configure Gemini: {e}")
+    logger.error(f"Failed to configure Gemini: {e}", exc_info=True)
 
 
 def is_math_equation(text: str) -> bool:
@@ -71,7 +74,7 @@ def solve_math_step_by_step(equation: str) -> dict:
                 clean_text = re.sub(r"\n```$", "", clean_text)
             return json.loads(clean_text)
         except Exception as e:
-            print(f"Error solving with Gemini: {e}. Falling back to mock solver.")
+            logger.error(f"Error solving with Gemini: {e}. Falling back to mock solver.", exc_info=True)
 
     # Fallback/Mock Math Solver
     if "integral" in equation.lower() or "\\int" in equation:
@@ -155,8 +158,8 @@ async def ocr_solve(
                 model = genai.GenerativeModel("gemini-1.5-flash")
                 res = model.generate_content(prompt)
                 solution = res.text
-            except Exception:
-                pass
+            except Exception as e:
+                logger.error(f"Error calling Gemini in OCR fallback RAG: {e}", exc_info=True)
 
         if not solution:
             solution = f"According to the NCERT textbook, {extracted_text} is defined by the laws of motion or kinetics."

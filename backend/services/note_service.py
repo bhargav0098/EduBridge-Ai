@@ -25,13 +25,27 @@ class NoteService:
         return note
 
     @staticmethod
-    def get_notes(db: Session, skip: int = 0, limit: int = 100, search: Optional[str] = None):
+    def get_notes(db: Session, skip: int = 0, limit: int = 100, search: Optional[str] = None, sort_by_upvotes: bool = False):
+        from ..models.models import NoteTag, NoteUpvote
+        from sqlalchemy import func
+        
         query = db.query(Note)
         if search:
-            query = query.filter(
+            # Join tags to allow searching by tag name as well
+            query = query.outerjoin(NoteTag).filter(
                 (Note.title.ilike(f"%{search}%")) | 
-                (Note.content.ilike(f"%{search}%"))
+                (Note.content.ilike(f"%{search}%")) |
+                (NoteTag.tag.ilike(f"%{search}%"))
+            ).distinct()
+            
+        if sort_by_upvotes:
+            query = query.outerjoin(NoteUpvote).group_by(Note.id).order_by(
+                func.count(NoteUpvote.id).desc(),
+                Note.created_at.desc()
             )
+        else:
+            query = query.order_by(Note.created_at.desc())
+            
         return query.offset(skip).limit(limit).all()
 
     @staticmethod
@@ -63,3 +77,20 @@ class NoteService:
             db.commit()
             return True
         return False
+
+    @staticmethod
+    def upvote_note(db: Session, note_id: int, user_id: str):
+        from ..models.models import NoteUpvote
+        existing = db.query(NoteUpvote).filter(
+            NoteUpvote.note_id == note_id,
+            NoteUpvote.user_id == user_id
+        ).first()
+        if existing:
+            db.delete(existing)
+            db.commit()
+            return {"upvoted": False, "change": -1}
+        else:
+            upvote = NoteUpvote(note_id=note_id, user_id=user_id)
+            db.add(upvote)
+            db.commit()
+            return {"upvoted": True, "change": 1}

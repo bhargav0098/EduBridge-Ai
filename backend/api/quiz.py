@@ -2,10 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
+import json
+import os
+import math
+import random
 
 from ..database import get_db
-from ..models.models import Question, StudentPerformance, StudentProfile, User, UserRole, ActivityLog, Achievement
+from ..models.models import Question, StudentPerformance, StudentProfile, User, UserRole, ActivityLog, Achievement, StudentTopicMastery
 from .auth import verify_token
 from ..utils.sse_manager import sse_manager
 from ..schemas.schemas import QuizSubmission, QuizQuestionSchema
@@ -28,248 +32,52 @@ def get_elo_difficulty(elo: int) -> int:
 
 def seed_questions(db: Session):
     """
-    Seed exactly 180 dynamic questions across Data Structures, Mathematics, and English Literature,
-    covering 3 difficulty levels including Easy, Medium, and Hard with 20 questions each.
-    This also seeds 52 legacy questions for physics and math for test compatibility.
+    Seed questions from backend/data/quiz_bank.json dynamically.
+    Falls back to warning if the file is not present.
     """
-    if db.query(Question).count() >= 232:
+    import json
+    import os
+
+    # Count how many questions exist
+    existing_count = db.query(Question).count()
+    if existing_count >= 232:
         return
 
-    # Clear existing questions
+    # Clear existing questions to ensure clean seeding
     db.query(Question).delete()
     db.commit()
 
     questions_list = []
+    # Path is relative to the root directory
+    backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    json_path = os.path.join(backend_dir, "data", "quiz_bank.json")
+    
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                for q_data in data:
+                    questions_list.append(
+                        Question(
+                            subject=q_data["subject"],
+                            topic=q_data["topic"],
+                            question_text=q_data["question_text"],
+                            difficulty=q_data["difficulty"],
+                            type=q_data.get("type", "MCQ"),
+                            options=q_data.get("options"),
+                            answer=q_data["answer"],
+                            explanation=q_data.get("explanation")
+                        )
+                    )
+            db.add_all(questions_list)
+            db.commit()
+            print(f"Seeded {len(questions_list)} questions dynamically from JSON.")
+            return
+        except Exception as e:
+            print(f"Failed to load quiz bank JSON: {e}. Falling back.")
+            db.rollback()
 
-    # Physics questions (25)
-    physics_topics = ["Kinematics", "Laws of Motion", "Work and Energy", "Gravitation", "Thermodynamics"]
-    for i in range(1, 26):
-        difficulty = ((i - 1) % 5) + 1
-        topic = physics_topics[(i - 1) % len(physics_topics)]
-        options = [f"Option A {i}", f"Option B {i}", f"Option C {i}", f"Option D {i}"]
-        questions_list.append(
-            Question(
-                subject="physics",
-                topic=topic,
-                difficulty=difficulty,
-                type="MCQ",
-                options=options,
-                answer=f"Option A {i}",
-                question_text=f"Physics question on {topic} number {i}",
-                explanation=f"This is the explanation for physics question {i}."
-            )
-        )
-
-    # Math questions (25)
-    math_topics = ["Sets and Functions", "Algebra", "Calculus", "Probability", "Coordinate Geometry"]
-    for i in range(1, 26):
-        difficulty = ((i - 1) % 5) + 1
-        topic = math_topics[(i - 1) % len(math_topics)]
-        options = [f"Option A {i}", f"Option B {i}", f"Option C {i}", f"Option D {i}"]
-        questions_list.append(
-            Question(
-                subject="math",
-                topic=topic,
-                difficulty=difficulty,
-                type="MCQ",
-                options=options,
-                answer=f"Option A {i}",
-                question_text=f"Math question on {topic} number {i}",
-                explanation=f"This is the explanation for math question {i}."
-            )
-        )
-
-    # Add a few more to make sure we are strictly over 50
-    questions_list.append(
-        Question(
-            subject="physics",
-            topic="Modern Physics",
-            difficulty=3,
-            type="SHORT",
-            options=None,
-            answer="E = mc^2",
-            question_text="What is Einstein's mass-energy equivalence equation?",
-            explanation="E = mc^2 shows that mass and energy are equivalent."
-        )
-    )
-    questions_list.append(
-        Question(
-            subject="math",
-            topic="Calculus",
-            difficulty=4,
-            type="SHORT",
-            options=None,
-            answer="2x",
-            question_text="What is the derivative of x^2?",
-            explanation="The derivative of x^2 is 2x."
-        )
-    )
-
-    subjects_data = [
-        {
-            "name": "data structures",
-            "topics": {
-                "easy": ["Arrays", "Stacks", "Queues", "Linked Lists", "Complexity"],
-                "medium": ["Binary Trees", "Sorting", "Searching", "Hashing", "Graphs"],
-                "hard": ["AVL Trees", "Red-Black Trees", "Dynamic Programming", "Graph Algorithms", "Heaps"]
-            },
-            "templates": {
-                "easy": [
-                    "What is the average time complexity of accessing an element in an array by index in {topic}?",
-                    "Which data structure is most appropriate for implementing a recursive function's {topic} trace?",
-                    "In a simple {topic}, how is the next element referenced?",
-                    "Which of the following operations is not directly supported by a standard {topic}?",
-                    "What does the term 'overflow' indicate in a {topic} context?"
-                ],
-                "medium": [
-                    "What is the worst-case time complexity of {topic} when using optimized algorithms?",
-                    "Which traversal strategy for a {topic} yields the keys in non-decreasing sorted order?",
-                    "What is the primary advantage of utilizing a {topic} over a standard sequential representation?",
-                    "In a {topic}, what is the maximum number of children a parent node can possess?",
-                    "What occurs during a collision resolution phase in a {topic} structure?"
-                ],
-                "hard": [
-                    "Which balancing rotation is required in a {topic} after inserting a violating element?",
-                    "What is the precise amortized time complexity of a delete-min operation in a Fibonacci {topic}?",
-                    "Which mathematical recurrence relation characterizes the height of a balanced {topic}?",
-                    "What is the worst-case time complexity of a multi-source shortest path search in a {topic}?",
-                    "Which property holds true for all nodes in a self-adjusting {topic}?"
-                ]
-            }
-        },
-        {
-            "name": "mathematics",
-            "topics": {
-                "easy": ["Algebra", "Trigonometry", "Matrices", "Probability", "Sets"],
-                "medium": ["Calculus", "Integration", "Determinants", "Vector Space", "Series"],
-                "hard": ["Differential Equations", "Fourier Series", "Complex Analysis", "Group Theory", "Topology"]
-            },
-            "templates": {
-                "easy": [
-                    "What is the value of the expression involving {topic} at point zero?",
-                    "Which of the following describes the identity element in a standard {topic}?",
-                    "What is the derivative of the basic {topic} function?",
-                    "How many elements are contained in the intersection of {topic} sets?",
-                    "What is the probability of a certain event under a uniform {topic}?"
-                ],
-                "medium": [
-                    "What is the limit of the {topic} function as the variable approaches infinity?",
-                    "What is the value of the definite integral representing the area of {topic}?",
-                    "Which theorem guarantees the existence of a root for a continuous {topic} function?",
-                    "What is the dimension of the subspace defined by the {topic} conditions?",
-                    "Which convergence test is most suitable for the infinite {topic}?"
-                ],
-                "hard": [
-                    "What is the general solution to the homogeneous {topic} equation?",
-                    "Which integral transform maps a {topic} differential equation to an algebraic one?",
-                    "What is the residue of the complex {topic} function at its pole?",
-                    "Which structural property characterizes a non-abelian {topic} group?",
-                    "Which of the following topological spaces is compact under the {topic} metric?"
-                ]
-            }
-        },
-        {
-            "name": "english literature",
-            "topics": {
-                "easy": ["Shakespearian Plays", "Literary Devices", "Romantic Poetry", "Victorian Novels", "Fables"],
-                "medium": ["Modernist Literature", "Tragedy", "Poetic Metres", "Renaissance Drama", "Satire"],
-                "hard": ["Post-colonial Criticism", "Structuralism", "Existential Drama", "Narratology", "Hermeneutics"]
-            },
-            "templates": {
-                "easy": [
-                    "Who is the central protagonist in the famous {topic} text?",
-                    "Which figure of speech is primarily utilized in the selected {topic} passage?",
-                    "What is the recurring thematic motif of the {topic} period?",
-                    "Which Victorian author is renowned for writing about {topic}?",
-                    "What moral lesson is typically conveyed by the classic {topic}?"
-                ],
-                "medium": [
-                    "Which literary movement of the 20th century heavily influenced the structure of {topic}?",
-                    "What is the metrical structure of a traditional sonnet in {topic}?",
-                    "How does the dramatic irony in {topic} contribute to the overall tragedy?",
-                    "Which satirical work is considered a masterpiece of {topic}?",
-                    "What narrative technique is used to represent the characters' thoughts in {topic}?"
-                ],
-                "hard": [
-                    "Which critical theorist pioneered the analysis of power dynamics in {topic}?",
-                    "How does the concept of intertextuality redefine authorship in {topic}?",
-                    "Which existential play is characterized by the absurdist dialogue in {topic}?",
-                    "What does the deconstructive reading of {topic} reveal about its binary oppositions?",
-                    "Which critical framework focuses on the subversion of cultural hegemony in {topic}?"
-                ]
-            }
-        }
-    ]
-
-    for subject in subjects_data:
-        sub_name = subject["name"]
-        
-        # Generate 20 Easy questions (difficulty 1 or 2)
-        for idx in range(20):
-            difficulty = 1 if idx < 10 else 2
-            topic = subject["topics"]["easy"][idx % len(subject["topics"]["easy"])]
-            template = subject["templates"]["easy"][idx % len(subject["templates"]["easy"])]
-            
-            question_text = template.format(topic=topic) + f" (Q {idx + 1})"
-            options = [f"Option A - {topic} concept", f"Option B - {topic} concept", f"Option C - {topic} concept", f"Option D - {topic} concept"]
-            questions_list.append(
-                Question(
-                    subject=sub_name,
-                    topic=topic,
-                    question_text=question_text,
-                    difficulty=difficulty,
-                    type="MCQ",
-                    options=options,
-                    answer="0",  # Index 0 is correct
-                    explanation=f"This is the correct explanation for {topic} under easy difficulty level."
-                )
-            )
-            
-        # Generate 20 Medium questions (difficulty 3)
-        for idx in range(20):
-            difficulty = 3
-            topic = subject["topics"]["medium"][idx % len(subject["topics"]["medium"])]
-            template = subject["templates"]["medium"][idx % len(subject["templates"]["medium"])]
-            
-            question_text = template.format(topic=topic) + f" (Q {idx + 21})"
-            options = [f"Option A - {topic} solution", f"Option B - {topic} solution", f"Option C - {topic} solution", f"Option D - {topic} solution"]
-            questions_list.append(
-                Question(
-                    subject=sub_name,
-                    topic=topic,
-                    question_text=question_text,
-                    difficulty=difficulty,
-                    type="MCQ",
-                    options=options,
-                    answer="1",  # Index 1 is correct
-                    explanation=f"This is the correct explanation for {topic} under medium difficulty level."
-                )
-            )
-            
-        # Generate 20 Hard questions (difficulty 4 or 5)
-        for idx in range(20):
-            difficulty = 4 if idx < 10 else 5
-            topic = subject["topics"]["hard"][idx % len(subject["topics"]["hard"])]
-            template = subject["templates"]["hard"][idx % len(subject["templates"]["hard"])]
-            
-            question_text = template.format(topic=topic) + f" (Q {idx + 41})"
-            options = [f"Option A - {topic} theory", f"Option B - {topic} theory", f"Option C - {topic} theory", f"Option D - {topic} theory"]
-            questions_list.append(
-                Question(
-                    subject=sub_name,
-                    topic=topic,
-                    question_text=question_text,
-                    difficulty=difficulty,
-                    type="MCQ",
-                    options=options,
-                    answer="2",  # Index 2 is correct
-                    explanation=f"This is the correct explanation for {topic} under hard difficulty level."
-                )
-            )
-
-    db.add_all(questions_list)
-    db.commit()
-    print(f"Seeded {len(questions_list)} real-world subject questions successfully.")
+    print("WARNING: quiz_bank.json not found! Empty question seeding.")
 
 
 @router.post("/seed")
@@ -278,9 +86,37 @@ def trigger_seed(db: Session = Depends(get_db)):
     return {"message": "Database seeded successfully"}
 
 
+@router.get("/concept-graph")
+def get_concept_graph(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(verify_token)
+):
+    import json
+    import os
+    backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    json_path = os.path.join(backend_dir, "data", "concept_graph.json")
+    if not os.path.exists(json_path):
+        raise HTTPException(status_code=404, detail="Concept graph configuration not found")
+    try:
+        with open(json_path, "r", encoding="utf-8") as f:
+            graph_data = json.load(f)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to parse concept graph: {str(e)}")
+    from ..models.models import StudentTopicMastery
+    masteries = db.query(StudentTopicMastery).filter(
+        StudentTopicMastery.student_id == current_user.id
+    ).all()
+    mastery_map = {m.topic.lower().strip(): m.p_known for m in masteries}
+    for node in graph_data.get("nodes", []):
+        node_id = node["id"].lower().strip()
+        node["mastery"] = round(mastery_map.get(node_id, 0.25) * 100, 1)
+    return graph_data
+
+
 @router.get("/next")
 def get_next_question(
     subject: str = Query(..., description="Subject of the quiz: physics or math"),
+    topic: Optional[str] = Query(None, description="Topic of the quiz"),
     db: Session = Depends(get_db),
     current_user: User = Depends(verify_token)
 ):
@@ -291,15 +127,55 @@ def get_next_question(
     profile = db.query(StudentProfile).filter(StudentProfile.user_id == current_user.id).first()
     student_elo = profile.elo if profile else 1200
 
-    target_diff = get_elo_difficulty(student_elo)
+    # Pick topic
+    topics_query = db.query(Question.topic).filter(Question.subject == subject.lower()).distinct().all()
+    topic_list = [t[0] for t in topics_query if t[0]]
+    if not topic_list:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No topics available for this subject."
+        )
+    
+    selected_topic = topic if topic else random.choice(topic_list)
 
-    # Find questions of the matching difficulty
+    # BKT mastery level lookup
+    mastery = db.query(StudentTopicMastery).filter(
+        StudentTopicMastery.student_id == current_user.id,
+        StudentTopicMastery.topic == selected_topic
+    ).first()
+    p_known = mastery.p_known if mastery else 0.25
+
+    # Determine BKT-lite target difficulty list
+    if p_known < 0.35:
+        diffs = [1, 2]
+    elif p_known > 0.75:
+        diffs = [4, 5]
+    else:
+        diffs = [3]
+
+    # Find questions of the matching topic and difficulty
     question = db.query(Question).filter(
         Question.subject == subject.lower(),
-        Question.difficulty == target_diff
+        Question.topic == selected_topic,
+        Question.difficulty.in_(diffs)
     ).order_by(func.random()).first()
 
-    # If no question matches target difficulty, try nearby difficulties
+    # Fallback to any question in selected topic
+    if not question:
+        question = db.query(Question).filter(
+            Question.subject == subject.lower(),
+            Question.topic == selected_topic
+        ).order_by(func.random()).first()
+
+    # Fallback to any question in subject matching ELO-based target diff
+    if not question:
+        target_diff = get_elo_difficulty(student_elo)
+        question = db.query(Question).filter(
+            Question.subject == subject.lower(),
+            Question.difficulty == target_diff
+        ).order_by(func.random()).first()
+
+    # Absolute fallback
     if not question:
         question = db.query(Question).filter(
             Question.subject == subject.lower()
@@ -315,10 +191,250 @@ def get_next_question(
         "id": question.id,
         "subject": question.subject,
         "topic": question.topic,
+        "question_text": question.question_text,
         "difficulty": question.difficulty,
         "type": question.type,
         "options": question.options,
-        "student_elo": student_elo
+        "student_elo": student_elo,
+        "p_known": p_known
+    }
+
+
+# Micro-lessons dictionary mapping topics to concepts
+MICRO_LESSONS = {
+    # Physics
+    "kinematics": "Kinematics describes motion. The three key equations of motion for constant acceleration are: v = u + at, s = ut + 0.5at^2, and v^2 = u^2 + 2as. Remember to check your units!",
+    "laws of motion": "Newton's laws of motion: 1st Law (Inertia) - objects remain at rest/motion unless forced to change. 2nd Law (F = ma) - force equals mass times acceleration. 3rd Law - every action has an equal and opposite reaction.",
+    "work and energy": "Work is force times displacement (W = F * d * cos(theta)). Kinetic Energy is 0.5 * m * v^2. Potential Energy is m * g * h. Total mechanical energy is conserved in a closed system.",
+    "gravitation": "Newton's law of gravitation states F = G * m1 * m2 / r^2. Acceleration due to gravity at earth surface is g = G * M / R^2 (~9.8 m/s^2).",
+    "thermodynamics": "The 1st Law is conservation of energy (dU = dQ - dW). The 2nd Law states entropy of an isolated system always increases. Heat flows naturally from hot to cold.",
+    "modern physics": "Modern Physics covers Einstein's relativity (E = mc^2), quantum mechanics, and atomic structures. Energy is quantized in packets called photons (E = h * f).",
+    
+    # Math
+    "sets and functions": "A Set is a collection of distinct elements. The intersection (A ∩ B) contains common elements. A Function maps each input to exactly one output.",
+    "algebra": "Algebra deals with equations. To solve for x, isolate the variable by performing inverse operations on both sides (e.g. if 2x + 3 = 13, subtract 3, then divide by 2).",
+    "calculus": "Calculus studies change. The derivative represents the slope or rate of change (e.g. d/dx of x^2 is 2x). Integration calculates the area under a curve.",
+    "probability": "Probability measures likelihood: P(A) = favorable outcomes / total outcomes. For independent events, P(A and B) = P(A) * P(B). Conditional probability is P(A|B) = P(A and B) / P(B).",
+    "coordinate geometry": "Coordinate geometry locates points on a grid. The distance between (x1, y1) and (x2, y2) is sqrt((x2-x1)^2 + (y2-y1)^2). The slope of a line is (y2-y1)/(x2-x1).",
+    
+    # Data Structures
+    "arrays": "Arrays store elements in contiguous memory. Accessing by index is O(1), but searching or inserting in an unsorted array takes O(N) time.",
+    "stacks": "Stacks are LIFO (Last In First Out) structures. Push and Pop operations are O(1) and occur at the same end (the top). Used in function calls and history backtracks.",
+    "queues": "Queues are FIFO (First In First Out) structures. Enqueue occurs at the rear, Dequeue occurs at the front. Both are O(1). Used in print jobs and CPU scheduling.",
+    "linked lists": "Linked Lists consist of nodes containing data and a next pointer. Accessing is O(N) since you must traverse. Insertion at head is O(1).",
+    "complexity": "Big O complexity measures how algorithm execution time or memory scale with input size N. Standard ranks: O(1) < O(log N) < O(N) < O(N log N) < O(N^2).",
+    "binary trees": "Binary Trees are structures where each node has at most 2 children. In-order traversal of a Binary Search Tree (left-root-right) visits keys in sorted ascending order.",
+    "sorting": "Sorting arranges items. Bubble/Insertion/Selection sorts are O(N^2). Merge and Heap Sorts are guaranteed O(N log N). Quick Sort is O(N log N) average, O(N^2) worst case.",
+    "searching": "Searching finds keys. Binary Search works on sorted arrays and takes O(log N) time by repeatedly halving the search interval.",
+    "hashing": "Hashing maps keys to indexes in a table. Average search/insert time is O(1). Collisions can be resolved using chaining or open addressing.",
+    "graphs": "Graphs consist of Vertices and Edges. Traversals include BFS (Breadth-First Search using a Queue) and DFS (Depth-First Search using recursion/Stack).",
+    "avl trees": "AVL Trees are self-balancing binary search trees. The height difference of left and right subtrees (balance factor) cannot exceed 1. Rotations (LL, RR, LR, RL) restore balance.",
+    "red-black trees": "Red-Black Trees are balanced search trees where nodes are colored red or black. Balancing rules ensure no path is more than twice as long as another.",
+    "dynamic programming": "Dynamic Programming solves complex problems by breaking them into overlapping subproblems, solving each once, and storing solutions in a table (memoization/tabulation).",
+    "graph algorithms": "Common graph algos include Dijkstra's (single-source shortest path, O(V^2) or O(E + V log V)) and Kruskal's/Prim's (minimum spanning trees).",
+    "heaps": "Heaps are complete binary trees. A Max-Heap keeps the largest element at the root. Insertion and deletion (extract-max) take O(log N) time.",
+    
+    # English Literature
+    "shakespearian plays": "William Shakespeare wrote tragedies (Hamlet, Macbeth), comedies (Midsummer Night's Dream), and histories. Tragedies usually depict the downfall of a noble hero.",
+    "literary devices": "Literary devices enrich text. Simile compares using 'like/as'. Metaphor states one thing is another. Personification gives human traits to non-human elements.",
+    "romantic poetry": "Romanticism (late 18th century) focused on nature, emotion, individualism, and imagination. Famous poets include Wordsworth, Coleridge, Keats, and Shelley.",
+    "victorian novels": "Victorian novels (19th century) reflect industrial society, social classes, morality, and reform. Famous writers include Charles Dickens, George Eliot, and the Brontës.",
+    "fables": "Fables are short stories featuring animals with human traits, designed to teach a moral lesson (e.g. Aesop's Fables).",
+    "modernist literature": "Modernism (early 20th century) rejected traditional formats, using stream-of-consciousness, fragmented timelines, and existential themes (e.g. Virginia Woolf, James Joyce).",
+    "tragedy": "Tragedy is a genre where characters encounter suffering and downfall, often due to a tragic flaw (hamartia) or fate, provoking catharsis (pity and fear) in the audience.",
+    "poetic metres": "Poetic metre is the rhythmic structure of a verse. Iambic pentameter consists of five pairs of unstressed/stressed syllables (da-DUM da-DUM da-DUM da-DUM da-DUM).",
+    "renaissance drama": "Renaissance drama (16th-17th century England) flourished under Elizabeth I and James I, featuring blank verse, complex plots, and moral ambiguity.",
+    "satire": "Satire uses humor, irony, exaggeration, or ridicule to expose and criticize human vices, stupidity, or social conventions (e.g. Jonathan Swift).",
+    "post-colonial criticism": "Post-colonial criticism analyzes the legacy of colonial rule, focus on identity, displacement, hybridity, and reclamation of voice by marginalized populations.",
+    "structuralism": "Structuralism is a critical framework stating that cultural elements must be understood in terms of their relationship to a larger, overarching system or structure.",
+    "existential drama": "Existential drama (e.g., Theatre of the Absurd) highlights the absurdity of human existence, lack of absolute truth, and the struggle to find meaning.",
+    "narratology": "Narratology is the study of narrative structures, focusing on how stories are constructed, narrator types, perspective (focalisation), and plot layers.",
+    "hermeneutics": "Hermeneutics is the theory and methodology of text interpretation, especially historical and philosophical texts, focusing on the cycle of understanding."
+}
+
+
+@router.get("/pathway")
+def get_learning_pathway(
+    subject: str = Query(..., description="Subject of the quiz: e.g. data structures, mathematics, english literature"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(verify_token)
+):
+    # Ensure database is seeded
+    seed_questions(db)
+
+    # Query all unique topics for the subject
+    topics = db.query(Question.topic).filter(Question.subject == subject.lower()).distinct().all()
+    topic_list = [t[0] for t in topics]
+    
+    # Query student's performance for this subject
+    performances = db.query(StudentPerformance).join(
+        Question, StudentPerformance.question_id == Question.id
+    ).filter(
+        StudentPerformance.student_id == current_user.id,
+        Question.subject == subject.lower()
+    ).all()
+    
+    topic_stats = {topic: {"correct": 0, "total": 0} for topic in topic_list}
+    for perf in performances:
+        q = db.query(Question).filter(Question.id == perf.question_id).first()
+        if q and q.topic in topic_stats:
+            topic_stats[q.topic]["total"] += 1
+            if perf.correct:
+                topic_stats[q.topic]["correct"] += 1
+                
+    pathway = []
+    for topic in topic_list:
+        stats = topic_stats[topic]
+        accuracy = (stats["correct"] / stats["total"]) if stats["total"] > 0 else 0.0
+        
+        # Scheduler logic:
+        # If accuracy < 0.7 or total attempts < 3, recommend fundamentals. Otherwise, recommend word problems.
+        if accuracy < 0.7 or stats["total"] < 3:
+            next_lesson = f"{topic} Fundamentals"
+            status = "In Progress" if stats["total"] > 0 else "Not Started"
+        else:
+            next_lesson = f"{topic} Word Problems"
+            status = "Mastered"
+            
+        # BKT & Spaced Repetition calculation
+        mastery = db.query(StudentTopicMastery).filter(
+            StudentTopicMastery.student_id == current_user.id,
+            StudentTopicMastery.topic == topic
+        ).first()
+        p_known = mastery.p_known if mastery else 0.25
+        last_practiced = mastery.last_practiced if mastery else None
+
+        if last_practiced:
+            if last_practiced.tzinfo is None:
+                t_days = (datetime.now() - last_practiced).total_seconds() / 86400.0
+            else:
+                t_days = (datetime.now(timezone.utc) - last_practiced).total_seconds() / 86400.0
+        else:
+            t_days = 99.0
+
+        strength = 2.0 + 8.0 * p_known
+        retention = math.exp(-t_days / strength)
+        review_recommended = (retention < 0.6)
+
+        pathway.append({
+            "topic": topic,
+            "accuracy": round(accuracy * 100, 1),
+            "attempts": stats["total"],
+            "correct": stats["correct"],
+            "next_lesson": next_lesson,
+            "status": status,
+            "review_recommended": review_recommended,
+            "retention": round(retention * 100, 1),
+            "p_known": round(p_known, 3),
+            "last_practiced": last_practiced.isoformat() if last_practiced else None
+        })
+        
+    return {
+        "subject": subject,
+        "student_id": current_user.id,
+        "pathway": pathway
+    }
+
+
+def evaluate_short_answer_semantically(question_text: str, model_answer: str, student_answer: str, topic: str) -> dict:
+    """
+    Evaluate a student's short answer against the model answer semantically.
+    Checks for misconceptions and provides feedback.
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    # Normalise
+    student_norm = student_answer.strip().lower()
+    model_norm = model_answer.strip().lower()
+    
+    # Check if Gemini API is configured
+    from ..config import settings
+    import google.generativeai as genai
+    
+    use_real = False
+    if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY != "mock_gemini_key_for_now":
+        use_real = True
+        
+    if use_real:
+        try:
+            genai.configure(api_key=settings.GEMINI_API_KEY)
+            model = genai.GenerativeModel(
+                model_name="gemini-1.5-flash",
+                generation_config={"response_mime_type": "application/json"}
+            )
+            prompt = (
+                f"Question: {question_text}\n"
+                f"Correct Model Answer: {model_answer}\n"
+                f"Student's Answer: {student_answer}\n\n"
+                "Evaluate the student's answer semantically. Check for correct understanding. "
+                "If they show a clear misconception (e.g. wrong organelle, inverted direction/sign, or confused terminology), "
+                "flag correct=false, explain the misconception in 'misconception_detected', and provide helpful 'feedback'. "
+                "Otherwise if it is correct, return correct=true, misconception_detected=null, and generic encouraging 'feedback'. "
+                "You must respond ONLY with a JSON object in this format:\n"
+                "{\n"
+                '  "correct": boolean,\n'
+                '  "misconception_detected": "string or null",\n'
+                '  "feedback": "string"\n'
+                "}"
+            )
+            response = model.generate_content(prompt)
+            result = json.loads(response.text.strip())
+            return {
+                "correct": bool(result.get("correct", False)),
+                "misconception_detected": result.get("misconception_detected"),
+                "feedback": result.get("feedback", "No feedback provided.")
+            }
+        except Exception as e:
+            logger.error(f"Semantic grading with Gemini failed: {e}. Falling back.", exc_info=True)
+            
+    # Local fallback / Keyword matching
+    # Let's check for specific distractor patterns
+    misconception_detected = None
+    correct = False
+    
+    # Misconception check: Photosynthesis vs Mitochondria
+    if "photosynthesis" in question_text.lower() or "photosynthesis" in model_norm:
+        if "mitochondria" in student_norm:
+            misconception_detected = "Did you mix up mitochondria with chloroplasts? Photosynthesis occurs in chloroplasts."
+        elif "chloroplast" in student_norm:
+            correct = True
+            
+    # Misconception check: Newton's 1st law vs Inertia
+    if "newton" in question_text.lower() or "1st law" in question_text.lower() or "first law" in question_text.lower():
+        if "net force" in student_norm and "zero" in student_norm:
+            # But did they mention inertia or stay at rest?
+            if "inertia" in student_norm or "rest" in student_norm or "motion" in student_norm:
+                correct = True
+            else:
+                misconception_detected = "Missing the core concept of inertia or staying at rest/motion unless acted upon."
+        elif "inertia" in student_norm:
+            correct = True
+            
+    # General keyword scoring fallback
+    if not correct and not misconception_detected:
+        # Extract key words (length > 3, exclude common stop words)
+        stop_words = {"what", "is", "the", "are", "and", "for", "with", "from", "that", "this", "these", "those"}
+        model_words = [w.strip(".,?!()") for w in model_norm.split() if w.strip(".,?!()") not in stop_words and len(w) > 3]
+        # Split student answer into normalized tokens
+        student_tokens = set(w.strip(".,?!()") for w in student_norm.split())
+        
+        if model_words:
+            matched = [w for w in model_words if w in student_tokens]
+            match_ratio = len(matched) / len(model_words)
+            if match_ratio >= 0.5:
+                correct = True
+                
+    feedback = "Correct! Great job." if correct else "Incorrect."
+    if misconception_detected:
+        feedback = f"Incorrect. Hint: {misconception_detected}"
+    elif not correct:
+        feedback = "Incorrect. Hint: Review the key concepts of the topic or study the micro-lesson below."
+        
+    return {
+        "correct": correct,
+        "misconception_detected": misconception_detected,
+        "feedback": feedback
     }
 
 
@@ -340,8 +456,24 @@ async def submit_answer(
         db.commit()
         db.refresh(profile)
 
-    # Verify answer
-    is_correct = (student_answer.strip().lower() == question.answer.strip().lower())
+    # Verify answer & Perform semantic evaluation for SHORT questions
+    is_correct = False
+    misconception_detected = None
+    feedback_msg = ""
+    
+    if question.type == "SHORT":
+        eval_res = evaluate_short_answer_semantically(
+            question_text=question.question_text,
+            model_answer=question.answer,
+            student_answer=student_answer,
+            topic=question.topic
+        )
+        is_correct = eval_res["correct"]
+        misconception_detected = eval_res["misconception_detected"]
+        feedback_msg = eval_res["feedback"]
+    else:
+        is_correct = (student_answer.strip().lower() == question.answer.strip().lower())
+        feedback_msg = "Great job!" if is_correct else "Study hard and try again!"
 
     # Elo-lite adjustment logic
     # "correct answer on hard question = +20 ELO, wrong on easy = -20"
@@ -370,6 +502,34 @@ async def submit_answer(
     db.add(perf)
     db.flush()
 
+    # BKT-lite Mastery Update
+    mastery = db.query(StudentTopicMastery).filter(
+        StudentTopicMastery.student_id == current_user.id,
+        StudentTopicMastery.topic == question.topic
+    ).first()
+    if not mastery:
+        mastery = StudentTopicMastery(
+            student_id=current_user.id,
+            topic=question.topic,
+            p_known=0.25
+        )
+        db.add(mastery)
+        db.flush()
+    
+    guess = 0.2
+    slip = 0.1
+    learn_rate = 0.15
+    p_known = mastery.p_known
+    
+    if is_correct:
+        p_known_updated = (p_known * (1 - slip)) / ((p_known * (1 - slip)) + ((1 - p_known) * guess))
+    else:
+        p_known_updated = (p_known * slip) / ((p_known * slip) + ((1 - p_known) * (1 - guess)))
+        
+    p_known_new = p_known_updated + (1 - p_known_updated) * learn_rate
+    mastery.p_known = max(0.01, min(0.99, p_known_new))
+    mastery.last_practiced = datetime.now(timezone.utc)
+
     # Log Activity
     log = ActivityLog(
         user_id=current_user.id,
@@ -380,16 +540,42 @@ async def submit_answer(
             "topic": question.topic,
             "correct": is_correct,
             "elo_change": elo_change,
-            "new_elo": new_elo
+            "new_elo": new_elo,
+            "p_known": mastery.p_known
         },
         related_id=str(question.id)
     )
     db.add(log)
 
-    # Check for Quiz Streak Master
+    # Check mistakes/streak on this topic
+    triggered_micro_lesson = None
+    topic_key = question.topic.lower().strip()
+    
+    # Query last attempts for this topic
+    last_attempts_topic = db.query(StudentPerformance).join(
+        Question, StudentPerformance.question_id == Question.id
+    ).filter(
+        StudentPerformance.student_id == current_user.id,
+        Question.topic == question.topic
+    ).order_by(StudentPerformance.attempt_time.desc(), StudentPerformance.id.desc()).limit(3).all()
+    
+    # 1. 3 correct in a row -> Increase ELO/Difficulty extra boost
+    if is_correct and len(last_attempts_topic) >= 3 and all(a.correct for a in last_attempts_topic):
+        profile.elo = profile.elo + 30
+        feedback_msg = f"{feedback_msg} Excellent! 3 correct in a row. Difficulty boosted (+30 ELO)!"
+        
+    # 2. 2 incorrect in a row -> Trigger micro-lesson
+    if not is_correct and len(last_attempts_topic) >= 2 and not last_attempts_topic[0].correct and not last_attempts_topic[1].correct:
+        triggered_micro_lesson = MICRO_LESSONS.get(
+            topic_key,
+            f"Keep practicing! Focus on studying the core concepts of {question.topic} to improve your score."
+        )
+        feedback_msg = f"{feedback_msg} Tip: Review the triggered micro-lesson below to help you clear doubts."
+
+    # Check for Quiz Streak Master (Global)
     last_attempts = db.query(StudentPerformance).filter(
         StudentPerformance.student_id == current_user.id
-    ).order_by(StudentPerformance.attempt_time.desc()).limit(3).all()
+    ).order_by(StudentPerformance.attempt_time.desc(), StudentPerformance.id.desc()).limit(3).all()
 
     if len(last_attempts) >= 3 and all(a.correct for a in last_attempts):
         existing_badge = db.query(Achievement).filter(
@@ -419,9 +605,12 @@ async def submit_answer(
         "correct": is_correct,
         "correct_answer": question.answer,
         "old_elo": old_elo,
-        "new_elo": new_elo,
-        "elo_change": elo_change,
-        "feedback": "Great job!" if is_correct else "Study hard and try again!"
+        "new_elo": profile.elo,
+        "elo_change": profile.elo - old_elo,
+        "feedback": feedback_msg,
+        "misconception_detected": misconception_detected,
+        "p_known": mastery.p_known,
+        "triggered_micro_lesson": triggered_micro_lesson
     }
 
 
@@ -627,4 +816,155 @@ async def submit_quiz(
         "new_elo": new_elo,
         "elo_change": elo_change
     }
+
+
+# Admin Question Management APIs
+from .auth import RoleChecker
+from fastapi import UploadFile, File
+import os
+import json
+
+@router.get("/questions")
+def list_questions(
+    subject: Optional[str] = None,
+    topic: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(RoleChecker([UserRole.TEACHER, UserRole.ADMIN]))
+):
+    query = db.query(Question)
+    if subject:
+        query = query.filter(Question.subject == subject.lower())
+    if topic:
+        query = query.filter(Question.topic.ilike(f"%{topic}%"))
+    
+    total = query.count()
+    items = query.offset(skip).limit(limit).all()
+    
+    return {
+        "total": total,
+        "questions": [
+            {
+                "id": q.id,
+                "subject": q.subject,
+                "topic": q.topic,
+                "question_text": q.question_text,
+                "difficulty": q.difficulty,
+                "type": q.type,
+                "options": q.options,
+                "answer": q.answer,
+                "explanation": q.explanation
+            } for q in items
+        ]
+    }
+
+@router.post("/questions")
+def create_question(
+    q_data: QuizQuestionSchema,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(RoleChecker([UserRole.TEACHER, UserRole.ADMIN]))
+):
+    new_q = Question(
+        subject=q_data.subject.lower(),
+        topic=q_data.topic,
+        question_text=q_data.question_text,
+        difficulty=q_data.difficulty,
+        type=q_data.type,
+        options=q_data.options,
+        answer=q_data.answer,
+        explanation=q_data.explanation
+    )
+    db.add(new_q)
+    db.commit()
+    db.refresh(new_q)
+    
+    # Sync with JSON file to make changes persistent in git/data folder
+    sync_db_questions_to_json(db)
+    
+    return {"success": True, "question_id": new_q.id}
+
+@router.delete("/questions/{q_id}")
+def delete_question(
+    q_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(RoleChecker([UserRole.TEACHER, UserRole.ADMIN]))
+):
+    q = db.query(Question).filter(Question.id == q_id).first()
+    if not q:
+        raise HTTPException(status_code=404, detail="Question not found")
+    
+    db.delete(q)
+    db.commit()
+    
+    # Sync with JSON file
+    sync_db_questions_to_json(db)
+    
+    return {"success": True, "message": "Question deleted successfully"}
+
+@router.post("/questions/upload")
+async def upload_questions_json(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(RoleChecker([UserRole.TEACHER, UserRole.ADMIN]))
+):
+    try:
+        content = await file.read()
+        questions_data = json.loads(content.decode("utf-8"))
+        
+        # Basic validation
+        if not isinstance(questions_data, list):
+            raise HTTPException(status_code=400, detail="JSON must be an array of questions")
+            
+        # Delete old questions and load new ones
+        db.query(Question).delete()
+        
+        for q_data in questions_data:
+            new_q = Question(
+                subject=q_data["subject"].lower(),
+                topic=q_data["topic"],
+                question_text=q_data["question_text"],
+                difficulty=q_data["difficulty"],
+                type=q_data.get("type", "MCQ"),
+                options=q_data.get("options"),
+                answer=q_data["answer"],
+                explanation=q_data.get("explanation")
+            )
+            db.add(new_q)
+            
+        db.commit()
+        
+        # Save to file
+        sync_db_questions_to_json(db)
+        
+        return {"success": True, "count": len(questions_data)}
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON file format")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to load questions: {str(e)}")
+
+def sync_db_questions_to_json(db: Session):
+    try:
+        questions = db.query(Question).all()
+        data = [
+            {
+                "subject": q.subject,
+                "topic": q.topic,
+                "question_text": q.question_text,
+                "difficulty": q.difficulty,
+                "type": q.type,
+                "options": q.options,
+                "answer": q.answer,
+                "explanation": q.explanation
+            } for q in questions
+        ]
+        backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        json_path = os.path.join(backend_dir, "data", "quiz_bank.json")
+        os.makedirs(os.path.dirname(json_path), exist_ok=True)
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+    except Exception as e:
+        print(f"Failed to sync database questions to JSON file: {e}")
+
 

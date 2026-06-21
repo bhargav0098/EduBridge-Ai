@@ -1,0 +1,3512 @@
+[
+  {
+    "subject": "physics",
+    "topic": "Kinematics",
+    "question_text": "Physics question on Kinematics number 1",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A 1",
+      "Option B 1",
+      "Option C 1",
+      "Option D 1"
+    ],
+    "answer": "Option A 1",
+    "explanation": "This is the explanation for physics question 1."
+  },
+  {
+    "subject": "physics",
+    "topic": "Laws of Motion",
+    "question_text": "Physics question on Laws of Motion number 2",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A 2",
+      "Option B 2",
+      "Option C 2",
+      "Option D 2"
+    ],
+    "answer": "Option A 2",
+    "explanation": "This is the explanation for physics question 2."
+  },
+  {
+    "subject": "physics",
+    "topic": "Work and Energy",
+    "question_text": "Physics question on Work and Energy number 3",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A 3",
+      "Option B 3",
+      "Option C 3",
+      "Option D 3"
+    ],
+    "answer": "Option A 3",
+    "explanation": "This is the explanation for physics question 3."
+  },
+  {
+    "subject": "physics",
+    "topic": "Gravitation",
+    "question_text": "Physics question on Gravitation number 4",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A 4",
+      "Option B 4",
+      "Option C 4",
+      "Option D 4"
+    ],
+    "answer": "Option A 4",
+    "explanation": "This is the explanation for physics question 4."
+  },
+  {
+    "subject": "physics",
+    "topic": "Thermodynamics",
+    "question_text": "Physics question on Thermodynamics number 5",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A 5",
+      "Option B 5",
+      "Option C 5",
+      "Option D 5"
+    ],
+    "answer": "Option A 5",
+    "explanation": "This is the explanation for physics question 5."
+  },
+  {
+    "subject": "physics",
+    "topic": "Kinematics",
+    "question_text": "Physics question on Kinematics number 6",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A 6",
+      "Option B 6",
+      "Option C 6",
+      "Option D 6"
+    ],
+    "answer": "Option A 6",
+    "explanation": "This is the explanation for physics question 6."
+  },
+  {
+    "subject": "physics",
+    "topic": "Laws of Motion",
+    "question_text": "Physics question on Laws of Motion number 7",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A 7",
+      "Option B 7",
+      "Option C 7",
+      "Option D 7"
+    ],
+    "answer": "Option A 7",
+    "explanation": "This is the explanation for physics question 7."
+  },
+  {
+    "subject": "physics",
+    "topic": "Work and Energy",
+    "question_text": "Physics question on Work and Energy number 8",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A 8",
+      "Option B 8",
+      "Option C 8",
+      "Option D 8"
+    ],
+    "answer": "Option A 8",
+    "explanation": "This is the explanation for physics question 8."
+  },
+  {
+    "subject": "physics",
+    "topic": "Gravitation",
+    "question_text": "Physics question on Gravitation number 9",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A 9",
+      "Option B 9",
+      "Option C 9",
+      "Option D 9"
+    ],
+    "answer": "Option A 9",
+    "explanation": "This is the explanation for physics question 9."
+  },
+  {
+    "subject": "physics",
+    "topic": "Thermodynamics",
+    "question_text": "Physics question on Thermodynamics number 10",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A 10",
+      "Option B 10",
+      "Option C 10",
+      "Option D 10"
+    ],
+    "answer": "Option A 10",
+    "explanation": "This is the explanation for physics question 10."
+  },
+  {
+    "subject": "physics",
+    "topic": "Kinematics",
+    "question_text": "Physics question on Kinematics number 11",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A 11",
+      "Option B 11",
+      "Option C 11",
+      "Option D 11"
+    ],
+    "answer": "Option A 11",
+    "explanation": "This is the explanation for physics question 11."
+  },
+  {
+    "subject": "physics",
+    "topic": "Laws of Motion",
+    "question_text": "Physics question on Laws of Motion number 12",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A 12",
+      "Option B 12",
+      "Option C 12",
+      "Option D 12"
+    ],
+    "answer": "Option A 12",
+    "explanation": "This is the explanation for physics question 12."
+  },
+  {
+    "subject": "physics",
+    "topic": "Work and Energy",
+    "question_text": "Physics question on Work and Energy number 13",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A 13",
+      "Option B 13",
+      "Option C 13",
+      "Option D 13"
+    ],
+    "answer": "Option A 13",
+    "explanation": "This is the explanation for physics question 13."
+  },
+  {
+    "subject": "physics",
+    "topic": "Gravitation",
+    "question_text": "Physics question on Gravitation number 14",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A 14",
+      "Option B 14",
+      "Option C 14",
+      "Option D 14"
+    ],
+    "answer": "Option A 14",
+    "explanation": "This is the explanation for physics question 14."
+  },
+  {
+    "subject": "physics",
+    "topic": "Thermodynamics",
+    "question_text": "Physics question on Thermodynamics number 15",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A 15",
+      "Option B 15",
+      "Option C 15",
+      "Option D 15"
+    ],
+    "answer": "Option A 15",
+    "explanation": "This is the explanation for physics question 15."
+  },
+  {
+    "subject": "physics",
+    "topic": "Kinematics",
+    "question_text": "Physics question on Kinematics number 16",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A 16",
+      "Option B 16",
+      "Option C 16",
+      "Option D 16"
+    ],
+    "answer": "Option A 16",
+    "explanation": "This is the explanation for physics question 16."
+  },
+  {
+    "subject": "physics",
+    "topic": "Laws of Motion",
+    "question_text": "Physics question on Laws of Motion number 17",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A 17",
+      "Option B 17",
+      "Option C 17",
+      "Option D 17"
+    ],
+    "answer": "Option A 17",
+    "explanation": "This is the explanation for physics question 17."
+  },
+  {
+    "subject": "physics",
+    "topic": "Work and Energy",
+    "question_text": "Physics question on Work and Energy number 18",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A 18",
+      "Option B 18",
+      "Option C 18",
+      "Option D 18"
+    ],
+    "answer": "Option A 18",
+    "explanation": "This is the explanation for physics question 18."
+  },
+  {
+    "subject": "physics",
+    "topic": "Gravitation",
+    "question_text": "Physics question on Gravitation number 19",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A 19",
+      "Option B 19",
+      "Option C 19",
+      "Option D 19"
+    ],
+    "answer": "Option A 19",
+    "explanation": "This is the explanation for physics question 19."
+  },
+  {
+    "subject": "physics",
+    "topic": "Thermodynamics",
+    "question_text": "Physics question on Thermodynamics number 20",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A 20",
+      "Option B 20",
+      "Option C 20",
+      "Option D 20"
+    ],
+    "answer": "Option A 20",
+    "explanation": "This is the explanation for physics question 20."
+  },
+  {
+    "subject": "physics",
+    "topic": "Kinematics",
+    "question_text": "Physics question on Kinematics number 21",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A 21",
+      "Option B 21",
+      "Option C 21",
+      "Option D 21"
+    ],
+    "answer": "Option A 21",
+    "explanation": "This is the explanation for physics question 21."
+  },
+  {
+    "subject": "physics",
+    "topic": "Laws of Motion",
+    "question_text": "Physics question on Laws of Motion number 22",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A 22",
+      "Option B 22",
+      "Option C 22",
+      "Option D 22"
+    ],
+    "answer": "Option A 22",
+    "explanation": "This is the explanation for physics question 22."
+  },
+  {
+    "subject": "physics",
+    "topic": "Work and Energy",
+    "question_text": "Physics question on Work and Energy number 23",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A 23",
+      "Option B 23",
+      "Option C 23",
+      "Option D 23"
+    ],
+    "answer": "Option A 23",
+    "explanation": "This is the explanation for physics question 23."
+  },
+  {
+    "subject": "physics",
+    "topic": "Gravitation",
+    "question_text": "Physics question on Gravitation number 24",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A 24",
+      "Option B 24",
+      "Option C 24",
+      "Option D 24"
+    ],
+    "answer": "Option A 24",
+    "explanation": "This is the explanation for physics question 24."
+  },
+  {
+    "subject": "physics",
+    "topic": "Thermodynamics",
+    "question_text": "Physics question on Thermodynamics number 25",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A 25",
+      "Option B 25",
+      "Option C 25",
+      "Option D 25"
+    ],
+    "answer": "Option A 25",
+    "explanation": "This is the explanation for physics question 25."
+  },
+  {
+    "subject": "math",
+    "topic": "Sets and Functions",
+    "question_text": "Math question on Sets and Functions number 1",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A 1",
+      "Option B 1",
+      "Option C 1",
+      "Option D 1"
+    ],
+    "answer": "Option A 1",
+    "explanation": "This is the explanation for math question 1."
+  },
+  {
+    "subject": "math",
+    "topic": "Algebra",
+    "question_text": "Math question on Algebra number 2",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A 2",
+      "Option B 2",
+      "Option C 2",
+      "Option D 2"
+    ],
+    "answer": "Option A 2",
+    "explanation": "This is the explanation for math question 2."
+  },
+  {
+    "subject": "math",
+    "topic": "Calculus",
+    "question_text": "Math question on Calculus number 3",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A 3",
+      "Option B 3",
+      "Option C 3",
+      "Option D 3"
+    ],
+    "answer": "Option A 3",
+    "explanation": "This is the explanation for math question 3."
+  },
+  {
+    "subject": "math",
+    "topic": "Probability",
+    "question_text": "Math question on Probability number 4",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A 4",
+      "Option B 4",
+      "Option C 4",
+      "Option D 4"
+    ],
+    "answer": "Option A 4",
+    "explanation": "This is the explanation for math question 4."
+  },
+  {
+    "subject": "math",
+    "topic": "Coordinate Geometry",
+    "question_text": "Math question on Coordinate Geometry number 5",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A 5",
+      "Option B 5",
+      "Option C 5",
+      "Option D 5"
+    ],
+    "answer": "Option A 5",
+    "explanation": "This is the explanation for math question 5."
+  },
+  {
+    "subject": "math",
+    "topic": "Sets and Functions",
+    "question_text": "Math question on Sets and Functions number 6",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A 6",
+      "Option B 6",
+      "Option C 6",
+      "Option D 6"
+    ],
+    "answer": "Option A 6",
+    "explanation": "This is the explanation for math question 6."
+  },
+  {
+    "subject": "math",
+    "topic": "Algebra",
+    "question_text": "Math question on Algebra number 7",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A 7",
+      "Option B 7",
+      "Option C 7",
+      "Option D 7"
+    ],
+    "answer": "Option A 7",
+    "explanation": "This is the explanation for math question 7."
+  },
+  {
+    "subject": "math",
+    "topic": "Calculus",
+    "question_text": "Math question on Calculus number 8",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A 8",
+      "Option B 8",
+      "Option C 8",
+      "Option D 8"
+    ],
+    "answer": "Option A 8",
+    "explanation": "This is the explanation for math question 8."
+  },
+  {
+    "subject": "math",
+    "topic": "Probability",
+    "question_text": "Math question on Probability number 9",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A 9",
+      "Option B 9",
+      "Option C 9",
+      "Option D 9"
+    ],
+    "answer": "Option A 9",
+    "explanation": "This is the explanation for math question 9."
+  },
+  {
+    "subject": "math",
+    "topic": "Coordinate Geometry",
+    "question_text": "Math question on Coordinate Geometry number 10",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A 10",
+      "Option B 10",
+      "Option C 10",
+      "Option D 10"
+    ],
+    "answer": "Option A 10",
+    "explanation": "This is the explanation for math question 10."
+  },
+  {
+    "subject": "math",
+    "topic": "Sets and Functions",
+    "question_text": "Math question on Sets and Functions number 11",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A 11",
+      "Option B 11",
+      "Option C 11",
+      "Option D 11"
+    ],
+    "answer": "Option A 11",
+    "explanation": "This is the explanation for math question 11."
+  },
+  {
+    "subject": "math",
+    "topic": "Algebra",
+    "question_text": "Math question on Algebra number 12",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A 12",
+      "Option B 12",
+      "Option C 12",
+      "Option D 12"
+    ],
+    "answer": "Option A 12",
+    "explanation": "This is the explanation for math question 12."
+  },
+  {
+    "subject": "math",
+    "topic": "Calculus",
+    "question_text": "Math question on Calculus number 13",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A 13",
+      "Option B 13",
+      "Option C 13",
+      "Option D 13"
+    ],
+    "answer": "Option A 13",
+    "explanation": "This is the explanation for math question 13."
+  },
+  {
+    "subject": "math",
+    "topic": "Probability",
+    "question_text": "Math question on Probability number 14",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A 14",
+      "Option B 14",
+      "Option C 14",
+      "Option D 14"
+    ],
+    "answer": "Option A 14",
+    "explanation": "This is the explanation for math question 14."
+  },
+  {
+    "subject": "math",
+    "topic": "Coordinate Geometry",
+    "question_text": "Math question on Coordinate Geometry number 15",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A 15",
+      "Option B 15",
+      "Option C 15",
+      "Option D 15"
+    ],
+    "answer": "Option A 15",
+    "explanation": "This is the explanation for math question 15."
+  },
+  {
+    "subject": "math",
+    "topic": "Sets and Functions",
+    "question_text": "Math question on Sets and Functions number 16",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A 16",
+      "Option B 16",
+      "Option C 16",
+      "Option D 16"
+    ],
+    "answer": "Option A 16",
+    "explanation": "This is the explanation for math question 16."
+  },
+  {
+    "subject": "math",
+    "topic": "Algebra",
+    "question_text": "Math question on Algebra number 17",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A 17",
+      "Option B 17",
+      "Option C 17",
+      "Option D 17"
+    ],
+    "answer": "Option A 17",
+    "explanation": "This is the explanation for math question 17."
+  },
+  {
+    "subject": "math",
+    "topic": "Calculus",
+    "question_text": "Math question on Calculus number 18",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A 18",
+      "Option B 18",
+      "Option C 18",
+      "Option D 18"
+    ],
+    "answer": "Option A 18",
+    "explanation": "This is the explanation for math question 18."
+  },
+  {
+    "subject": "math",
+    "topic": "Probability",
+    "question_text": "Math question on Probability number 19",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A 19",
+      "Option B 19",
+      "Option C 19",
+      "Option D 19"
+    ],
+    "answer": "Option A 19",
+    "explanation": "This is the explanation for math question 19."
+  },
+  {
+    "subject": "math",
+    "topic": "Coordinate Geometry",
+    "question_text": "Math question on Coordinate Geometry number 20",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A 20",
+      "Option B 20",
+      "Option C 20",
+      "Option D 20"
+    ],
+    "answer": "Option A 20",
+    "explanation": "This is the explanation for math question 20."
+  },
+  {
+    "subject": "math",
+    "topic": "Sets and Functions",
+    "question_text": "Math question on Sets and Functions number 21",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A 21",
+      "Option B 21",
+      "Option C 21",
+      "Option D 21"
+    ],
+    "answer": "Option A 21",
+    "explanation": "This is the explanation for math question 21."
+  },
+  {
+    "subject": "math",
+    "topic": "Algebra",
+    "question_text": "Math question on Algebra number 22",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A 22",
+      "Option B 22",
+      "Option C 22",
+      "Option D 22"
+    ],
+    "answer": "Option A 22",
+    "explanation": "This is the explanation for math question 22."
+  },
+  {
+    "subject": "math",
+    "topic": "Calculus",
+    "question_text": "Math question on Calculus number 23",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A 23",
+      "Option B 23",
+      "Option C 23",
+      "Option D 23"
+    ],
+    "answer": "Option A 23",
+    "explanation": "This is the explanation for math question 23."
+  },
+  {
+    "subject": "math",
+    "topic": "Probability",
+    "question_text": "Math question on Probability number 24",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A 24",
+      "Option B 24",
+      "Option C 24",
+      "Option D 24"
+    ],
+    "answer": "Option A 24",
+    "explanation": "This is the explanation for math question 24."
+  },
+  {
+    "subject": "math",
+    "topic": "Coordinate Geometry",
+    "question_text": "Math question on Coordinate Geometry number 25",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A 25",
+      "Option B 25",
+      "Option C 25",
+      "Option D 25"
+    ],
+    "answer": "Option A 25",
+    "explanation": "This is the explanation for math question 25."
+  },
+  {
+    "subject": "physics",
+    "topic": "Modern Physics",
+    "question_text": "What is Einstein's mass-energy equivalence equation?",
+    "difficulty": 3,
+    "type": "SHORT",
+    "options": null,
+    "answer": "E = mc^2",
+    "explanation": "E = mc^2 shows that mass and energy are equivalent."
+  },
+  {
+    "subject": "math",
+    "topic": "Calculus",
+    "question_text": "What is the derivative of x^2?",
+    "difficulty": 4,
+    "type": "SHORT",
+    "options": null,
+    "answer": "2x",
+    "explanation": "The derivative of x^2 is 2x."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Arrays",
+    "question_text": "What is the average time complexity of accessing an element in an array by index in Arrays? (Q 1)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Arrays concept",
+      "Option B - Arrays concept",
+      "Option C - Arrays concept",
+      "Option D - Arrays concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Arrays under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Stacks",
+    "question_text": "Which data structure is most appropriate for implementing a recursive function's Stacks trace? (Q 2)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Stacks concept",
+      "Option B - Stacks concept",
+      "Option C - Stacks concept",
+      "Option D - Stacks concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Stacks under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Queues",
+    "question_text": "In a simple Queues, how is the next element referenced? (Q 3)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Queues concept",
+      "Option B - Queues concept",
+      "Option C - Queues concept",
+      "Option D - Queues concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Queues under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Linked Lists",
+    "question_text": "Which of the following operations is not directly supported by a standard Linked Lists? (Q 4)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Linked Lists concept",
+      "Option B - Linked Lists concept",
+      "Option C - Linked Lists concept",
+      "Option D - Linked Lists concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Linked Lists under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Complexity",
+    "question_text": "What does the term 'overflow' indicate in a Complexity context? (Q 5)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Complexity concept",
+      "Option B - Complexity concept",
+      "Option C - Complexity concept",
+      "Option D - Complexity concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Complexity under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Arrays",
+    "question_text": "What is the average time complexity of accessing an element in an array by index in Arrays? (Q 6)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Arrays concept",
+      "Option B - Arrays concept",
+      "Option C - Arrays concept",
+      "Option D - Arrays concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Arrays under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Stacks",
+    "question_text": "Which data structure is most appropriate for implementing a recursive function's Stacks trace? (Q 7)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Stacks concept",
+      "Option B - Stacks concept",
+      "Option C - Stacks concept",
+      "Option D - Stacks concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Stacks under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Queues",
+    "question_text": "In a simple Queues, how is the next element referenced? (Q 8)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Queues concept",
+      "Option B - Queues concept",
+      "Option C - Queues concept",
+      "Option D - Queues concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Queues under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Linked Lists",
+    "question_text": "Which of the following operations is not directly supported by a standard Linked Lists? (Q 9)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Linked Lists concept",
+      "Option B - Linked Lists concept",
+      "Option C - Linked Lists concept",
+      "Option D - Linked Lists concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Linked Lists under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Complexity",
+    "question_text": "What does the term 'overflow' indicate in a Complexity context? (Q 10)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Complexity concept",
+      "Option B - Complexity concept",
+      "Option C - Complexity concept",
+      "Option D - Complexity concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Complexity under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Arrays",
+    "question_text": "What is the average time complexity of accessing an element in an array by index in Arrays? (Q 11)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Arrays concept",
+      "Option B - Arrays concept",
+      "Option C - Arrays concept",
+      "Option D - Arrays concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Arrays under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Stacks",
+    "question_text": "Which data structure is most appropriate for implementing a recursive function's Stacks trace? (Q 12)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Stacks concept",
+      "Option B - Stacks concept",
+      "Option C - Stacks concept",
+      "Option D - Stacks concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Stacks under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Queues",
+    "question_text": "In a simple Queues, how is the next element referenced? (Q 13)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Queues concept",
+      "Option B - Queues concept",
+      "Option C - Queues concept",
+      "Option D - Queues concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Queues under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Linked Lists",
+    "question_text": "Which of the following operations is not directly supported by a standard Linked Lists? (Q 14)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Linked Lists concept",
+      "Option B - Linked Lists concept",
+      "Option C - Linked Lists concept",
+      "Option D - Linked Lists concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Linked Lists under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Complexity",
+    "question_text": "What does the term 'overflow' indicate in a Complexity context? (Q 15)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Complexity concept",
+      "Option B - Complexity concept",
+      "Option C - Complexity concept",
+      "Option D - Complexity concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Complexity under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Arrays",
+    "question_text": "What is the average time complexity of accessing an element in an array by index in Arrays? (Q 16)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Arrays concept",
+      "Option B - Arrays concept",
+      "Option C - Arrays concept",
+      "Option D - Arrays concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Arrays under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Stacks",
+    "question_text": "Which data structure is most appropriate for implementing a recursive function's Stacks trace? (Q 17)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Stacks concept",
+      "Option B - Stacks concept",
+      "Option C - Stacks concept",
+      "Option D - Stacks concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Stacks under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Queues",
+    "question_text": "In a simple Queues, how is the next element referenced? (Q 18)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Queues concept",
+      "Option B - Queues concept",
+      "Option C - Queues concept",
+      "Option D - Queues concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Queues under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Linked Lists",
+    "question_text": "Which of the following operations is not directly supported by a standard Linked Lists? (Q 19)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Linked Lists concept",
+      "Option B - Linked Lists concept",
+      "Option C - Linked Lists concept",
+      "Option D - Linked Lists concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Linked Lists under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Complexity",
+    "question_text": "What does the term 'overflow' indicate in a Complexity context? (Q 20)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Complexity concept",
+      "Option B - Complexity concept",
+      "Option C - Complexity concept",
+      "Option D - Complexity concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Complexity under easy difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Binary Trees",
+    "question_text": "What is the worst-case time complexity of Binary Trees when using optimized algorithms? (Q 21)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Binary Trees solution",
+      "Option B - Binary Trees solution",
+      "Option C - Binary Trees solution",
+      "Option D - Binary Trees solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Binary Trees under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Sorting",
+    "question_text": "Which traversal strategy for a Sorting yields the keys in non-decreasing sorted order? (Q 22)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Sorting solution",
+      "Option B - Sorting solution",
+      "Option C - Sorting solution",
+      "Option D - Sorting solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Sorting under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Searching",
+    "question_text": "What is the primary advantage of utilizing a Searching over a standard sequential representation? (Q 23)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Searching solution",
+      "Option B - Searching solution",
+      "Option C - Searching solution",
+      "Option D - Searching solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Searching under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Hashing",
+    "question_text": "In a Hashing, what is the maximum number of children a parent node can possess? (Q 24)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Hashing solution",
+      "Option B - Hashing solution",
+      "Option C - Hashing solution",
+      "Option D - Hashing solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Hashing under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Graphs",
+    "question_text": "What occurs during a collision resolution phase in a Graphs structure? (Q 25)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Graphs solution",
+      "Option B - Graphs solution",
+      "Option C - Graphs solution",
+      "Option D - Graphs solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Graphs under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Binary Trees",
+    "question_text": "What is the worst-case time complexity of Binary Trees when using optimized algorithms? (Q 26)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Binary Trees solution",
+      "Option B - Binary Trees solution",
+      "Option C - Binary Trees solution",
+      "Option D - Binary Trees solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Binary Trees under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Sorting",
+    "question_text": "Which traversal strategy for a Sorting yields the keys in non-decreasing sorted order? (Q 27)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Sorting solution",
+      "Option B - Sorting solution",
+      "Option C - Sorting solution",
+      "Option D - Sorting solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Sorting under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Searching",
+    "question_text": "What is the primary advantage of utilizing a Searching over a standard sequential representation? (Q 28)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Searching solution",
+      "Option B - Searching solution",
+      "Option C - Searching solution",
+      "Option D - Searching solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Searching under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Hashing",
+    "question_text": "In a Hashing, what is the maximum number of children a parent node can possess? (Q 29)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Hashing solution",
+      "Option B - Hashing solution",
+      "Option C - Hashing solution",
+      "Option D - Hashing solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Hashing under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Graphs",
+    "question_text": "What occurs during a collision resolution phase in a Graphs structure? (Q 30)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Graphs solution",
+      "Option B - Graphs solution",
+      "Option C - Graphs solution",
+      "Option D - Graphs solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Graphs under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Binary Trees",
+    "question_text": "What is the worst-case time complexity of Binary Trees when using optimized algorithms? (Q 31)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Binary Trees solution",
+      "Option B - Binary Trees solution",
+      "Option C - Binary Trees solution",
+      "Option D - Binary Trees solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Binary Trees under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Sorting",
+    "question_text": "Which traversal strategy for a Sorting yields the keys in non-decreasing sorted order? (Q 32)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Sorting solution",
+      "Option B - Sorting solution",
+      "Option C - Sorting solution",
+      "Option D - Sorting solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Sorting under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Searching",
+    "question_text": "What is the primary advantage of utilizing a Searching over a standard sequential representation? (Q 33)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Searching solution",
+      "Option B - Searching solution",
+      "Option C - Searching solution",
+      "Option D - Searching solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Searching under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Hashing",
+    "question_text": "In a Hashing, what is the maximum number of children a parent node can possess? (Q 34)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Hashing solution",
+      "Option B - Hashing solution",
+      "Option C - Hashing solution",
+      "Option D - Hashing solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Hashing under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Graphs",
+    "question_text": "What occurs during a collision resolution phase in a Graphs structure? (Q 35)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Graphs solution",
+      "Option B - Graphs solution",
+      "Option C - Graphs solution",
+      "Option D - Graphs solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Graphs under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Binary Trees",
+    "question_text": "What is the worst-case time complexity of Binary Trees when using optimized algorithms? (Q 36)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Binary Trees solution",
+      "Option B - Binary Trees solution",
+      "Option C - Binary Trees solution",
+      "Option D - Binary Trees solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Binary Trees under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Sorting",
+    "question_text": "Which traversal strategy for a Sorting yields the keys in non-decreasing sorted order? (Q 37)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Sorting solution",
+      "Option B - Sorting solution",
+      "Option C - Sorting solution",
+      "Option D - Sorting solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Sorting under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Searching",
+    "question_text": "What is the primary advantage of utilizing a Searching over a standard sequential representation? (Q 38)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Searching solution",
+      "Option B - Searching solution",
+      "Option C - Searching solution",
+      "Option D - Searching solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Searching under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Hashing",
+    "question_text": "In a Hashing, what is the maximum number of children a parent node can possess? (Q 39)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Hashing solution",
+      "Option B - Hashing solution",
+      "Option C - Hashing solution",
+      "Option D - Hashing solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Hashing under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Graphs",
+    "question_text": "What occurs during a collision resolution phase in a Graphs structure? (Q 40)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Graphs solution",
+      "Option B - Graphs solution",
+      "Option C - Graphs solution",
+      "Option D - Graphs solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Graphs under medium difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "AVL Trees",
+    "question_text": "Which balancing rotation is required in a AVL Trees after inserting a violating element? (Q 41)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - AVL Trees theory",
+      "Option B - AVL Trees theory",
+      "Option C - AVL Trees theory",
+      "Option D - AVL Trees theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for AVL Trees under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Red-Black Trees",
+    "question_text": "What is the precise amortized time complexity of a delete-min operation in a Fibonacci Red-Black Trees? (Q 42)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Red-Black Trees theory",
+      "Option B - Red-Black Trees theory",
+      "Option C - Red-Black Trees theory",
+      "Option D - Red-Black Trees theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Red-Black Trees under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Dynamic Programming",
+    "question_text": "Which mathematical recurrence relation characterizes the height of a balanced Dynamic Programming? (Q 43)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Dynamic Programming theory",
+      "Option B - Dynamic Programming theory",
+      "Option C - Dynamic Programming theory",
+      "Option D - Dynamic Programming theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Dynamic Programming under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Graph Algorithms",
+    "question_text": "What is the worst-case time complexity of a multi-source shortest path search in a Graph Algorithms? (Q 44)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Graph Algorithms theory",
+      "Option B - Graph Algorithms theory",
+      "Option C - Graph Algorithms theory",
+      "Option D - Graph Algorithms theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Graph Algorithms under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Heaps",
+    "question_text": "Which property holds true for all nodes in a self-adjusting Heaps? (Q 45)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Heaps theory",
+      "Option B - Heaps theory",
+      "Option C - Heaps theory",
+      "Option D - Heaps theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Heaps under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "AVL Trees",
+    "question_text": "Which balancing rotation is required in a AVL Trees after inserting a violating element? (Q 46)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - AVL Trees theory",
+      "Option B - AVL Trees theory",
+      "Option C - AVL Trees theory",
+      "Option D - AVL Trees theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for AVL Trees under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Red-Black Trees",
+    "question_text": "What is the precise amortized time complexity of a delete-min operation in a Fibonacci Red-Black Trees? (Q 47)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Red-Black Trees theory",
+      "Option B - Red-Black Trees theory",
+      "Option C - Red-Black Trees theory",
+      "Option D - Red-Black Trees theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Red-Black Trees under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Dynamic Programming",
+    "question_text": "Which mathematical recurrence relation characterizes the height of a balanced Dynamic Programming? (Q 48)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Dynamic Programming theory",
+      "Option B - Dynamic Programming theory",
+      "Option C - Dynamic Programming theory",
+      "Option D - Dynamic Programming theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Dynamic Programming under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Graph Algorithms",
+    "question_text": "What is the worst-case time complexity of a multi-source shortest path search in a Graph Algorithms? (Q 49)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Graph Algorithms theory",
+      "Option B - Graph Algorithms theory",
+      "Option C - Graph Algorithms theory",
+      "Option D - Graph Algorithms theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Graph Algorithms under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Heaps",
+    "question_text": "Which property holds true for all nodes in a self-adjusting Heaps? (Q 50)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Heaps theory",
+      "Option B - Heaps theory",
+      "Option C - Heaps theory",
+      "Option D - Heaps theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Heaps under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "AVL Trees",
+    "question_text": "Which balancing rotation is required in a AVL Trees after inserting a violating element? (Q 51)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - AVL Trees theory",
+      "Option B - AVL Trees theory",
+      "Option C - AVL Trees theory",
+      "Option D - AVL Trees theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for AVL Trees under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Red-Black Trees",
+    "question_text": "What is the precise amortized time complexity of a delete-min operation in a Fibonacci Red-Black Trees? (Q 52)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Red-Black Trees theory",
+      "Option B - Red-Black Trees theory",
+      "Option C - Red-Black Trees theory",
+      "Option D - Red-Black Trees theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Red-Black Trees under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Dynamic Programming",
+    "question_text": "Which mathematical recurrence relation characterizes the height of a balanced Dynamic Programming? (Q 53)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Dynamic Programming theory",
+      "Option B - Dynamic Programming theory",
+      "Option C - Dynamic Programming theory",
+      "Option D - Dynamic Programming theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Dynamic Programming under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Graph Algorithms",
+    "question_text": "What is the worst-case time complexity of a multi-source shortest path search in a Graph Algorithms? (Q 54)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Graph Algorithms theory",
+      "Option B - Graph Algorithms theory",
+      "Option C - Graph Algorithms theory",
+      "Option D - Graph Algorithms theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Graph Algorithms under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Heaps",
+    "question_text": "Which property holds true for all nodes in a self-adjusting Heaps? (Q 55)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Heaps theory",
+      "Option B - Heaps theory",
+      "Option C - Heaps theory",
+      "Option D - Heaps theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Heaps under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "AVL Trees",
+    "question_text": "Which balancing rotation is required in a AVL Trees after inserting a violating element? (Q 56)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - AVL Trees theory",
+      "Option B - AVL Trees theory",
+      "Option C - AVL Trees theory",
+      "Option D - AVL Trees theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for AVL Trees under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Red-Black Trees",
+    "question_text": "What is the precise amortized time complexity of a delete-min operation in a Fibonacci Red-Black Trees? (Q 57)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Red-Black Trees theory",
+      "Option B - Red-Black Trees theory",
+      "Option C - Red-Black Trees theory",
+      "Option D - Red-Black Trees theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Red-Black Trees under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Dynamic Programming",
+    "question_text": "Which mathematical recurrence relation characterizes the height of a balanced Dynamic Programming? (Q 58)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Dynamic Programming theory",
+      "Option B - Dynamic Programming theory",
+      "Option C - Dynamic Programming theory",
+      "Option D - Dynamic Programming theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Dynamic Programming under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Graph Algorithms",
+    "question_text": "What is the worst-case time complexity of a multi-source shortest path search in a Graph Algorithms? (Q 59)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Graph Algorithms theory",
+      "Option B - Graph Algorithms theory",
+      "Option C - Graph Algorithms theory",
+      "Option D - Graph Algorithms theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Graph Algorithms under hard difficulty level."
+  },
+  {
+    "subject": "data structures",
+    "topic": "Heaps",
+    "question_text": "Which property holds true for all nodes in a self-adjusting Heaps? (Q 60)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Heaps theory",
+      "Option B - Heaps theory",
+      "Option C - Heaps theory",
+      "Option D - Heaps theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Heaps under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Algebra",
+    "question_text": "What is the value of the expression involving Algebra at point zero? (Q 1)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Algebra concept",
+      "Option B - Algebra concept",
+      "Option C - Algebra concept",
+      "Option D - Algebra concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Algebra under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Trigonometry",
+    "question_text": "Which of the following describes the identity element in a standard Trigonometry? (Q 2)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Trigonometry concept",
+      "Option B - Trigonometry concept",
+      "Option C - Trigonometry concept",
+      "Option D - Trigonometry concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Trigonometry under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Matrices",
+    "question_text": "What is the derivative of the basic Matrices function? (Q 3)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Matrices concept",
+      "Option B - Matrices concept",
+      "Option C - Matrices concept",
+      "Option D - Matrices concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Matrices under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Probability",
+    "question_text": "How many elements are contained in the intersection of Probability sets? (Q 4)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Probability concept",
+      "Option B - Probability concept",
+      "Option C - Probability concept",
+      "Option D - Probability concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Probability under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Sets",
+    "question_text": "What is the probability of a certain event under a uniform Sets? (Q 5)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Sets concept",
+      "Option B - Sets concept",
+      "Option C - Sets concept",
+      "Option D - Sets concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Sets under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Algebra",
+    "question_text": "What is the value of the expression involving Algebra at point zero? (Q 6)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Algebra concept",
+      "Option B - Algebra concept",
+      "Option C - Algebra concept",
+      "Option D - Algebra concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Algebra under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Trigonometry",
+    "question_text": "Which of the following describes the identity element in a standard Trigonometry? (Q 7)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Trigonometry concept",
+      "Option B - Trigonometry concept",
+      "Option C - Trigonometry concept",
+      "Option D - Trigonometry concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Trigonometry under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Matrices",
+    "question_text": "What is the derivative of the basic Matrices function? (Q 8)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Matrices concept",
+      "Option B - Matrices concept",
+      "Option C - Matrices concept",
+      "Option D - Matrices concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Matrices under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Probability",
+    "question_text": "How many elements are contained in the intersection of Probability sets? (Q 9)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Probability concept",
+      "Option B - Probability concept",
+      "Option C - Probability concept",
+      "Option D - Probability concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Probability under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Sets",
+    "question_text": "What is the probability of a certain event under a uniform Sets? (Q 10)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Sets concept",
+      "Option B - Sets concept",
+      "Option C - Sets concept",
+      "Option D - Sets concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Sets under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Algebra",
+    "question_text": "What is the value of the expression involving Algebra at point zero? (Q 11)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Algebra concept",
+      "Option B - Algebra concept",
+      "Option C - Algebra concept",
+      "Option D - Algebra concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Algebra under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Trigonometry",
+    "question_text": "Which of the following describes the identity element in a standard Trigonometry? (Q 12)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Trigonometry concept",
+      "Option B - Trigonometry concept",
+      "Option C - Trigonometry concept",
+      "Option D - Trigonometry concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Trigonometry under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Matrices",
+    "question_text": "What is the derivative of the basic Matrices function? (Q 13)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Matrices concept",
+      "Option B - Matrices concept",
+      "Option C - Matrices concept",
+      "Option D - Matrices concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Matrices under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Probability",
+    "question_text": "How many elements are contained in the intersection of Probability sets? (Q 14)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Probability concept",
+      "Option B - Probability concept",
+      "Option C - Probability concept",
+      "Option D - Probability concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Probability under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Sets",
+    "question_text": "What is the probability of a certain event under a uniform Sets? (Q 15)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Sets concept",
+      "Option B - Sets concept",
+      "Option C - Sets concept",
+      "Option D - Sets concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Sets under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Algebra",
+    "question_text": "What is the value of the expression involving Algebra at point zero? (Q 16)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Algebra concept",
+      "Option B - Algebra concept",
+      "Option C - Algebra concept",
+      "Option D - Algebra concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Algebra under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Trigonometry",
+    "question_text": "Which of the following describes the identity element in a standard Trigonometry? (Q 17)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Trigonometry concept",
+      "Option B - Trigonometry concept",
+      "Option C - Trigonometry concept",
+      "Option D - Trigonometry concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Trigonometry under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Matrices",
+    "question_text": "What is the derivative of the basic Matrices function? (Q 18)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Matrices concept",
+      "Option B - Matrices concept",
+      "Option C - Matrices concept",
+      "Option D - Matrices concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Matrices under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Probability",
+    "question_text": "How many elements are contained in the intersection of Probability sets? (Q 19)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Probability concept",
+      "Option B - Probability concept",
+      "Option C - Probability concept",
+      "Option D - Probability concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Probability under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Sets",
+    "question_text": "What is the probability of a certain event under a uniform Sets? (Q 20)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Sets concept",
+      "Option B - Sets concept",
+      "Option C - Sets concept",
+      "Option D - Sets concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Sets under easy difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Calculus",
+    "question_text": "What is the limit of the Calculus function as the variable approaches infinity? (Q 21)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Calculus solution",
+      "Option B - Calculus solution",
+      "Option C - Calculus solution",
+      "Option D - Calculus solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Calculus under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Integration",
+    "question_text": "What is the value of the definite integral representing the area of Integration? (Q 22)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Integration solution",
+      "Option B - Integration solution",
+      "Option C - Integration solution",
+      "Option D - Integration solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Integration under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Determinants",
+    "question_text": "Which theorem guarantees the existence of a root for a continuous Determinants function? (Q 23)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Determinants solution",
+      "Option B - Determinants solution",
+      "Option C - Determinants solution",
+      "Option D - Determinants solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Determinants under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Vector Space",
+    "question_text": "What is the dimension of the subspace defined by the Vector Space conditions? (Q 24)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Vector Space solution",
+      "Option B - Vector Space solution",
+      "Option C - Vector Space solution",
+      "Option D - Vector Space solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Vector Space under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Series",
+    "question_text": "Which convergence test is most suitable for the infinite Series? (Q 25)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Series solution",
+      "Option B - Series solution",
+      "Option C - Series solution",
+      "Option D - Series solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Series under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Calculus",
+    "question_text": "What is the limit of the Calculus function as the variable approaches infinity? (Q 26)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Calculus solution",
+      "Option B - Calculus solution",
+      "Option C - Calculus solution",
+      "Option D - Calculus solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Calculus under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Integration",
+    "question_text": "What is the value of the definite integral representing the area of Integration? (Q 27)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Integration solution",
+      "Option B - Integration solution",
+      "Option C - Integration solution",
+      "Option D - Integration solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Integration under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Determinants",
+    "question_text": "Which theorem guarantees the existence of a root for a continuous Determinants function? (Q 28)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Determinants solution",
+      "Option B - Determinants solution",
+      "Option C - Determinants solution",
+      "Option D - Determinants solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Determinants under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Vector Space",
+    "question_text": "What is the dimension of the subspace defined by the Vector Space conditions? (Q 29)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Vector Space solution",
+      "Option B - Vector Space solution",
+      "Option C - Vector Space solution",
+      "Option D - Vector Space solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Vector Space under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Series",
+    "question_text": "Which convergence test is most suitable for the infinite Series? (Q 30)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Series solution",
+      "Option B - Series solution",
+      "Option C - Series solution",
+      "Option D - Series solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Series under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Calculus",
+    "question_text": "What is the limit of the Calculus function as the variable approaches infinity? (Q 31)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Calculus solution",
+      "Option B - Calculus solution",
+      "Option C - Calculus solution",
+      "Option D - Calculus solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Calculus under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Integration",
+    "question_text": "What is the value of the definite integral representing the area of Integration? (Q 32)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Integration solution",
+      "Option B - Integration solution",
+      "Option C - Integration solution",
+      "Option D - Integration solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Integration under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Determinants",
+    "question_text": "Which theorem guarantees the existence of a root for a continuous Determinants function? (Q 33)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Determinants solution",
+      "Option B - Determinants solution",
+      "Option C - Determinants solution",
+      "Option D - Determinants solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Determinants under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Vector Space",
+    "question_text": "What is the dimension of the subspace defined by the Vector Space conditions? (Q 34)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Vector Space solution",
+      "Option B - Vector Space solution",
+      "Option C - Vector Space solution",
+      "Option D - Vector Space solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Vector Space under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Series",
+    "question_text": "Which convergence test is most suitable for the infinite Series? (Q 35)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Series solution",
+      "Option B - Series solution",
+      "Option C - Series solution",
+      "Option D - Series solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Series under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Calculus",
+    "question_text": "What is the limit of the Calculus function as the variable approaches infinity? (Q 36)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Calculus solution",
+      "Option B - Calculus solution",
+      "Option C - Calculus solution",
+      "Option D - Calculus solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Calculus under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Integration",
+    "question_text": "What is the value of the definite integral representing the area of Integration? (Q 37)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Integration solution",
+      "Option B - Integration solution",
+      "Option C - Integration solution",
+      "Option D - Integration solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Integration under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Determinants",
+    "question_text": "Which theorem guarantees the existence of a root for a continuous Determinants function? (Q 38)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Determinants solution",
+      "Option B - Determinants solution",
+      "Option C - Determinants solution",
+      "Option D - Determinants solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Determinants under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Vector Space",
+    "question_text": "What is the dimension of the subspace defined by the Vector Space conditions? (Q 39)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Vector Space solution",
+      "Option B - Vector Space solution",
+      "Option C - Vector Space solution",
+      "Option D - Vector Space solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Vector Space under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Series",
+    "question_text": "Which convergence test is most suitable for the infinite Series? (Q 40)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Series solution",
+      "Option B - Series solution",
+      "Option C - Series solution",
+      "Option D - Series solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Series under medium difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Differential Equations",
+    "question_text": "What is the general solution to the homogeneous Differential Equations equation? (Q 41)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Differential Equations theory",
+      "Option B - Differential Equations theory",
+      "Option C - Differential Equations theory",
+      "Option D - Differential Equations theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Differential Equations under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Fourier Series",
+    "question_text": "Which integral transform maps a Fourier Series differential equation to algebraic one? (Q 42)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Fourier Series theory",
+      "Option B - Fourier Series theory",
+      "Option C - Fourier Series theory",
+      "Option D - Fourier Series theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Fourier Series under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Complex Analysis",
+    "question_text": "What is the residue of the complex Complex Analysis function at its pole? (Q 43)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Complex Analysis theory",
+      "Option B - Complex Analysis theory",
+      "Option C - Complex Analysis theory",
+      "Option D - Complex Analysis theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Complex Analysis under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Group Theory",
+    "question_text": "Which structural property characterizes a non-abelian Group Theory group? (Q 44)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Group Theory theory",
+      "Option B - Group Theory theory",
+      "Option C - Group Theory theory",
+      "Option D - Group Theory theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Group Theory under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Topology",
+    "question_text": "Which of the following topological spaces is compact under the Topology metric? (Q 45)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Topology theory",
+      "Option B - Topology theory",
+      "Option C - Topology theory",
+      "Option D - Topology theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Topology under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Differential Equations",
+    "question_text": "What is the general solution to the homogeneous Differential Equations equation? (Q 46)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Differential Equations theory",
+      "Option B - Differential Equations theory",
+      "Option C - Differential Equations theory",
+      "Option D - Differential Equations theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Differential Equations under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Fourier Series",
+    "question_text": "Which integral transform maps a Fourier Series differential equation to algebraic one? (Q 47)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Fourier Series theory",
+      "Option B - Fourier Series theory",
+      "Option C - Fourier Series theory",
+      "Option D - Fourier Series theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Fourier Series under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Complex Analysis",
+    "question_text": "What is the residue of the complex Complex Analysis function at its pole? (Q 48)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Complex Analysis theory",
+      "Option B - Complex Analysis theory",
+      "Option C - Complex Analysis theory",
+      "Option D - Complex Analysis theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Complex Analysis under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Group Theory",
+    "question_text": "Which structural property characterizes a non-abelian Group Theory group? (Q 49)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Group Theory theory",
+      "Option B - Group Theory theory",
+      "Option C - Group Theory theory",
+      "Option D - Group Theory theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Group Theory under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Topology",
+    "question_text": "Which of the following topological spaces is compact under the Topology metric? (Q 50)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Topology theory",
+      "Option B - Topology theory",
+      "Option C - Topology theory",
+      "Option D - Topology theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Topology under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Differential Equations",
+    "question_text": "What is the general solution to the homogeneous Differential Equations equation? (Q 51)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Differential Equations theory",
+      "Option B - Differential Equations theory",
+      "Option C - Differential Equations theory",
+      "Option D - Differential Equations theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Differential Equations under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Fourier Series",
+    "question_text": "Which integral transform maps a Fourier Series differential equation to algebraic one? (Q 52)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Fourier Series theory",
+      "Option B - Fourier Series theory",
+      "Option C - Fourier Series theory",
+      "Option D - Fourier Series theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Fourier Series under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Complex Analysis",
+    "question_text": "What is the residue of the complex Complex Analysis function at its pole? (Q 53)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Complex Analysis theory",
+      "Option B - Complex Analysis theory",
+      "Option C - Complex Analysis theory",
+      "Option D - Complex Analysis theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Complex Analysis under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Group Theory",
+    "question_text": "Which structural property characterizes a non-abelian Group Theory group? (Q 54)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Group Theory theory",
+      "Option B - Group Theory theory",
+      "Option C - Group Theory theory",
+      "Option D - Group Theory theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Group Theory under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Topology",
+    "question_text": "Which of the following topological spaces is compact under the Topology metric? (Q 55)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Topology theory",
+      "Option B - Topology theory",
+      "Option C - Topology theory",
+      "Option D - Topology theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Topology under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Differential Equations",
+    "question_text": "What is the general solution to the homogeneous Differential Equations equation? (Q 56)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Differential Equations theory",
+      "Option B - Differential Equations theory",
+      "Option C - Differential Equations theory",
+      "Option D - Differential Equations theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Differential Equations under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Fourier Series",
+    "question_text": "Which integral transform maps a Fourier Series differential equation to algebraic one? (Q 57)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Fourier Series theory",
+      "Option B - Fourier Series theory",
+      "Option C - Fourier Series theory",
+      "Option D - Fourier Series theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Fourier Series under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Complex Analysis",
+    "question_text": "What is the residue of the complex Complex Analysis function at its pole? (Q 58)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Complex Analysis theory",
+      "Option B - Complex Analysis theory",
+      "Option C - Complex Analysis theory",
+      "Option D - Complex Analysis theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Complex Analysis under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Group Theory",
+    "question_text": "Which structural property characterizes a non-abelian Group Theory group? (Q 59)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Group Theory theory",
+      "Option B - Group Theory theory",
+      "Option C - Group Theory theory",
+      "Option D - Group Theory theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Group Theory under hard difficulty level."
+  },
+  {
+    "subject": "mathematics",
+    "topic": "Topology",
+    "question_text": "Which of the following topological spaces is compact under the Topology metric? (Q 60)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Topology theory",
+      "Option B - Topology theory",
+      "Option C - Topology theory",
+      "Option D - Topology theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Topology under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Shakespearian Plays",
+    "question_text": "Who is the central protagonist in the famous Shakespearian Plays text? (Q 1)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Shakespearian Plays concept",
+      "Option B - Shakespearian Plays concept",
+      "Option C - Shakespearian Plays concept",
+      "Option D - Shakespearian Plays concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Shakespearian Plays under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Literary Devices",
+    "question_text": "Which figure of speech is primarily utilized in the selected Literary Devices passage? (Q 2)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Literary Devices concept",
+      "Option B - Literary Devices concept",
+      "Option C - Literary Devices concept",
+      "Option D - Literary Devices concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Literary Devices under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Romantic Poetry",
+    "question_text": "What is the recurring thematic motif of the Romantic Poetry period? (Q 3)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Romantic Poetry concept",
+      "Option B - Romantic Poetry concept",
+      "Option C - Romantic Poetry concept",
+      "Option D - Romantic Poetry concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Romantic Poetry under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Victorian Novels",
+    "question_text": "Which Victorian author is renowned for writing about Victorian Novels? (Q 4)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Victorian Novels concept",
+      "Option B - Victorian Novels concept",
+      "Option C - Victorian Novels concept",
+      "Option D - Victorian Novels concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Victorian Novels under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Fables",
+    "question_text": "What moral lesson is typically conveyed by the classic Fables? (Q 5)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Fables concept",
+      "Option B - Fables concept",
+      "Option C - Fables concept",
+      "Option D - Fables concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Fables under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Shakespearian Plays",
+    "question_text": "Who is the central protagonist in the famous Shakespearian Plays text? (Q 6)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Shakespearian Plays concept",
+      "Option B - Shakespearian Plays concept",
+      "Option C - Shakespearian Plays concept",
+      "Option D - Shakespearian Plays concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Shakespearian Plays under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Literary Devices",
+    "question_text": "Which figure of speech is primarily utilized in the selected Literary Devices passage? (Q 7)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Literary Devices concept",
+      "Option B - Literary Devices concept",
+      "Option C - Literary Devices concept",
+      "Option D - Literary Devices concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Literary Devices under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Romantic Poetry",
+    "question_text": "What is the recurring thematic motif of the Romantic Poetry period? (Q 8)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Romantic Poetry concept",
+      "Option B - Romantic Poetry concept",
+      "Option C - Romantic Poetry concept",
+      "Option D - Romantic Poetry concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Romantic Poetry under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Victorian Novels",
+    "question_text": "Which Victorian author is renowned for writing about Victorian Novels? (Q 9)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Victorian Novels concept",
+      "Option B - Victorian Novels concept",
+      "Option C - Victorian Novels concept",
+      "Option D - Victorian Novels concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Victorian Novels under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Fables",
+    "question_text": "What moral lesson is typically conveyed by the classic Fables? (Q 10)",
+    "difficulty": 1,
+    "type": "MCQ",
+    "options": [
+      "Option A - Fables concept",
+      "Option B - Fables concept",
+      "Option C - Fables concept",
+      "Option D - Fables concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Fables under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Shakespearian Plays",
+    "question_text": "Who is the central protagonist in the famous Shakespearian Plays text? (Q 11)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Shakespearian Plays concept",
+      "Option B - Shakespearian Plays concept",
+      "Option C - Shakespearian Plays concept",
+      "Option D - Shakespearian Plays concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Shakespearian Plays under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Literary Devices",
+    "question_text": "Which figure of speech is primarily utilized in the selected Literary Devices passage? (Q 12)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Literary Devices concept",
+      "Option B - Literary Devices concept",
+      "Option C - Literary Devices concept",
+      "Option D - Literary Devices concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Literary Devices under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Romantic Poetry",
+    "question_text": "What is the recurring thematic motif of the Romantic Poetry period? (Q 13)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Romantic Poetry concept",
+      "Option B - Romantic Poetry concept",
+      "Option C - Romantic Poetry concept",
+      "Option D - Romantic Poetry concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Romantic Poetry under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Victorian Novels",
+    "question_text": "Which Victorian author is renowned for writing about Victorian Novels? (Q 14)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Victorian Novels concept",
+      "Option B - Victorian Novels concept",
+      "Option C - Victorian Novels concept",
+      "Option D - Victorian Novels concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Victorian Novels under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Fables",
+    "question_text": "What moral lesson is typically conveyed by the classic Fables? (Q 15)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Fables concept",
+      "Option B - Fables concept",
+      "Option C - Fables concept",
+      "Option D - Fables concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Fables under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Shakespearian Plays",
+    "question_text": "Who is the central protagonist in the famous Shakespearian Plays text? (Q 16)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Shakespearian Plays concept",
+      "Option B - Shakespearian Plays concept",
+      "Option C - Shakespearian Plays concept",
+      "Option D - Shakespearian Plays concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Shakespearian Plays under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Literary Devices",
+    "question_text": "Which figure of speech is primarily utilized in the selected Literary Devices passage? (Q 17)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Literary Devices concept",
+      "Option B - Literary Devices concept",
+      "Option C - Literary Devices concept",
+      "Option D - Literary Devices concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Literary Devices under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Romantic Poetry",
+    "question_text": "What is the recurring thematic motif of the Romantic Poetry period? (Q 18)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Romantic Poetry concept",
+      "Option B - Romantic Poetry concept",
+      "Option C - Romantic Poetry concept",
+      "Option D - Romantic Poetry concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Romantic Poetry under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Victorian Novels",
+    "question_text": "Which Victorian author is renowned for writing about Victorian Novels? (Q 19)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Victorian Novels concept",
+      "Option B - Victorian Novels concept",
+      "Option C - Victorian Novels concept",
+      "Option D - Victorian Novels concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Victorian Novels under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Fables",
+    "question_text": "What moral lesson is typically conveyed by the classic Fables? (Q 20)",
+    "difficulty": 2,
+    "type": "MCQ",
+    "options": [
+      "Option A - Fables concept",
+      "Option B - Fables concept",
+      "Option C - Fables concept",
+      "Option D - Fables concept"
+    ],
+    "answer": "0",
+    "explanation": "This is the correct explanation for Fables under easy difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Modernist Literature",
+    "question_text": "Which literary movement of the 20th century heavily influenced the structure of Modernist Literature? (Q 21)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Modernist Literature solution",
+      "Option B - Modernist Literature solution",
+      "Option C - Modernist Literature solution",
+      "Option D - Modernist Literature solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Modernist Literature under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Tragedy",
+    "question_text": "What is the metrical structure of a traditional sonnet in Tragedy? (Q 22)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Tragedy solution",
+      "Option B - Tragedy solution",
+      "Option C - Tragedy solution",
+      "Option D - Tragedy solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Tragedy under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Poetic Metres",
+    "question_text": "How does the dramatic irony in Poetic Metres contribute to the overall tragedy? (Q 23)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Poetic Metres solution",
+      "Option B - Poetic Metres solution",
+      "Option C - Poetic Metres solution",
+      "Option D - Poetic Metres solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Poetic Metres under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Renaissance Drama",
+    "question_text": "Which satirical work is considered a masterpiece of Renaissance Drama? (Q 24)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Renaissance Drama solution",
+      "Option B - Renaissance Drama solution",
+      "Option C - Renaissance Drama solution",
+      "Option D - Renaissance Drama solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Renaissance Drama under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Satire",
+    "question_text": "What narrative technique is used to represent the characters' thoughts in Satire? (Q 25)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Satire solution",
+      "Option B - Satire solution",
+      "Option C - Satire solution",
+      "Option D - Satire solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Satire under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Modernist Literature",
+    "question_text": "Which literary movement of the 20th century heavily influenced the structure of Modernist Literature? (Q 26)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Modernist Literature solution",
+      "Option B - Modernist Literature solution",
+      "Option C - Modernist Literature solution",
+      "Option D - Modernist Literature solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Modernist Literature under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Tragedy",
+    "question_text": "What is the metrical structure of a traditional sonnet in Tragedy? (Q 27)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Tragedy solution",
+      "Option B - Tragedy solution",
+      "Option C - Tragedy solution",
+      "Option D - Tragedy solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Tragedy under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Poetic Metres",
+    "question_text": "How does the dramatic irony in Poetic Metres contribute to the overall tragedy? (Q 28)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Poetic Metres solution",
+      "Option B - Poetic Metres solution",
+      "Option C - Poetic Metres solution",
+      "Option D - Poetic Metres solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Poetic Metres under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Renaissance Drama",
+    "question_text": "Which satirical work is considered a masterpiece of Renaissance Drama? (Q 29)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Renaissance Drama solution",
+      "Option B - Renaissance Drama solution",
+      "Option C - Renaissance Drama solution",
+      "Option D - Renaissance Drama solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Renaissance Drama under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Satire",
+    "question_text": "What narrative technique is used to represent the characters' thoughts in Satire? (Q 30)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Satire solution",
+      "Option B - Satire solution",
+      "Option C - Satire solution",
+      "Option D - Satire solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Satire under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Modernist Literature",
+    "question_text": "Which literary movement of the 20th century heavily influenced the structure of Modernist Literature? (Q 31)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Modernist Literature solution",
+      "Option B - Modernist Literature solution",
+      "Option C - Modernist Literature solution",
+      "Option D - Modernist Literature solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Modernist Literature under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Tragedy",
+    "question_text": "What is the metrical structure of a traditional sonnet in Tragedy? (Q 32)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Tragedy solution",
+      "Option B - Tragedy solution",
+      "Option C - Tragedy solution",
+      "Option D - Tragedy solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Tragedy under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Poetic Metres",
+    "question_text": "How does the dramatic irony in Poetic Metres contribute to the overall tragedy? (Q 33)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Poetic Metres solution",
+      "Option B - Poetic Metres solution",
+      "Option C - Poetic Metres solution",
+      "Option D - Poetic Metres solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Poetic Metres under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Renaissance Drama",
+    "question_text": "Which satirical work is considered a masterpiece of Renaissance Drama? (Q 34)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Renaissance Drama solution",
+      "Option B - Renaissance Drama solution",
+      "Option C - Renaissance Drama solution",
+      "Option D - Renaissance Drama solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Renaissance Drama under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Satire",
+    "question_text": "What narrative technique is used to represent the characters' thoughts in Satire? (Q 35)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Satire solution",
+      "Option B - Satire solution",
+      "Option C - Satire solution",
+      "Option D - Satire solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Satire under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Modernist Literature",
+    "question_text": "Which literary movement of the 20th century heavily influenced the structure of Modernist Literature? (Q 36)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Modernist Literature solution",
+      "Option B - Modernist Literature solution",
+      "Option C - Modernist Literature solution",
+      "Option D - Modernist Literature solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Modernist Literature under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Tragedy",
+    "question_text": "What is the metrical structure of a traditional sonnet in Tragedy? (Q 37)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Tragedy solution",
+      "Option B - Tragedy solution",
+      "Option C - Tragedy solution",
+      "Option D - Tragedy solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Tragedy under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Poetic Metres",
+    "question_text": "How does the dramatic irony in Poetic Metres contribute to the overall tragedy? (Q 38)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Poetic Metres solution",
+      "Option B - Poetic Metres solution",
+      "Option C - Poetic Metres solution",
+      "Option D - Poetic Metres solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Poetic Metres under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Renaissance Drama",
+    "question_text": "Which satirical work is considered a masterpiece of Renaissance Drama? (Q 39)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Renaissance Drama solution",
+      "Option B - Renaissance Drama solution",
+      "Option C - Renaissance Drama solution",
+      "Option D - Renaissance Drama solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Renaissance Drama under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Satire",
+    "question_text": "What narrative technique is used to represent the characters' thoughts in Satire? (Q 40)",
+    "difficulty": 3,
+    "type": "MCQ",
+    "options": [
+      "Option A - Satire solution",
+      "Option B - Satire solution",
+      "Option C - Satire solution",
+      "Option D - Satire solution"
+    ],
+    "answer": "1",
+    "explanation": "This is the correct explanation for Satire under medium difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Post-colonial Criticism",
+    "question_text": "Which critical theorist pioneered the analysis of power dynamics in Post-colonial Criticism? (Q 41)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Post-colonial Criticism theory",
+      "Option B - Post-colonial Criticism theory",
+      "Option C - Post-colonial Criticism theory",
+      "Option D - Post-colonial Criticism theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Post-colonial Criticism under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Structuralism",
+    "question_text": "How does the concept of intertextuality redefine authorship in Structuralism? (Q 42)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Structuralism theory",
+      "Option B - Structuralism theory",
+      "Option C - Structuralism theory",
+      "Option D - Structuralism theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Structuralism under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Existential Drama",
+    "question_text": "Which existential play is characterized by the absurdist dialogue in Existential Drama? (Q 43)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Existential Drama theory",
+      "Option B - Existential Drama theory",
+      "Option C - Existential Drama theory",
+      "Option D - Existential Drama theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Existential Drama under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Narratology",
+    "question_text": "What does the deconstructive reading of Narratology reveal about its binary oppositions? (Q 44)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Narratology theory",
+      "Option B - Narratology theory",
+      "Option C - Narratology theory",
+      "Option D - Narratology theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Narratology under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Hermeneutics",
+    "question_text": "Which critical framework focuses on the subversion of cultural hegemony in Hermeneutics? (Q 45)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Hermeneutics theory",
+      "Option B - Hermeneutics theory",
+      "Option C - Hermeneutics theory",
+      "Option D - Hermeneutics theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Hermeneutics under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Post-colonial Criticism",
+    "question_text": "Which critical theorist pioneered the analysis of power dynamics in Post-colonial Criticism? (Q 46)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Post-colonial Criticism theory",
+      "Option B - Post-colonial Criticism theory",
+      "Option C - Post-colonial Criticism theory",
+      "Option D - Post-colonial Criticism theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Post-colonial Criticism under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Structuralism",
+    "question_text": "How does the concept of intertextuality redefine authorship in Structuralism? (Q 47)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Structuralism theory",
+      "Option B - Structuralism theory",
+      "Option C - Structuralism theory",
+      "Option D - Structuralism theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Structuralism under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Existential Drama",
+    "question_text": "Which existential play is characterized by the absurdist dialogue in Existential Drama? (Q 48)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Existential Drama theory",
+      "Option B - Existential Drama theory",
+      "Option C - Existential Drama theory",
+      "Option D - Existential Drama theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Existential Drama under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Narratology",
+    "question_text": "What does the deconstructive reading of Narratology reveal about its binary oppositions? (Q 49)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Narratology theory",
+      "Option B - Narratology theory",
+      "Option C - Narratology theory",
+      "Option D - Narratology theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Narratology under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Hermeneutics",
+    "question_text": "Which critical framework focuses on the subversion of cultural hegemony in Hermeneutics? (Q 50)",
+    "difficulty": 4,
+    "type": "MCQ",
+    "options": [
+      "Option A - Hermeneutics theory",
+      "Option B - Hermeneutics theory",
+      "Option C - Hermeneutics theory",
+      "Option D - Hermeneutics theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Hermeneutics under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Post-colonial Criticism",
+    "question_text": "Which critical theorist pioneered the analysis of power dynamics in Post-colonial Criticism? (Q 51)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Post-colonial Criticism theory",
+      "Option B - Post-colonial Criticism theory",
+      "Option C - Post-colonial Criticism theory",
+      "Option D - Post-colonial Criticism theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Post-colonial Criticism under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Structuralism",
+    "question_text": "How does the concept of intertextuality redefine authorship in Structuralism? (Q 52)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Structuralism theory",
+      "Option B - Structuralism theory",
+      "Option C - Structuralism theory",
+      "Option D - Structuralism theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Structuralism under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Existential Drama",
+    "question_text": "Which existential play is characterized by the absurdist dialogue in Existential Drama? (Q 53)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Existential Drama theory",
+      "Option B - Existential Drama theory",
+      "Option C - Existential Drama theory",
+      "Option D - Existential Drama theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Existential Drama under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Narratology",
+    "question_text": "What does the deconstructive reading of Narratology reveal about its binary oppositions? (Q 54)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Narratology theory",
+      "Option B - Narratology theory",
+      "Option C - Narratology theory",
+      "Option D - Narratology theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Narratology under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Hermeneutics",
+    "question_text": "Which critical framework focuses on the subversion of cultural hegemony in Hermeneutics? (Q 55)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Hermeneutics theory",
+      "Option B - Hermeneutics theory",
+      "Option C - Hermeneutics theory",
+      "Option D - Hermeneutics theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Hermeneutics under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Post-colonial Criticism",
+    "question_text": "Which critical theorist pioneered the analysis of power dynamics in Post-colonial Criticism? (Q 56)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Post-colonial Criticism theory",
+      "Option B - Post-colonial Criticism theory",
+      "Option C - Post-colonial Criticism theory",
+      "Option D - Post-colonial Criticism theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Post-colonial Criticism under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Structuralism",
+    "question_text": "How does the concept of intertextuality redefine authorship in Structuralism? (Q 57)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Structuralism theory",
+      "Option B - Structuralism theory",
+      "Option C - Structuralism theory",
+      "Option D - Structuralism theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Structuralism under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Existential Drama",
+    "question_text": "Which existential play is characterized by the absurdist dialogue in Existential Drama? (Q 58)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Existential Drama theory",
+      "Option B - Existential Drama theory",
+      "Option C - Existential Drama theory",
+      "Option D - Existential Drama theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Existential Drama under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Narratology",
+    "question_text": "What does the deconstructive reading of Narratology reveal about its binary oppositions? (Q 59)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Narratology theory",
+      "Option B - Narratology theory",
+      "Option C - Narratology theory",
+      "Option D - Narratology theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Narratology under hard difficulty level."
+  },
+  {
+    "subject": "english literature",
+    "topic": "Hermeneutics",
+    "question_text": "Which critical framework focuses on the subversion of cultural hegemony in Hermeneutics? (Q 60)",
+    "difficulty": 5,
+    "type": "MCQ",
+    "options": [
+      "Option A - Hermeneutics theory",
+      "Option B - Hermeneutics theory",
+      "Option C - Hermeneutics theory",
+      "Option D - Hermeneutics theory"
+    ],
+    "answer": "2",
+    "explanation": "This is the correct explanation for Hermeneutics under hard difficulty level."
+  },
+  {
+    "subject": "physics",
+    "topic": "Modern Physics",
+    "question_text": "Explain photosynthesis and where it takes place.",
+    "difficulty": 3,
+    "type": "SHORT",
+    "options": [],
+    "answer": "photosynthesis occurs in chloroplasts of green plants to make food",
+    "explanation": "Photosynthesis uses sunlight to produce nutrients in chloroplasts."
+  },
+  {
+    "subject": "physics",
+    "topic": "Modern Physics",
+    "question_text": "Explain photosynthesis and where it takes place.",
+    "difficulty": 3,
+    "type": "SHORT",
+    "options": [],
+    "answer": "photosynthesis occurs in chloroplasts of green plants to make food",
+    "explanation": "Photosynthesis uses sunlight to produce nutrients in chloroplasts."
+  },
+  {
+    "subject": "physics",
+    "topic": "Modern Physics",
+    "question_text": "Explain photosynthesis and where it takes place.",
+    "difficulty": 3,
+    "type": "SHORT",
+    "options": [],
+    "answer": "photosynthesis occurs in chloroplasts of green plants to make food",
+    "explanation": "Photosynthesis uses sunlight to produce nutrients in chloroplasts."
+  },
+  {
+    "subject": "physics",
+    "topic": "Modern Physics",
+    "question_text": "Explain photosynthesis and where it takes place.",
+    "difficulty": 3,
+    "type": "SHORT",
+    "options": [],
+    "answer": "photosynthesis occurs in chloroplasts of green plants to make food",
+    "explanation": "Photosynthesis uses sunlight to produce nutrients in chloroplasts."
+  }
+]

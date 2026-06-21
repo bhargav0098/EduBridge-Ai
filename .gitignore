@@ -72,3 +72,10 @@ temp/
 
 # faiss index (generated, not source)
 # faiss_index/  # keep commented — project includes pre-built index
+
+.vercel
+
+# Logs
+logs/
+backend/logs/
+*.log

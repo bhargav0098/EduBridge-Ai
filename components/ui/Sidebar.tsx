@@ -11,6 +11,8 @@ const studentMenuItems = [
   { label: 'AI Chat',          href: '/chat/student', icon: '💬' },
   { label: 'Quiz',             href: '/quiz',       icon: '📝' },
   { label: 'Notes',            href: '/notes',      icon: '📚' },
+  { label: 'Knowledge Wiki',   href: '/wiki',       icon: '🌐' },
+  { label: 'Badges & Credentials', href: '/badges', icon: '🏅' },
   { label: 'Events',           href: '/events',     icon: '📅' },
   { label: 'Resources',        href: '/resources',  icon: '🏢' },
   { label: 'Peer Matching',    href: '/peers',      icon: '👥' },
@@ -23,6 +25,8 @@ const teacherMenuItems = [
   { label: 'Mark Attendance',  href: '/dashboard',  icon: '📅', tab: 'attendance' },
   { label: 'Student Roster',   href: '/dashboard',  icon: '👥', tab: 'students'   },
   { label: 'Upload Materials', href: '/dashboard',  icon: '📤', tab: 'upload'     },
+  { label: 'Knowledge Wiki',   href: '/wiki',       icon: '🌐' },
+  { label: 'Badges & Credentials', href: '/badges', icon: '🏅' },
   { label: 'Events',           href: '/events',     icon: '🎉' },
   { label: 'Admin',            href: '/admin',      icon: '⚙️' },
 ];

@@ -12,6 +12,11 @@ from slowapi import _rate_limit_exceeded_handler
 
 from .config import settings
 from .database import engine, Base
+from .utils.logger import setup_logging
+
+# Initialize logging system
+setup_logging()
+
 from .api import attendance, notes, events, resources, peer_match, notifications, auth, chat, ocr, speech, quiz, assignments, doubts, dashboard
 from .utils.limiter import limiter
 
@@ -86,7 +91,17 @@ async def on_startup():
             # Drop questions table to recreate with new schema
             Base.metadata.tables["questions"].drop(bind=engine)
             
+    # Register all database tables
+    from .models.models import StudentTopicMastery
     Base.metadata.create_all(bind=engine)
+
+    # Safe migration: Add badge_hash column to achievements table if missing
+    if "achievements" in inspector.get_table_names():
+        columns = [c["name"] for c in inspector.get_columns("achievements")]
+        if "badge_hash" not in columns:
+            from sqlalchemy import text
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE achievements ADD COLUMN badge_hash VARCHAR"))
 
     # Seed mock students for dynamic classes list
     from .database import SessionLocal

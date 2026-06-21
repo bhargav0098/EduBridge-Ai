@@ -1,0 +1,284 @@
+{
+  "nodes": [
+    {
+      "id": "kinematics",
+      "label": "Kinematics",
+      "subject": "Physics",
+      "description": "Study of motion of points, bodies, and systems of bodies without considering the forces that cause them to move.",
+      "prerequisites": [],
+      "applications": ["laws of motion"]
+    },
+    {
+      "id": "laws of motion",
+      "label": "Laws of Motion",
+      "subject": "Physics",
+      "description": "Newton's three laws relating the motion of a body and the forces acting on it.",
+      "prerequisites": ["kinematics"],
+      "applications": ["work and energy", "gravitation"]
+    },
+    {
+      "id": "work and energy",
+      "label": "Work and Energy",
+      "subject": "Physics",
+      "description": "Relationship between mechanical work, kinetic energy, potential energy, and energy conservation principles.",
+      "prerequisites": ["laws of motion"],
+      "applications": ["thermodynamics"]
+    },
+    {
+      "id": "gravitation",
+      "label": "Gravitation",
+      "subject": "Physics",
+      "description": "Newtonian gravity, universal gravitational constant, orbits, and Kepler's laws.",
+      "prerequisites": ["laws of motion"],
+      "applications": []
+    },
+    {
+      "id": "thermodynamics",
+      "label": "Thermodynamics",
+      "subject": "Physics",
+      "description": "Heat, work, temperature, and statistical behavior of energy systems governed by the laws of thermodynamics.",
+      "prerequisites": ["work and energy"],
+      "applications": ["modern physics"]
+    },
+    {
+      "id": "modern physics",
+      "label": "Modern Physics",
+      "subject": "Physics",
+      "description": "Quantum mechanics, wave-particle duality, atomic structure, and special relativity.",
+      "prerequisites": ["thermodynamics"],
+      "applications": []
+    },
+    {
+      "id": "sets and functions",
+      "label": "Sets and Functions",
+      "subject": "Mathematics",
+      "description": "Basic set operations, union, intersection, functions, domain, range, and mappings.",
+      "prerequisites": [],
+      "applications": ["algebra", "probability"]
+    },
+    {
+      "id": "algebra",
+      "label": "Algebra",
+      "subject": "Mathematics",
+      "description": "Solving linear and quadratic equations, polynomial functions, and matrix operations.",
+      "prerequisites": ["sets and functions"],
+      "applications": ["coordinate geometry", "calculus"]
+    },
+    {
+      "id": "coordinate geometry",
+      "label": "Coordinate Geometry",
+      "subject": "Mathematics",
+      "description": "Locating points on a plane, slopes of lines, equations of lines, circles, and conics.",
+      "prerequisites": ["algebra"],
+      "applications": ["calculus"]
+    },
+    {
+      "id": "calculus",
+      "label": "Calculus",
+      "subject": "Mathematics",
+      "description": "Differentiation, limits, derivatives, integration, and calculating area under curves.",
+      "prerequisites": ["algebra", "coordinate geometry"],
+      "applications": []
+    },
+    {
+      "id": "probability",
+      "label": "Probability",
+      "subject": "Mathematics",
+      "description": "Likelihood of events, conditional probability, independent events, Bayes' theorem, and distributions.",
+      "prerequisites": ["sets and functions"],
+      "applications": []
+    },
+    {
+      "id": "arrays",
+      "label": "Arrays",
+      "subject": "Data Structures",
+      "description": "Contiguous block of elements indexed from 0 to N-1, supporting constant time access.",
+      "prerequisites": [],
+      "applications": ["linked lists", "stacks", "queues", "sorting"]
+    },
+    {
+      "id": "linked lists",
+      "label": "Linked Lists",
+      "subject": "Data Structures",
+      "description": "Sequence of nodes where each node contains data and pointers to the next node.",
+      "prerequisites": ["arrays"],
+      "applications": ["graphs"]
+    },
+    {
+      "id": "stacks",
+      "label": "Stacks",
+      "subject": "Data Structures",
+      "description": "LIFO (Last In First Out) structure used in recursive call stacks and expression parsing.",
+      "prerequisites": ["arrays"],
+      "applications": []
+    },
+    {
+      "id": "queues",
+      "label": "Queues",
+      "subject": "Data Structures",
+      "description": "FIFO (First In First Out) structure used in print queues and CPU process scheduling.",
+      "prerequisites": ["arrays"],
+      "applications": []
+    },
+    {
+      "id": "complexity",
+      "label": "Complexity",
+      "subject": "Data Structures",
+      "description": "Big O, Big Omega, and Big Theta notation representing computational time and space bounds.",
+      "prerequisites": [],
+      "applications": ["sorting", "searching"]
+    },
+    {
+      "id": "sorting",
+      "label": "Sorting",
+      "subject": "Data Structures",
+      "description": "Arranging data in ascending or descending order (Bubble, Insertion, Quick, Merge Sort).",
+      "prerequisites": ["arrays", "complexity"],
+      "applications": ["searching"]
+    },
+    {
+      "id": "searching",
+      "label": "Searching",
+      "subject": "Data Structures",
+      "description": "Linear and Binary Search algorithms to find target keys in dataset arrays.",
+      "prerequisites": ["sorting"],
+      "applications": ["hashing"]
+    },
+    {
+      "id": "hashing",
+      "label": "Hashing",
+      "subject": "Data Structures",
+      "description": "Mapping keys to index values using hash functions, collision resolution via chaining/open addressing.",
+      "prerequisites": ["searching"],
+      "applications": []
+    },
+    {
+      "id": "binary trees",
+      "label": "Binary Trees",
+      "subject": "Data Structures",
+      "description": "Hierarchical node structure where each parent node has at most two child nodes.",
+      "prerequisites": ["linked lists"],
+      "applications": ["avl trees", "red-black trees", "heaps"]
+    },
+    {
+      "id": "avl trees",
+      "label": "AVL Trees",
+      "subject": "Data Structures",
+      "description": "Self-balancing binary search trees where balance factor difference cannot exceed 1.",
+      "prerequisites": ["binary trees"],
+      "applications": []
+    },
+    {
+      "id": "red-black trees",
+      "label": "Red-Black Trees",
+      "subject": "Data Structures",
+      "description": "Color-balanced binary search trees ensuring O(log N) operations in worst case.",
+      "prerequisites": ["binary trees"],
+      "applications": []
+    },
+    {
+      "id": "heaps",
+      "label": "Heaps",
+      "subject": "Data Structures",
+      "description": "Max/Min binary heaps representing complete binary trees used for priority queue operations.",
+      "prerequisites": ["binary trees"],
+      "applications": []
+    },
+    {
+      "id": "graphs",
+      "label": "Graphs",
+      "subject": "Data Structures",
+      "description": "Networks of vertices connected by edges, represented by adjacency matrices or lists.",
+      "prerequisites": ["linked lists"],
+      "applications": ["graph algorithms"]
+    },
+    {
+      "id": "graph algorithms",
+      "label": "Graph Algorithms",
+      "subject": "Data Structures",
+      "description": "Dijkstra's shortest path, Kruskal's/Prim's minimum spanning trees, BFS, and DFS traversals.",
+      "prerequisites": ["graphs"],
+      "applications": []
+    },
+    {
+      "id": "dynamic programming",
+      "label": "Dynamic Programming",
+      "subject": "Data Structures",
+      "description": "Solving subproblems recursively, caching results to avoid recalculating overlapping subproblems.",
+      "prerequisites": ["complexity"],
+      "applications": []
+    },
+    {
+      "id": "shakespearian plays",
+      "label": "Shakespearian Plays",
+      "subject": "English Literature",
+      "description": "Tragedies, Comedies, and Histories penned by William Shakespeare, exploring dramatic arcs.",
+      "prerequisites": [],
+      "applications": ["tragedy", "renaissance drama"]
+    },
+    {
+      "id": "literary devices",
+      "label": "Literary Devices",
+      "subject": "English Literature",
+      "description": "Metaphors, Similes, Personification, and Alliteration used to enrich literary meaning.",
+      "prerequisites": [],
+      "applications": ["romantic poetry", "satire"]
+    },
+    {
+      "id": "romantic poetry",
+      "label": "Romantic Poetry",
+      "subject": "English Literature",
+      "description": "Focus on nature, personal expression, and emotions in early 19th-century poetry.",
+      "prerequisites": ["literary devices"],
+      "applications": ["victorian novels"]
+    },
+    {
+      "id": "victorian novels",
+      "label": "Victorian Novels",
+      "subject": "English Literature",
+      "description": "Social realism, industrial critique, class divides, and moral reform in Victorian-era prose.",
+      "prerequisites": ["romantic poetry"],
+      "applications": ["modernist literature"]
+    },
+    {
+      "id": "modernist literature",
+      "label": "Modernist Literature",
+      "subject": "English Literature",
+      "description": "Break from classical structures, stream-of-consciousness, fragmentation, and alienation.",
+      "prerequisites": ["victorian novels"],
+      "applications": ["post-colonial criticism"]
+    },
+    {
+      "id": "tragedy",
+      "label": "Tragedy",
+      "subject": "English Literature",
+      "description": "Genre describing the downfall of a heroic character due to personal flaws or fate.",
+      "prerequisites": ["shakespearian plays"],
+      "applications": ["existential drama"]
+    },
+    {
+      "id": "existential drama",
+      "label": "Existential Drama",
+      "subject": "English Literature",
+      "description": "Theatre of the absurd, alienation, and questioning of objective truth or meaning.",
+      "prerequisites": ["tragedy"],
+      "applications": []
+    },
+    {
+      "id": "satire",
+      "label": "Satire",
+      "subject": "English Literature",
+      "description": "Ridiculing vices, conventions, or corrupt systems through irony and exaggeration.",
+      "prerequisites": ["literary devices"],
+      "applications": []
+    },
+    {
+      "id": "post-colonial criticism",
+      "label": "Post-Colonial Criticism",
+      "subject": "English Literature",
+      "description": "Analyzing literary legacies of colonial rule, displacement, and cultural subversion.",
+      "prerequisites": ["modernist literature"],
+      "applications": []
+    }
+  ]
+}

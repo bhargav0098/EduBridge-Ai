@@ -89,6 +89,7 @@ class DashboardService:
                     "badge_name": ach.badge_name,
                     "description": ach.description,
                     "points": ach.points,
+                    "badge_hash": ach.badge_hash,
                     "earned_at": ach.earned_at
                 }
                 for ach in achievements

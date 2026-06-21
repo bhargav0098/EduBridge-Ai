@@ -72,8 +72,16 @@ class NoteSchema(BaseModel):
     owner_id: str
     created_at: datetime
     tags: List[str] = []
+    upvotes_count: int = 0
 
     model_config = {"from_attributes": True}
+
+    @field_validator("tags", mode="before")
+    @classmethod
+    def validate_tags(cls, v):
+        if isinstance(v, list):
+            return [t.tag if hasattr(t, "tag") else t for t in v]
+        return v
 
     @classmethod
     def model_validate(cls, obj, *args, **kwargs):
@@ -84,6 +92,11 @@ class NoteSchema(BaseModel):
             raw_tags = obj.tags
             if raw_tags and hasattr(raw_tags[0], "tag"):
                 instance.tags = [t.tag for t in raw_tags]
+        # Populate upvotes count
+        if obj and hasattr(obj, "upvotes") and obj.upvotes:
+            instance.upvotes_count = len(obj.upvotes)
+        else:
+            instance.upvotes_count = getattr(obj, "upvotes_count", 0)
         return instance
 
 
@@ -317,6 +330,7 @@ class AchievementSchema(BaseModel):
     badge_name: str
     description: Optional[str] = None
     points: int
+    badge_hash: Optional[str] = None
     earned_at: datetime
 
     model_config = {"from_attributes": True}
@@ -358,7 +372,9 @@ class QuizQuestionSchema(BaseModel):
     question_text: str
     difficulty: int
     type: str
-    options: List[str]
+    options: Optional[List[str]] = None
+    answer: str
+    explanation: Optional[str] = None
 
     model_config = {"from_attributes": True}
 

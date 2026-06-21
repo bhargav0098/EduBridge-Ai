@@ -520,6 +520,36 @@ EduBridge AI is built and maintained by **Team Achievers**:
 
 ---
 
+## ❓ Troubleshooting FAQ
+
+### 1. Gemini / OpenAI API Call Failures
+* **Issue**: The chatbot or math solver responds with generic mock data rather than dynamic answers.
+* **Fix**: Ensure your `GEMINI_API_KEY` is set inside `backend/.env`. Check `logs/edubridge.log` for connection error stacktraces. Ensure the key is active and has sufficient quota.
+
+### 2. SQLite Database Out of Sync
+* **Issue**: Database crashes or missing table/column errors after schema changes.
+* **Fix**: The backend automatically runs basic migration checks on startup. However, in development, you can safely delete the local SQLite database file `edubridge.db` and restart the FastAPI server:
+  ```bash
+  rm edubridge.db
+  # The database and all mock data will be clean-seeded on next start.
+  ```
+
+### 3. Frontend proxy fails to communicate with Backend
+* **Issue**: Logging in with seeded database users (e.g., `arya@edu.ai`) returns "Invalid credentials" because Next.js is running in offline Demo Mode.
+* **Fix**: Make sure `BACKEND_URL=http://127.0.0.1:8000` is present in your `.env.local` (or `.env`) file, and that the FastAPI backend is running. If Next.js cannot contact the backend, it falls back to its local in-memory mock store.
+
+### 4. Pytest ModuleNotFoundError
+* **Issue**: Running pytest returns `ModuleNotFoundError: No module named 'backend'`.
+* **Fix**: Python needs to know where the root module is. Run tests with:
+  * **Windows PowerShell**: `$env:PYTHONPATH="."; python -m pytest backend/tests`
+  * **Unix/Linux/macOS**: `PYTHONPATH=. pytest backend/tests`
+
+### 5. SlowAPI Throttling (429 Rate Limit)
+* **Issue**: Chat responds with HTTP 429 "Rate limit exceeded".
+* **Fix**: Heavy AI API endpoints are rate-limited to 60 requests/minute to protect upstream quotas. Wait 60 seconds for the throttle bucket to refresh.
+
+---
+
 ## 📄 License & Acknowledgments
 
 This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for details.

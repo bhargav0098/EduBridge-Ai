@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Text, Integer, Float, JSON, Enum
+from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Text, Integer, Float, JSON, Enum, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
@@ -81,6 +81,11 @@ class Note(Base):
     owner = relationship("User", back_populates="notes")
     tags = relationship("NoteTag", back_populates="note")
     shares = relationship("NoteShare", back_populates="note")
+    upvotes = relationship("NoteUpvote", back_populates="note", cascade="all, delete-orphan")
+
+    @property
+    def upvotes_count(self) -> int:
+        return len(self.upvotes) if self.upvotes else 0
 
 class NoteTag(Base):
     __tablename__ = "note_tags"
@@ -97,6 +102,14 @@ class NoteShare(Base):
     user_id = Column(String, ForeignKey("users.id")) # Shared with
     
     note = relationship("Note", back_populates="shares")
+
+class NoteUpvote(Base):
+    __tablename__ = "note_upvotes"
+    id = Column(Integer, primary_key=True, index=True)
+    note_id = Column(Integer, ForeignKey("notes.id"), nullable=False)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    
+    note = relationship("Note", back_populates="upvotes")
 
 # Events Models
 class Event(Base):
@@ -288,10 +301,22 @@ class Achievement(Base):
     badge_name = Column(String, nullable=False)
     description = Column(Text, nullable=True)
     points = Column(Integer, default=0)
+    badge_hash = Column(String, nullable=True)
     earned_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
     user = relationship("User", back_populates="achievements")
+
+from sqlalchemy.event import listens_for
+import hashlib
+from datetime import datetime
+
+@listens_for(Achievement, 'before_insert')
+def receive_before_insert(mapper, connection, target):
+    if not target.badge_hash:
+        timestamp_str = datetime.now().isoformat()
+        raw = f"{target.user_id}:{target.badge_name}:{timestamp_str}"
+        target.badge_hash = hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 # Doubts/Questions
 class Doubt(Base):
@@ -310,4 +335,15 @@ class Doubt(Base):
     student = relationship("User", foreign_keys=[student_id])
     teacher = relationship("User", foreign_keys=[teacher_id])
     assignment = relationship("Assignment")
+
+
+class StudentTopicMastery(Base):
+    __tablename__ = "student_topic_mastery"
+    id = Column(Integer, primary_key=True, index=True)
+    student_id = Column(String, ForeignKey("users.id"), nullable=False, index=True)
+    topic = Column(String, nullable=False, index=True)
+    p_known = Column(Float, default=0.25, nullable=False)
+    last_practiced = Column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (UniqueConstraint('student_id', 'topic', name='_student_topic_uc'),)
 
